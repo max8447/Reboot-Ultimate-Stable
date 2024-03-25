@@ -361,22 +361,22 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
-.vs/Project Reboot 3.0/v17/Browse.VC.db
-.vs/Project Reboot 3.0/v17/.suo
-.vs/Project Reboot 3.0/v17/fileList.bin
-.vs/Project Reboot 3.0/v17/ipch/AutoPCH/389a1fa1f6dcd16f/DLLMAIN.ipch
-.vs/Project Reboot 3.0/v17/ipch/AutoPCH/6b05e7771d6ded15/UTIL.ipch
-Project Reboot 3.0/x64/Release/Project Reboot 3.0.tlog/CL.read.1.tlog
-Project Reboot 3.0/x64/Release/Project Reboot 3.0.tlog/link.read.1.tlog
-Project Reboot 3.0/x64/Release/Project Reboot 3.0.tlog/CL.write.1.tlog
-Project Reboot 3.0e/x64/Release/vc143.pdb
-x64/Release/Project Reboot 3.0.pdb
-Project Reboot 3.0/x64/Release/Project Reboot 3.0.log
-Project Reboot 3.0/x64/Release/Project Reboot 3.0.ipdb
-Project Reboot 3.0/x64/Release/Project Reboot 3.0.iobj
-.vs/Project Reboot 3.0/v17/Browse.VC.db
-.vs/Project Reboot 3.0/v17/.suo
-.vs/Project Reboot 3.0/v17/.suo
+.vs/Reboot Ultimate Stable/v17/Browse.VC.db
+.vs/Reboot Ultimate Stable/v17/.suo
+.vs/Reboot Ultimate Stable/v17/fileList.bin
+.vs/Reboot Ultimate Stable/v17/ipch/AutoPCH/389a1fa1f6dcd16f/DLLMAIN.ipch
+.vs/Reboot Ultimate Stable/v17/ipch/AutoPCH/6b05e7771d6ded15/UTIL.ipch
+Reboot Ultimate Stable/x64/Release/Reboot Ultimate Stable.tlog/CL.read.1.tlog
+Reboot Ultimate Stable/x64/Release/Reboot Ultimate Stable.tlog/link.read.1.tlog
+Reboot Ultimate Stable/x64/Release/Reboot Ultimate Stable.tlog/CL.write.1.tlog
+Reboot Ultimate Stablee/x64/Release/vc143.pdb
+x64/Release/Reboot Ultimate Stable.pdb
+Reboot Ultimate Stable/x64/Release/Reboot Ultimate Stable.log
+Reboot Ultimate Stable/x64/Release/Reboot Ultimate Stable.ipdb
+Reboot Ultimate Stable/x64/Release/Reboot Ultimate Stable.iobj
+.vs/Reboot Ultimate Stable/v17/Browse.VC.db
+.vs/Reboot Ultimate Stable/v17/.suo
+.vs/Reboot Ultimate Stable/v17/.suo
 *.db
 *.bin
 *.ipch

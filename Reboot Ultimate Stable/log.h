@@ -52,7 +52,7 @@ inline void InitLogger()
         freopen_s(&stream, "err.txt", "w", stderr);
     }
 
-    SetConsoleTitleA("Project Reboot 3.0");
+    SetConsoleTitleA("Reboot Ultimate Stable");
 
     std::string logName = "reboot.log"; // GenerateLogFileName();
 
