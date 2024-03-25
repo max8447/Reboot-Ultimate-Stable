@@ -4,6 +4,7 @@
 #include "Package.h"
 
 #define ANY_PACKAGE (UObject*)-1
+#define BGACLASS FindObject<UClass>(L"/Script/Engine.BlueprintGeneratedClass")
 
 extern inline UObject* (*StaticFindObjectOriginal)(UClass* Class, UObject* InOuter, const TCHAR* Name, bool ExactClass) = nullptr;
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "inc.h"
+#include "UnrealString.h"
 
 struct FVector
 {
@@ -14,6 +15,15 @@ public:
 	VectorDataType X;
 	VectorDataType Y;
 	VectorDataType Z;
+
+	FString ToString() const
+	{
+		FString Result;
+
+		Result.Set((std::to_wstring(X) + L", " + std::to_wstring(Y) + L", " + std::to_wstring(Z)).c_str());
+
+		return Result;
+	}
 
 	bool CompareVectors(const FVector& A)
 	{

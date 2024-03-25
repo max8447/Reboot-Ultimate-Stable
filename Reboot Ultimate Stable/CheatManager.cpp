@@ -14,6 +14,12 @@ void UCheatManager::DestroyTarget()
 	this->ProcessEvent(DestroyTargetFn);
 }
 
+void UCheatManager::DestroyAll(TSubclassOf<AActor> AClass)
+{
+	static auto DestroyAllFn = FindObject<UFunction>("/Script/Engine.CheatManager.DestroyAll");
+	this->ProcessEvent(DestroyAllFn, &AClass);
+}
+
 UClass* UCheatManager::StaticClass()
 {
 	static auto Class = FindObject<UClass>(L"/Script/Engine.CheatManager");

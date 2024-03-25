@@ -36,6 +36,12 @@ int& APlayerState::GetPlayerID()
 	return Get<int>(PlayerIDOffset);
 }
 
+FString& APlayerState::GetPlayerNamePrivate()
+{
+	static auto PlayerNamePrivateOffset = GetOffset("PlayerNamePrivate");
+	return Get<FString>(PlayerNamePrivateOffset);
+}
+
 bool APlayerState::IsBot()
 {
 	static auto bIsABotOffset = GetOffset("bIsABot");
@@ -48,6 +54,18 @@ void APlayerState::SetIsBot(bool NewValue)
 	static auto bIsABotOffset = GetOffset("bIsABot");
 	static auto bIsABotFieldMask = GetFieldMask(GetProperty("bIsABot"));
 	return SetBitfieldValue(bIsABotOffset, bIsABotFieldMask, NewValue);
+}
+
+void APlayerState::SetPlayerNameInternal(const FString& S)
+{
+	GetPlayerNamePrivate() = S;
+}
+
+void APlayerState::SetPlayerName(const FString& S)
+{
+	SetPlayerNameInternal(S);
+	OnRep_PlayerName();
+	ForceNetUpdate();
 }
 
 void APlayerState::OnRep_PlayerName()
