@@ -94,6 +94,16 @@ void AFortPawn::SetShield(float NewShield)
 		this->ProcessEvent(SetShieldFn, &NewShield);
 }
 
+void AFortPawn::SetMaxShield(float NewShieldVal)
+{
+	static auto SetMaxShieldFn = FindObject<UFunction>(L"/Script/FortniteGame.FortPawn.SetMaxShield");
+
+	if (!SetMaxShieldFn)
+		return;
+
+	this->ProcessEvent(SetMaxShieldFn, &NewShieldVal);
+}
+
 void AFortPawn::NetMulticast_Athena_BatchedDamageCuesHook(UObject* Context, FFrame* Stack, void* Ret)
 {
 	auto Pawn = (AFortPawn*)Context;

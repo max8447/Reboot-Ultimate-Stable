@@ -30,6 +30,12 @@ namespace EFortPickupSourceTypeFlag
 		return FloorLootValue;
 	}
 
+	static inline int64 GetAIValue()
+	{
+		static auto AIValue = GetEnum() ? GetEnum()->GetValue("AI") : -1;
+		return AIValue;
+	}
+
 	static inline int64 GetOtherValue()
 	{
 		static auto OtherValue = GetEnum() ? GetEnum()->GetValue("Other") : -1;

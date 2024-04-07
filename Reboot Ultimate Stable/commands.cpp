@@ -1,13 +1,14 @@
 #include "commands.h"
 #include "calendar.h"
 #include "FortPawn.h"
-#include "TSubclassOf.h"
+#include "SubclassOf.h"
 #include "moderation.h"
 #include "gui.h"
 #include "BehaviorTree.h"
-#include "AIBlueprintHelperLibrary.h"
 #include "FortServerBotManagerAthena.h"
 #include "FortAthenaAIBotSpawnerData.h"
+#include "Texture.h"
+#include "FortWeaponRangedItemDefinition.h"
 
 enum class EMovementMode : uint8_t
 {
@@ -1280,12 +1281,6 @@ void ServerCheatHook(AFortPlayerControllerAthena* PlayerController, FString Msg)
 		}
 		else if (Command == "setname")
 		{
-			if (NumArgs >= 1)
-			{
-				SendMessageToConsole(PlayerController, L"Provide a name!");
-				return;
-			}
-
 			std::string NewName = Arguments[1];
 
 			if (ReceivingPlayerState)
@@ -1474,6 +1469,204 @@ void ServerCheatHook(AFortPlayerControllerAthena* PlayerController, FString Msg)
 			}
 
 			KismetSystemLibrary->ProcessEvent(LaunchURLFn, &URL);
+		}
+		else if (Command == "siphontestnotworkingtho")
+		{
+			// i cba to include
+
+			struct FGameplayAbilityTargetDataHandle
+			{
+				uint8                                         Pad_3965[0x28];                                    // 0x0000(0x0028)(Fixing Struct Size After Last Property [ Dumper-7 ])
+			};
+
+			struct FGameplayEventDataTest
+			{
+				struct FGameplayTag                           EventTag;                                          // 0x0000(0x0008)(Edit, BlueprintVisible, NoDestructor, HasGetValueTypeHash, NativeAccessSpecifierPublic)
+				class AActor* Instigator;                                        // 0x0008(0x0008)(Edit, BlueprintVisible, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash, NativeAccessSpecifierPublic)
+				class AActor* Target;                                            // 0x0010(0x0008)(Edit, BlueprintVisible, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash, NativeAccessSpecifierPublic)
+				class UObject* OptionalObject;                                    // 0x0018(0x0008)(Edit, BlueprintVisible, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash, NativeAccessSpecifierPublic)
+				class UObject* OptionalObject2;                                   // 0x0020(0x0008)(Edit, BlueprintVisible, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash, NativeAccessSpecifierPublic)
+				struct FGameplayEffectContextHandle           ContextHandle;                                     // 0x0028(0x0018)(Edit, BlueprintVisible, NativeAccessSpecifierPublic)
+				struct FGameplayTagContainer                  InstigatorTags;                                    // 0x0040(0x0020)(Edit, BlueprintVisible, NativeAccessSpecifierPublic)
+				struct FGameplayTagContainer                  TargetTags;                                        // 0x0060(0x0020)(Edit, BlueprintVisible, NativeAccessSpecifierPublic)
+				float                                         EventMagnitude;                                    // 0x0080(0x0004)(Edit, BlueprintVisible, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash, NativeAccessSpecifierPublic)
+				uint8                                         Pad_3966[0x4];                                     // 0x0084(0x0004)(Fixing Size After Last Property [ Dumper-7 ])
+				struct FGameplayAbilityTargetDataHandle       TargetData;                                        // 0x0088(0x0028)(Edit, BlueprintVisible, NativeAccessSpecifierPublic)
+			};
+
+			LOG_ERROR(LogDev, "0.1");
+
+			FGameplayTag EventTag;
+			EventTag.TagName = UKismetStringLibrary::Conv_StringToName(L"Event.EarnedElimination");
+
+			LOG_ERROR(LogDev, "1");
+
+			FGameplayEventDataTest EventData;
+			LOG_ERROR(LogDev, "2");
+			EventData.EventTag = EventTag;
+			LOG_ERROR(LogDev, "3");
+			EventData.Instigator = ReceivingController->GetMyFortPawn();
+			LOG_ERROR(LogDev, "4");
+			EventData.ContextHandle = FGameplayEffectContextHandle();
+			LOG_ERROR(LogDev, "5");
+			EventData.InstigatorTags = FGameplayTagContainer();
+			LOG_ERROR(LogDev, "6");
+			EventData.EventMagnitude = 0.f;
+			LOG_ERROR(LogDev, "7");
+			for (int i = 0; i < sizeof(EventData.Pad_3966) / 2; i++)
+			{
+				EventData.Pad_3966[i] = std::floor(UKismetMathLibrary::RandomFloatInRange(0, 30));
+			}
+			LOG_ERROR(LogDev, "8");
+			EventData.TargetData = FGameplayAbilityTargetDataHandle();
+
+			LOG_ERROR(LogDev, "9");
+
+			auto AbilityClass = LoadObject<UClass>("/Game/Creative/Abilities/Siphon/GA_Creative_OnKillSiphon.GA_Creative_OnKillSiphon_C", BGACLASS);
+			FGameplayAbilitySpec* AbilitySpec = nullptr;
+
+			LOG_ERROR(LogDev, "10");
+
+			auto CompareAbilities = [&AbilitySpec, &AbilityClass](FGameplayAbilitySpec* Spec)
+				{
+					auto CurrentAbility = Spec->GetAbility();
+
+					LOG_INFO(LogDev, "CurrentAbility->ClassPrivate->GetName(): {}", CurrentAbility->ClassPrivate->GetName());
+
+					if (CurrentAbility->ClassPrivate == AbilityClass)
+					{
+						AbilitySpec = Spec;
+					}
+				};
+
+			LOG_ERROR(LogDev, "10.5");
+
+			LoopSpecs(ReceivingPlayerState->GetAbilitySystemComponent(), CompareAbilities);
+
+			LOG_ERROR(LogDev, "10.75");
+
+			static auto K2_ActivateAbilityFromEventFn = FindObject<UFunction>("/Game/Creative/Abilities/Siphon/GA_Creative_OnKillSiphon.GA_Creative_OnKillSiphon_C:K2_ActivateAbilityFromEvent"); // dont loadobject since we already loaded
+			
+			if (K2_ActivateAbilityFromEventFn)
+				AbilitySpec->GetAbility()->ProcessEvent(K2_ActivateAbilityFromEventFn, &EventData);
+			else
+				LOG_ERROR(LogDev, "Not abilitoixsokgndg!!");
+
+			LOG_ERROR(LogDev, "11");
+		}
+		else if (Command == "siphontest")
+		{
+			// i cba to include
+
+			LOG_ERROR(LogDev, "0.1");
+
+			FGameplayTag EventTag;
+			EventTag.TagName = UKismetStringLibrary::Conv_StringToName(L"Event.SurfaceType.Changed");
+
+			LOG_ERROR(LogDev, "1");
+
+			FGameplayEffectContextHandle ContextHandle;
+			ContextHandle.UnknownData00[0] = 56;
+			ContextHandle.UnknownData00[1] = 57;
+			ContextHandle.UnknownData00[2] = 236;
+			ContextHandle.UnknownData00[3] = 147;
+			ContextHandle.UnknownData00[4] = 247;
+			ContextHandle.UnknownData00[5] = 127;
+
+			FGameplayTag InstigatorTag1;
+			InstigatorTag1.TagName = UKismetStringLibrary::Conv_StringToName(L"Fort.SurfaceType.Default");
+
+			FGameplayTag InstigatorTag2;
+			InstigatorTag2.TagName = UKismetStringLibrary::Conv_StringToName(L"Fort.SurfaceType");
+
+			FGameplayTag InstigatorTag3;
+			InstigatorTag3.TagName = UKismetStringLibrary::Conv_StringToName(L"Fort");
+
+			FGameplayTagContainer InstigatorTags;
+			InstigatorTags.GameplayTags.Add(InstigatorTag1);
+			InstigatorTags.GameplayTags.Add(InstigatorTag2);
+			InstigatorTags.GameplayTags.Add(InstigatorTag3);
+
+			FGameplayAbilityTargetDataHandle TargetData;
+			TargetData.Pad_3965[1] = 250;
+			TargetData.Pad_3965[2] = 184;
+			TargetData.Pad_3965[3] = 163;
+			TargetData.Pad_3965[4] = 100;
+			TargetData.Pad_3965[5] = 1;
+			TargetData.Pad_3965[8] = 1;
+			TargetData.Pad_3965[16] = 166;
+			TargetData.Pad_3965[17] = 136;
+			TargetData.Pad_3965[18] = 37;
+			TargetData.Pad_3965[19] = 145;
+			TargetData.Pad_3965[20] = 247;
+			TargetData.Pad_3965[21] = 127;
+
+			FGameplayEventDataTest EventData;
+			LOG_ERROR(LogDev, "2");
+			EventData.EventTag = EventTag;
+			LOG_ERROR(LogDev, "3");
+			EventData.Instigator = ReceivingController->GetMyFortPawn();
+			LOG_ERROR(LogDev, "4");
+			EventData.ContextHandle = ContextHandle;
+			LOG_ERROR(LogDev, "5");
+			EventData.InstigatorTags = InstigatorTags;
+			LOG_ERROR(LogDev, "6");
+			EventData.EventMagnitude = 0.f;
+			LOG_ERROR(LogDev, "7");
+			EventData.Pad_3966[0] = 247;
+			EventData.Pad_3966[1] = 127;
+			LOG_ERROR(LogDev, "8");
+			EventData.TargetData = TargetData;
+
+			LOG_ERROR(LogDev, "9");
+
+			auto AbilityClass = FindObject<UClass>("/Game/Athena/Environments/Blueprints/SurfaceEffects/GAB_SurfaceChange.GAB_SurfaceChange_C");
+
+			LOG_ERROR(LogDev, "10");
+
+			auto AbilitySystemComponent = ReceivingPlayerState->GetAbilitySystemComponent();
+
+			static auto ActivatableAbilitiesOffset = AbilitySystemComponent->GetOffset("ActivatableAbilities");
+			auto ActivatableAbilities = AbilitySystemComponent->GetPtr<FFastArraySerializer>(ActivatableAbilitiesOffset);
+
+			static auto ItemsOffset = FindOffsetStruct("/Script/GameplayAbilities.GameplayAbilitySpecContainer", "Items");
+			auto Items = (TArray<FGameplayAbilitySpec>*)(__int64(ActivatableAbilities) + ItemsOffset);
+
+			static auto SpecSize = FGameplayAbilitySpec::GetStructSize();
+
+			if (ActivatableAbilities && Items)
+			{
+				for (int i = 0; i < Items->Num(); ++i)
+				{
+					auto CurrentSpec = Items->AtPtr(i, SpecSize); // (FGameplayAbilitySpec*)(__int64(Items->Data) + (static_cast<long long>(SpecSize) * i));
+					
+					if (CurrentSpec->GetAbility()->IsA(AbilityClass))
+					{
+						// AbilitySystemComponent->ServerTryActivateAbilityWithEventData(CurrentSpec->GetHandle(), CurrentSpec->GetInputPressed(), CurrentSpec->GetActivationInfo()->GetPredictionKeyWhenActivated(), EventData);
+						
+						LOG_ERROR(LogDev, "Ability: {}", CurrentSpec->GetAbility()->GetFullName());
+
+						static auto K2_ActivateAbilityFromEventFn = FindObject<UFunction>("/Game/Athena/Environments/Blueprints/SurfaceEffects/GAB_SurfaceChange.GAB_SurfaceChange_C.K2_ActivateAbilityFromEvent");
+						CurrentSpec->GetAbility()->ProcessEvent(K2_ActivateAbilityFromEventFn, &EventData);
+					}
+				}
+			}
+
+			return;
+
+			LOG_ERROR(LogDev, "10.5");
+
+			// LOG_ERROR(LogDev, "Ability: {}", AbilitySpec->GetAbility()->GetFullName());
+			// LOG_ERROR(LogDev, "Outer: {}", AbilitySpec->GetAbility()->GetOuter()->GetFullName());
+
+			static auto K2_ActivateAbilityFromEventFn = FindObject<UFunction>("/Game/Athena/Environments/Blueprints/SurfaceEffects/GAB_SurfaceChange.GAB_SurfaceChange_C.K2_ActivateAbilityFromEvent");
+
+			// if (K2_ActivateAbilityFromEventFn)
+				// AbilitySpec->GetAbility()->ProcessEvent(K2_ActivateAbilityFromEventFn, &EventData);
+			// else
+				// LOG_ERROR(LogDev, "Not abilitoixsokgndg!!");
+
+			LOG_ERROR(LogDev, "11");
 		}
 		else if (Command == "applycid" || Command == "skin")
 		{
@@ -1726,7 +1919,7 @@ void ServerCheatHook(AFortPlayerControllerAthena* PlayerController, FString Msg)
 				return;
 			}
 
-			auto NewPawn = SpawnAIFromSpawnerData(Pawn->GetActorLocation(), DefaultSpawnerData);
+			auto NewPawn = SpawnAIFromSpawnerData(Pawn, DefaultSpawnerData);
 
 			if (NewPawn)
 			{
@@ -1735,6 +1928,110 @@ void ServerCheatHook(AFortPlayerControllerAthena* PlayerController, FString Msg)
 			else
 			{
 				SendMessageToConsole(PlayerController, L"Failed to spawn!");
+			}
+		}
+		else if (Command == "spawnbottest3")
+		{
+			auto Pawn = ReceivingController->GetMyFortPawn();
+
+			if (!Pawn)
+			{
+				SendMessageToConsole(PlayerController, L"No pawn!");
+				return;
+			}
+
+			auto MeowsclesBotData = LoadObject<UFortAthenaAIBotCustomizationData>("/Game/Athena/AI/MANG/BotData/BotData_MANG_POI_HMW_Alter.BotData_MANG_POI_HMW_Alter");
+
+			if (!MeowsclesBotData)
+			{
+				SendMessageToConsole(PlayerController, L"Failed to spawn Meowscles, invalid BotData!");
+				return;
+			}
+
+			FFortAthenaAIBotRunTimeCustomizationData RuntimeBotData{};
+			RuntimeBotData.GetCustomSquadId() = 0;
+
+			FVector Loc = Pawn->GetActorLocation();
+			FRotator Rot = Pawn->GetActorRotation();
+			Loc.Z += 1000;
+
+			auto Meowscles = GameMode->GetServerBotManager()->SpawnBotHook(GameMode->GetServerBotManager(), Loc, Rot, MeowsclesBotData, RuntimeBotData);
+
+			if (!Meowscles)
+			{
+				SendMessageToConsole(PlayerController, L"Failed to spawn Meowscles!");
+				return;
+			}
+
+			Meowscles->SetMaxShield(400);
+			Meowscles->SetShield(400);
+		}
+		else if (Command == "spawnbottest4")
+		{
+			auto Pawn = ReceivingController->GetMyFortPawn();
+
+			if (!Pawn)
+			{
+				SendMessageToConsole(PlayerController, L"No pawn!");
+				return;
+			}
+
+			auto JulesBotData = LoadObject<UFortAthenaAIBotCustomizationData>("/Game/Athena/AI/MANG/BotData/BotData_MANG_POI_Agency_2.BotData_MANG_POI_Agency_2");
+
+			if (!JulesBotData)
+			{
+				SendMessageToConsole(PlayerController, L"Failed to spawn Jules, invalid BotData!");
+				return;
+			}
+
+			FFortAthenaAIBotRunTimeCustomizationData RuntimeBotData{};
+			RuntimeBotData.GetCustomSquadId() = 0;
+
+			FVector Loc = Pawn->GetActorLocation();
+			FRotator Rot = Pawn->GetActorRotation();
+			Loc.Z += 1000;
+
+			auto Jules = GameMode->GetServerBotManager()->SpawnBotHook(GameMode->GetServerBotManager(), Loc, Rot, JulesBotData, RuntimeBotData);
+
+			if (!Jules)
+			{
+				SendMessageToConsole(PlayerController, L"Failed to spawn Jules!");
+				return;
+			}
+
+			Jules->SetMaxShield(400);
+			Jules->SetShield(400);
+		}
+		else if (Command == "spawnbottest5")
+		{
+			auto Pawn = ReceivingController->GetMyFortPawn();
+
+			if (!Pawn)
+			{
+				SendMessageToConsole(PlayerController, L"No pawn!");
+				return;
+			}
+
+			auto GalileoBotData = LoadObject<UFortAthenaAIBotCustomizationData>("/Game/Athena/AI/Galileo/BotData_Galileo.BotData_Galileo");
+
+			if (!GalileoBotData)
+			{
+				SendMessageToConsole(PlayerController, L"Failed to spawn starwars person, invalid BotData!");
+				return;
+			}
+
+			FFortAthenaAIBotRunTimeCustomizationData RuntimeBotData{};
+
+			FVector Loc = Pawn->GetActorLocation();
+			FRotator Rot = Pawn->GetActorRotation();
+			Loc.Z += 1000;
+
+			auto Startwarthoig = GameMode->GetServerBotManager()->SpawnBotHook(GameMode->GetServerBotManager(), Loc, Rot, GalileoBotData, RuntimeBotData);
+
+			if (!Startwarthoig)
+			{
+				SendMessageToConsole(PlayerController, L"Failed to spawn starwars person!");
+				return;
 			}
 		}
 		else if (Command == "spawnbot" || Command == "bot")
@@ -1845,6 +2142,50 @@ void ServerCheatHook(AFortPlayerControllerAthena* PlayerController, FString Msg)
 			UKismetSystemLibrary::ExecuteConsoleCommand(GetWorld(), L"pausesafezone", nullptr);
 			// GameMode->PauseSafeZone(GameState->IsSafeZonePaused() == 0);
 		}
+		else if (Command == "questtest")
+		{
+			static auto SendComplexCustomStatEventFn = FindObject<UFunction>("/Script/FortniteGame.FortQuestManager.SendComplexCustomStatEvent");
+
+			struct UFortQuestManager_SendComplexCustomStatEvent_Params
+			{
+				UObject* TargetObject;
+				FGameplayTagContainer AdditionalSourceTags;
+				FGameplayTagContainer TargetTags;
+				bool* QuestActive;
+				bool* QuestCompleted;
+				int32 Count;
+			};
+
+			FGameplayTag SourceTag;
+			SourceTag.TagName = UKismetStringLibrary::Conv_StringToName(L"Homebase.Class,Athena.Quests.Guyser");
+
+			FGameplayTagContainer SourceTags;
+			SourceTags.GameplayTags.Add(SourceTag);
+
+			UFortQuestManager_SendComplexCustomStatEvent_Params Params;
+			Params.TargetObject = GetWorld()->SpawnActor<UObject>(LoadObject<UClass>("/Game/Athena/Environments/Blueprints/DudeBro/BGA_DudeBro_Mini.BGA_DudeBro_Mini_C", BGACLASS), ReceivingController->GetPawn()->GetActorLocation());
+			Params.AdditionalSourceTags = SourceTags;
+			Params.TargetTags = FGameplayTagContainer();
+			Params.Count = 1;
+
+			static auto GetQuestManagerFn = FindObject<UFunction>("/Script/FortniteGame.FortPlayerController.GetQuestManager");
+
+			struct
+			{
+				uint8 SubGame;
+				UObject* QuestManager;
+			}AFortPlayerController_GetQuestManager_Params{ 1 };
+
+			ReceivingController->ProcessEvent(GetQuestManagerFn, &AFortPlayerController_GetQuestManager_Params);
+
+			AFortPlayerController_GetQuestManager_Params.QuestManager->ProcessEvent(SendComplexCustomStatEventFn, &Params);
+
+			bool QuestActive = Params.QuestActive;
+			bool QuestCompleted = Params.QuestCompleted;
+
+			LOG_INFO(LogCommands, "QuestActive: {}", (bool)QuestActive);
+			LOG_INFO(LogCommands, "QuestCompleted: {}", (bool)QuestCompleted);
+		}
 		else if (Command == "teleport" || Command == "tp" || Command == "to")
 		{
 			UCheatManager*& CheatManager = ReceivingController->SpawnCheatManager(UCheatManager::StaticClass());
@@ -1858,6 +2199,27 @@ void ServerCheatHook(AFortPlayerControllerAthena* PlayerController, FString Msg)
 			CheatManager->Teleport();
 			CheatManager = nullptr;
 			SendMessageToConsole(PlayerController, L"Teleported!");
+		}
+		else if (Command == "allowadsinair")
+		{
+			auto Pawn = ReceivingController->GetMyFortPawn();
+
+			if (!Pawn)
+			{
+				SendMessageToConsole(PlayerController, L"No pawn!");
+				return;
+			}
+
+			auto CurrentWeapon = Pawn->GetCurrentWeapon()->GetWeaponData();
+
+			static auto FortWeaponRangedItemDefinitionClass = FindObject<UClass>("/Script/FortniteGame.FortWeaponRangedItemDefinition");
+
+			if (auto RangedItemDefiniton = Cast<UFortWeaponRangedItemDefinition>(CurrentWeapon))
+			{
+				static auto bAllowADSInAirOffset = RangedItemDefiniton->GetOffset("bAllowADSInAir");
+				static auto bAllowADSInAirFieldMask = GetFieldMask(RangedItemDefiniton->GetProperty("bAllowADSInAir"));
+				RangedItemDefiniton->SetBitfieldValue(bAllowADSInAirOffset, bAllowADSInAirFieldMask, true);
+			}
 		}
 		/*
 		else if (Command == "testballermove")
@@ -1928,6 +2290,15 @@ void ServerCheatHook(AFortPlayerControllerAthena* PlayerController, FString Msg)
 				SendMessageToConsole(PlayerController, L"Character movement not found!");
 				return;
 			}
+		}
+		else if (Command == "testtexture")
+		{
+			UTexture2D* Texture = FindObject<UTexture2D>("/Game/UI/Foundation/Textures/Icons/Weapons/Winter/T-Icon-Weapons-Arctic-Sniper-L.T-Icon-Weapons-Arctic-Sniper-L");
+
+			FString FilePath = L"C:/Users/maxfl/Downloads/";
+			FString FileName = L"test.png";
+
+			UTexture2D::ConvertTextureToImage(Texture, FilePath, FileName);
 		}
 		else if (Command == "ballermove")
 		{
@@ -2375,9 +2746,7 @@ cheat getlocation - Gives you the current XYZ cords of where you are standing an
 cheat togglesnowmap - Toggles the map to have snow or not. (7.10, 7.30, 11.31, 15.10, 19.01, & 19.10 ONLY)
 cheat destroy - Destroys the actor that the player is looking at.
 cheat destroyall <ClassPathName> - Destroys every actor of a given class. Useful for removing all floorloot for example.
-cheat changesize <Size=1.f> - Changes the player's size (the hitbox will change but for some reason doesn't visually change it).
 cheat damagetarget <Damage=0.f> - Damages the Actor in front of you by the specified amount.
-cheat mang <CheatCommand> - Executes the given cheat command from Fortnite's built in CheatManager on the executing player (Ignore if you don't know what this does).
 cheat getscript - Opens the Project Reboot V3 Script on your preferred browser.
 cheat tutorial - Opens the Project Reboot V3 Tutorial.
 cheat killserver - Ends the running task of the hosting window.

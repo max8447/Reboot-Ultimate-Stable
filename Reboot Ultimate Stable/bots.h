@@ -5,6 +5,9 @@
 #include "FortAthenaAIBotController.h"
 #include "BuildingContainer.h"
 #include "botnames.h"
+#include "FortInventory.h"
+#include "FortWeaponRangedItemDefinition.h"
+#include "GameplayTagContainer.h"
 
 class BotPOI
 {
@@ -48,7 +51,7 @@ public:
 
 	static bool ShouldUseAIBotController()
 	{
-		return Fortnite_Version >= 11 && Engine_Version < 500;
+		return Fortnite_Version >= 11 && Fortnite_Version < 19; // s15+ use aibotspawnerdata
 	}
 
 	static void InitializeBotClasses()
@@ -198,58 +201,53 @@ public:
 		ApplyHID(Pawn, CurrentHeroType, true);
 	}
 
-	void SetName(const FString& NewName)
+	void ChangeName()
 	{
-		if (// true ||
-			Fortnite_Version < 9
-			)
-		{
-			if (auto PlayerController = Cast<APlayerController>(Controller))
-			{
-				PlayerController->ServerChangeName(NewName);
-			}
-		}
-		else
-		{
-			auto GameMode = Cast<AFortGameModeAthena>(GetWorld()->GetGameMode());
-			GameMode->ChangeName(Controller, NewName, true);
-		}
+		bool bUseOverrideName = false;
 
-		PlayerState->OnRep_PlayerName(); // ?
-	}
-
-	FString GetRandomName() // Todo SetName(GetRandomName())
-	{
-		static int CurrentBotNum = 1;
-		std::wstring BotNumWStr;
 		FString NewName;
 
-		if (Fortnite_Version < 9)
+		if (bUseOverrideName)
 		{
-			BotNumWStr = std::to_wstring(CurrentBotNum++);
-			NewName = (L"RebootBot" + BotNumWStr).c_str();
+			NewName = L"Override";
 		}
 		else
 		{
-			if (Fortnite_Version < 11)
+			static int CurrentBotNum = 1;
+			std::wstring BotNumWStr;
+
+			if (Fortnite_Version < 9)
 			{
-				BotNumWStr = std::to_wstring(CurrentBotNum++ + 200);
-				NewName = (std::format(L"Anonymous[{}]", BotNumWStr)).c_str();
+				BotNumWStr = std::to_wstring(CurrentBotNum++);
+				NewName = (L"RebootBot" + BotNumWStr).c_str();
+
+				if (auto PlayerController = Cast<AFortPlayerController>(Controller))
+					PlayerController->ServerChangeName(NewName);
 			}
 			else
 			{
-				if (!PlayerBotNames.empty())
+				if (Fortnite_Version < 11)
 				{
-					// std::shuffle(PlayerBotNames.begin(), PlayerBotNames.end(), std::default_random_engine((unsigned int)time(0)));
-
-					int RandomIndex = std::rand() % (PlayerBotNames.size() - 1);
-					NewName = PlayerBotNames[RandomIndex];
-					PlayerBotNames.erase(PlayerBotNames.begin() + RandomIndex);
+					BotNumWStr = std::to_wstring(CurrentBotNum++ + 200);
+					NewName = (std::format(L"Anonymous[{}]", BotNumWStr)).c_str();
 				}
+				else
+				{
+					if (!PlayerBotNames.empty())
+					{
+						int RandomIndex = std::rand() % PlayerBotNames.size();
+						std::string RandomBotName = PlayerBotNames[RandomIndex];
+						NewName = std::wstring(RandomBotName.begin(), RandomBotName.end()).c_str();
+						PlayerBotNames.erase(PlayerBotNames.begin() + RandomIndex);
+					}
+				}
+
+				auto GameMode = Cast<AFortGameModeAthena>(GetWorld()->GetGameMode());
+				GameMode->ChangeName(Controller, NewName, true);
 			}
 		}
 
-		return NewName;
+		LOG_INFO(LogBots, "NewName: {}", NewName.ToString());
 	}
 
 	void Initialize(const FTransform& SpawnTransform, AActor* InSpawnLocator)
@@ -272,12 +270,7 @@ public:
 		else
 		{
 			Pawn = GameMode->GetServerBotManager()->GetCachedBotMutator()->SpawnBot(PawnClass, InSpawnLocator, SpawnTransform.Translation, SpawnTransform.Rotation.Rotator(), false);
-
-			if (Fortnite_Version < 17)
-				Controller = Cast<AFortAthenaAIBotController>(Pawn->GetController());
-			else
-				Controller = GetWorld()->SpawnActor<AFortAthenaAIBotController>(Pawn->GetAIControllerClass());
-
+			Controller = Cast<AFortAthenaAIBotController>(Pawn->GetController());
 			PlayerState = Cast<AFortPlayerStateAthena>(Controller->GetPlayerState());
 		}
 
@@ -287,19 +280,13 @@ public:
 			return;
 		}
 
-		PlayerState->SetIsBot(true);
+		if (Fortnite_Version >= 20)
+			LOG_INFO(LogBots, "Bot spawned at {}", Pawn->GetActorLocation().ToString().ToString());
 
-		if (Controller->GetPawn() != Pawn)
-		{
-			Controller->Possess(Pawn);
-		}
+		ChangeName();
 
-		FString BotNewName = GetRandomName();
-		
-		LOG_INFO(LogBots, "BotNewName: {}", BotNewName.ToString());
-		SetName(BotNewName);
-
-		PlayerState->GetTeamIndex() = GameMode->Athena_PickTeamHook(GameMode, 0, Controller);
+		if (Addresses::PickTeam)
+			PlayerState->GetTeamIndex() = GameMode->Athena_PickTeamHook(GameMode, 0, Controller);
 
 		static auto SquadIdOffset = PlayerState->GetOffset("SquadId", false);
 
@@ -308,8 +295,16 @@ public:
 
 		GameState->AddPlayerStateToGameMemberInfo(PlayerState);
 
-		Pawn->SetHealth(100);
-		Pawn->SetMaxHealth(100);
+		PlayerState->SetIsBot(true);
+
+		if (Controller->GetPawn() != Pawn)
+		{
+			Controller->Possess(Pawn);
+		}
+
+		Pawn->SetHealth(21);
+		Pawn->SetMaxHealth(21);
+		Pawn->SetShield(21);
 
 		auto PlayerAbilitySet = GetPlayerAbilitySet();
 		auto AbilitySystemComponent = PlayerState->GetAbilitySystemComponent();
@@ -320,20 +315,51 @@ public:
 		}
 
 		SetupInventory();
-		PickRandomLoadout();
-		ApplyCosmeticLoadout();
 
-		GameState->GetPlayersLeft()++;
-		GameState->OnRep_PlayersLeft();
+		if (Fortnite_Version >= 9)
+		{
+			PickRandomLoadout();
+			ApplyCosmeticLoadout();
+		}
 
-		if (auto FortPlayerControllerAthena = Cast<AFortPlayerControllerAthena>(Controller))
-			GameMode->GetAlivePlayers().Add(FortPlayerControllerAthena);
+		if (!ShouldUseAIBotController())
+		{
+			GameState->GetPlayersLeft()++;
+			GameState->OnRep_PlayersLeft();
+
+			if (auto FortPlayerControllerAthena = Cast<AFortPlayerControllerAthena>(Controller))
+				GameMode->GetAlivePlayers().Add(FortPlayerControllerAthena);
+		}
 
 		LOG_INFO(LogDev, "Finished spawning bot!")
 	}
+
+	void OnDied(AFortPlayerStateAthena* KillerPlayerState, AActor* DamageCauser)
+	{
+		LOG_INFO(LogBots, "Bot Died!");
+
+		AFortPawn* KillerPawn = nullptr;
+
+		if (KillerPlayerState)
+		{
+			AFortPlayerControllerAthena* KillerPlayerController = Cast<AFortPlayerControllerAthena>(KillerPlayerState->GetOwner());
+
+			if (KillerPlayerController)
+			{
+				KillerPawn = KillerPlayerController->GetMyFortPawn();
+			}
+		}
+
+		FFortPlayerDeathReport DeathReport{};
+		DeathReport.GetKillerPlayerState() = KillerPlayerState;
+		DeathReport.GetKillerPawn() = KillerPawn;
+		DeathReport.GetDamageCauser() = DamageCauser;
+
+		AFortPlayerController::ClientOnPawnDiedHook((AFortPlayerController*)Controller, &DeathReport);
+	}
 };
 
-static inline std::vector<PlayerBot> AllPlayerBotsToTick;
+inline std::vector<PlayerBot> AllPlayerBotsToTick;
 
 namespace Bots
 {

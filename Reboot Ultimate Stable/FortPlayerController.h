@@ -40,6 +40,24 @@ struct FFortAthenaLoadout
 	}
 };
 
+struct FFortPlayerDeathReport
+{
+	class AFortPlayerState*& GetKillerPlayerState()
+	{
+		return *(class AFortPlayerState**)(__int64(this) + MemberOffsets::DeathReport::KillerPlayerState);
+	}
+
+	AFortPawn*& GetKillerPawn()
+	{
+		return *(AFortPawn**)(__int64(this) + MemberOffsets::DeathReport::KillerPawn);
+	}
+
+	AActor*& GetDamageCauser()
+	{
+		return *(AActor**)(__int64(this) + MemberOffsets::DeathReport::DamageCauser);
+	}
+};
+
 enum class EFortWeaponUpgradeCosts : uint8_t
 {
 	NotSet = 0,

@@ -24,6 +24,7 @@
 #include "gui.h"
 #include "FortAthenaMutator_InventoryOverride.h"
 #include "FortAthenaMutator_TDM.h"
+#include <unordered_set>
 
 void AFortPlayerController::ClientReportDamagedResourceBuilding(ABuildingSMActor* BuildingSMActor, EFortResourceType PotentialResourceType, int PotentialResourceCount, bool bDestroyed, bool bJustHitWeakspot)
 {
@@ -855,6 +856,8 @@ void AFortPlayerController::ServerCreateBuildingActorHook(UObject* Context, FFra
 	if (!PlayerStateAthena)
 		return ServerCreateBuildingActorOriginal(Context, Stack, Ret);
 
+	// LOG_INFO(LogGame, __FUNCTION__);
+
 	UClass* BuildingClass = nullptr;
 	FVector BuildLocation;
 	FRotator BuildRotator;
@@ -888,7 +891,7 @@ void AFortPlayerController::ServerCreateBuildingActorHook(UObject* Context, FFra
 		bMirrored = Params->bMirrored;
 	}
 
-	// LOG_INFO(LogDev, "BuildingClass {}", __int64(BuildingClass));
+	// LOG_INFO(LogDev, "BuildingClass {}", BuildingClass->GetFullName());
 
 	if (!BuildingClass)
 		return ServerCreateBuildingActorOriginal(Context, Stack, Ret);
@@ -1441,6 +1444,9 @@ void AFortPlayerController::ClientOnPawnDiedHook(AFortPlayerController* PlayerCo
 
 	bool bDropInventory = true;
 
+	if (DeadPlayerState->IsBot())
+		bDropInventory = false;
+
 	LoopMutators([&](AFortAthenaMutator* Mutator)
 		{
 			if (auto FortAthenaMutator_InventoryOverride = Cast<AFortAthenaMutator_InventoryOverride>(Mutator))
@@ -1548,6 +1554,81 @@ void AFortPlayerController::ClientOnPawnDiedHook(AFortPlayerController* PlayerCo
 
 					RemoveFromAlivePlayers(GameMode, PlayerController, KillerPlayerState == DeadPlayerState ? nullptr : KillerPlayerState, KillerPawn, KillerWeaponDef, DeathCause, 0);
 
+					if (DeadPlayerState->IsBot())
+					{
+						GameState->GetPlayerBotsLeft()--;
+						GameState->OnRep_PlayerBotsLeft();
+
+						std::unordered_set<int> AliveTeamIndexes;
+
+						for (int i = 0; i < GameMode->GetAlivePlayers().Num(); i++)
+						{
+							auto AlivePlayer = GameMode->GetAlivePlayers().at(i);
+
+							if (!AlivePlayer)
+								continue;
+
+							if (AlivePlayer != DeadPawn->GetController())
+							{
+								auto TeamIndex = AlivePlayer->GetPlayerStateAthena()->GetTeamIndex();
+
+								AliveTeamIndexes.emplace(TeamIndex);
+							}
+						}
+
+						for (int i = 0; i < GameMode->GetAliveBots().Num(); i++)
+						{
+							auto AliveBot = GameMode->GetAliveBots().at(i);
+
+							if (!AliveBot)
+								continue;
+
+							if (AliveBot != Cast<AController>(DeadPawn->GetController()))
+							{
+								auto TeamIndex = Cast<AFortPlayerStateAthena>(AliveBot->GetPlayerState())->GetTeamIndex();
+
+								AliveTeamIndexes.emplace(TeamIndex);
+							}
+						}
+
+						if (GameMode->GetAliveBots().Num() > 0)
+						{
+							if (!AliveTeamIndexes.empty()) {
+								auto Last = AliveTeamIndexes.begin();
+								std::advance(Last, std::distance(AliveTeamIndexes.begin(), AliveTeamIndexes.end()) - 1);
+								AliveTeamIndexes.erase(Last);
+						}
+
+						if (AliveTeamIndexes.size() <= 1 && bStartedBus)
+						{
+							GameMode->EndMatch();
+
+							static auto World_NetDriverOffset = GetWorld()->GetOffset("NetDriver");
+							auto WorldNetDriver = GetWorld()->Get<UNetDriver*>(World_NetDriverOffset);
+							auto& ClientConnections = WorldNetDriver->GetClientConnections();
+
+							for (int i = 0; i < ClientConnections.Num(); i++)
+							{
+								static auto PlayerControllerOffset = ClientConnections.at(i)->GetOffset("PlayerController");
+								auto CurrentPlayerController = Cast<AFortPlayerControllerAthena>(ClientConnections.at(i)->Get(PlayerControllerOffset));
+
+								if (!CurrentPlayerController)
+									continue;
+
+								auto CurrentPlayerState = Cast<AFortPlayerStateAthena>(CurrentPlayerController->GetPlayerState());
+
+								if (!CurrentPlayerState->IsValidLowLevel())
+									continue;
+
+								LOG_INFO(LogGame, "Winner {}!", CurrentPlayerState->GetPlayerName().ToString());
+
+								CurrentPlayerController->PlayWinEffects(KillerPawn, KillerWeaponDef, DeathCause, false);
+								CurrentPlayerController->ClientNotifyWon(KillerPawn, KillerWeaponDef, DeathCause);
+								CurrentPlayerController->ClientNotifyTeamWon(KillerPawn, KillerWeaponDef, DeathCause);
+							}
+						}
+					}
+
 					/*
 
 					STATS:
@@ -1646,12 +1727,10 @@ void AFortPlayerController::ClientOnPawnDiedHook(AFortPlayerController* PlayerCo
 		}
 	}
 
-	if (DeadPlayerState->IsBot())
-	{
-		// AllPlayerBotsToTick.remov3lbah
-	}
-
 	DeadPlayerState->EndDBNOAbilities();
+
+	if (DeadPlayerState->IsBot())
+		return;
 
 	return ClientOnPawnDiedOriginal(PlayerController, DeathReport);
 }

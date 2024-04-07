@@ -234,6 +234,49 @@ public:
 		}
 	}
 
+	void PlayWinEffects(APawn* FinisherPawn, UFortWeaponItemDefinition* FinishingWeapon, uint8 DeathCause, bool bAudioOnly)
+	{
+		static auto PlayWinEffectsFn = FindObject<UFunction>("/Script/FortniteGame.FortPlayerControllerAthena.PlayWinEffects");
+
+		struct
+		{
+			APawn* FinisherPawn;
+			UFortWeaponItemDefinition* FinishingWeapon;
+			uint8 DeathCause;
+			bool bAudioOnly;
+		}AFortPlayerControllerAthena_PlayWinEffects_Params{ FinisherPawn , FinishingWeapon , DeathCause , bAudioOnly };
+
+		this->ProcessEvent(PlayWinEffectsFn, &AFortPlayerControllerAthena_PlayWinEffects_Params);
+	}
+
+	void ClientNotifyWon(APawn* FinisherPawn, UFortWeaponItemDefinition* FinishingWeapon, uint8 DeathCause)
+	{
+		static auto ClientNotifyWonFn = FindObject<UFunction>("/Script/FortniteGame.FortPlayerControllerAthena.ClientNotifyWon");
+
+		struct
+		{
+			APawn* FinisherPawn;
+			UFortWeaponItemDefinition* FinishingWeapon;
+			uint8 DeathCause;
+		}AFortPlayerControllerAthena_ClientNotifyWon_Params{ FinisherPawn , FinishingWeapon , DeathCause };
+
+		this->ProcessEvent(ClientNotifyWonFn, &AFortPlayerControllerAthena_ClientNotifyWon_Params);
+	}
+
+	void ClientNotifyTeamWon(APawn* FinisherPawn, UFortWeaponItemDefinition* FinishingWeapon, uint8 DeathCause)
+	{
+		static auto ClientNotifyTeamWonFn = FindObject<UFunction>("/Script/FortniteGame.FortPlayerControllerAthena.ClientNotifyTeamWon");
+
+		struct
+		{
+			APawn* FinisherPawn;
+			UFortWeaponItemDefinition* FinishingWeapon;
+			uint8 DeathCause;
+		}AFortPlayerControllerAthena_ClientNotifyTeamWon_Params{ FinisherPawn , FinishingWeapon , DeathCause };
+
+		this->ProcessEvent(ClientNotifyTeamWonFn, &AFortPlayerControllerAthena_ClientNotifyTeamWon_Params);
+	}
+
 	void ClientOnPawnRevived(AController* EventInstigator) // actually zone // idk what this actually does but i call it
 	{
 		static auto ClientOnPawnRevivedFn = FindObject<UFunction>(L"/Script/FortniteGame.FortPlayerControllerZone.ClientOnPawnRevived");

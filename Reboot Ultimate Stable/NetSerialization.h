@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Vector.h"
+
 struct FFastArraySerializerItem
 {
 	int                                                ReplicationID;                                            // 0x0000(0x0004) (ZeroConstructor, IsPlainOldData, RepSkip, RepNotify, Interp, NonTransactional, EditorOnly, NoDestructor, AutoWeak, ContainsInstancedReference, AssetRegistrySearchable, SimpleDisplay, AdvancedDisplay, Protected, BlueprintCallable, BlueprintAuthorityOnly, TextExportTransient, NonPIEDuplicateTransient, ExposeOnSpawn, PersistentInstance, UObjectWrapper, HasGetValueTypeHash, NativeAccessSpecifierPublic, NativeAccessSpecifierProtected, NativeAccessSpecifierPrivate)
@@ -122,5 +124,24 @@ struct FFastArraySerializer
 		// Invalidate the cached item counts so that they're recomputed during the next write
 		GetCachedNumItems() = -1;
 		GetCachedNumItemsToConsiderForWriting() = -1;
+	}
+};
+
+struct FVector_NetQuantize10 : public FVector
+{
+	FVector ToVector()
+	{
+		float MinValue = -16384.0f;
+		float MaxValue = 16383.0f;
+
+		float Range = MaxValue - MinValue;
+
+		float StepSize = Range / 1024.0f;
+
+		float OriginalX = X * StepSize + MinValue;
+		float OriginalY = Y * StepSize + MinValue;
+		float OriginalZ = Z * StepSize + MinValue;
+
+		return FVector(OriginalX, OriginalY, OriginalZ);
 	}
 };

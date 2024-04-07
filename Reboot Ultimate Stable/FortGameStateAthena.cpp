@@ -343,6 +343,16 @@ void AFortGameStateAthena::OnRep_PlayersLeft()
 	this->ProcessEvent(OnRep_PlayersLeftFn);
 }
 
+void AFortGameStateAthena::OnRep_PlayerBotsLeft()
+{
+	static auto OnRep_PlayerBotsLeftFn = FindObject<UFunction>(L"/Script/FortniteGame.FortGameStateAthena.OnRep_PlayerBotsLeft");
+
+	if (!OnRep_PlayerBotsLeftFn)
+		return;
+
+	this->ProcessEvent(OnRep_PlayerBotsLeftFn);
+}
+
 TeamsArrayContainer* AFortGameStateAthena::GetTeamsArrayContainer()
 {
 	if (true)
@@ -365,12 +375,9 @@ TeamsArrayContainer* AFortGameStateAthena::GetTeamsArrayContainer()
 
 void AFortGameStateAthena::AddToAdditionalPlaylistLevelsStreamed(const FName& Name, bool bServerOnly)
 {
-	auto NameStr = Name.ToString();
-	auto NameWStr = std::wstring(NameStr.begin(), NameStr.end());
-
 	if (true)
 	{
-		StreamLevel(Name.ToString()); // skunke bozo (I didn't test the next code too much soo)
+		StreamLevel(Name.ToString());
 	}
 	else
 	{

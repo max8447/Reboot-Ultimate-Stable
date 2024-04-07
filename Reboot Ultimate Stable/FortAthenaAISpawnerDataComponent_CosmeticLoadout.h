@@ -11,4 +11,10 @@ public:
 		static auto CosmeticLoadoutOffset = GetOffset("CosmeticLoadout");
 		return GetPtr<FFortAthenaLoadout>(CosmeticLoadoutOffset);
 	}
+
+	static UClass* StaticClass()
+	{
+		static auto Class = FindObject<UClass>("/Script/FortniteGame.FortAthenaAISpawnerDataComponent_CosmeticLoadout");
+		return Class;
+	}
 };

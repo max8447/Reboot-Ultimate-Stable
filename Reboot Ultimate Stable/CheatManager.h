@@ -1,7 +1,8 @@
 #pragma once
 
 #include "Object.h"
-#include "TSubclassOf.h"
+#include "SubclassOf.h"
+#include "Actor.h"
 
 class UCheatManager : public UObject
 {

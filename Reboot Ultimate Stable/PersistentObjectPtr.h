@@ -12,4 +12,14 @@ public:
 	mutable int			TagAtLastTest;
 	/** Guid for the object this pointer points to or will point to. **/
 	TObjectID				ObjectID;
+
+public:
+	class UObject* Get() const
+	{
+		return WeakPtr.Get();
+	}
+	class UObject* operator->() const
+	{
+		return WeakPtr.Get();
+	}
 };

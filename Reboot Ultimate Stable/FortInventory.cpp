@@ -8,7 +8,7 @@
 #include "FortGadgetItemDefinition.h"
 #include "FortPlayerStateAthena.h"
 
-UFortItem* CreateItemInstance(AFortPlayerController* PlayerController, UFortItemDefinition* ItemDefinition, int Count)
+static UFortItem* CreateItemInstance(AFortPlayerController* PlayerController, UFortItemDefinition* ItemDefinition, int Count)
 {
 	UFortItem* NewItemInstance = ItemDefinition->CreateTemporaryItemInstanceBP(Count);
 
@@ -562,8 +562,8 @@ FFortItemEntry* AFortInventory::FindReplicatedEntry(const FGuid& Guid)
 	return nullptr;
 }
 
-/* UClass* AFortInventory::StaticClass()
+UClass* AFortInventory::StaticClass()
 {
 	static auto Class = FindObject<UClass>("/Script/FortniteGame.FortInventory");
 	return Class;
-} */
+}

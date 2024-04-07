@@ -200,6 +200,8 @@
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="EngineTypes.cpp" />
     <ClCompile Include="finder.cpp" />
+    <ClCompile Include="FortAthenaAIBotController.cpp" />
+    <ClCompile Include="FortAthenaAIBotCustomizationData.cpp" />
     <ClCompile Include="FortAthenaCreativePortal.cpp" />
     <ClCompile Include="FortAthenaMapInfo.cpp" />
     <ClCompile Include="FortAthenaMutator_Barrier.cpp" />
@@ -209,6 +211,7 @@
     <ClCompile Include="FortAthenaVehicle.cpp" />
     <ClCompile Include="FortAthenaVehicleSpawner.cpp" />
     <ClCompile Include="FortDecoItemDefinition.cpp" />
+    <ClCompile Include="FortDecoTool.cpp" />
     <ClCompile Include="FortGadgetItemDefinition.cpp" />
     <ClCompile Include="FortGameMode.cpp" />
     <ClCompile Include="FortGameModeAthena.cpp" />
@@ -290,6 +293,7 @@
     <ClInclude Include="AthenaPlayerMatchReport.h" />
     <ClInclude Include="AthenaResurrectionComponent.h" />
     <ClInclude Include="AttributeSet.h" />
+    <ClInclude Include="BehaviorTree.h" />
     <ClInclude Include="BGA.h" />
     <ClInclude Include="BinaryHeap.h" />
     <ClInclude Include="BitArray.h" />
@@ -335,7 +339,10 @@
     <ClInclude Include="FortAthenaAIBotCharacterCustomization.h" />
     <ClInclude Include="FortAthenaAIBotController.h" />
     <ClInclude Include="FortAthenaAIBotCustomizationData.h" />
+    <ClInclude Include="FortAthenaAIBotInventoryItems.h" />
     <ClInclude Include="FortAthenaAIBotSpawnerData.h" />
+    <ClInclude Include="FortAthenaAISpawnerDataComponent_AIBotGameplay.h" />
+    <ClInclude Include="FortAthenaAISpawnerDataComponent_AIBotInventory.h" />
     <ClInclude Include="FortAthenaAISpawnerDataComponent_CosmeticLoadout.h" />
     <ClInclude Include="FortAthenaAISpawnerDataComponent_SpawnParams.h" />
     <ClInclude Include="FortAthenaCreativePortal.h" />
@@ -362,6 +369,7 @@
     <ClInclude Include="FortBotNameSettings.h" />
     <ClInclude Include="FortDagwoodVehicle.h" />
     <ClInclude Include="FortDecoItemDefinition.h" />
+    <ClInclude Include="FortDecoTool.h" />
     <ClInclude Include="FortGadgetItemDefinition.h" />
     <ClInclude Include="FortGameMode.h" />
     <ClInclude Include="FortGameModeAthena.h" />
@@ -391,16 +399,19 @@
     <ClInclude Include="FortPlaylist.h" />
     <ClInclude Include="FortPlaylistAthena.h" />
     <ClInclude Include="FortPlaysetItemDefinition.h" />
+    <ClInclude Include="FortPoiVolume.h" />
     <ClInclude Include="FortQuickBars.h" />
     <ClInclude Include="FortResourceItemDefinition.h" />
     <ClInclude Include="FortSafeZoneIndicator.h" />
     <ClInclude Include="FortServerBotManagerAthena.h" />
+    <ClInclude Include="FortTrapItemDefinition.h" />
     <ClInclude Include="FortVehicleItemDefinition.h" />
     <ClInclude Include="FortVolume.h" />
     <ClInclude Include="FortWeapon.h" />
     <ClInclude Include="FortWeaponItemDefinition.h" />
     <ClInclude Include="BuildingWeapons.h" />
     <ClInclude Include="FortWeaponMeleeItemDefinition.h" />
+    <ClInclude Include="FortWeaponRangedItemDefinition.h" />
     <ClInclude Include="FortWeaponRangedMountedCannon.h" />
     <ClInclude Include="FortWorldItemDefinition.h" />
     <ClInclude Include="Function.h" />
@@ -473,6 +484,7 @@
     <ClInclude Include="Set.h" />
     <ClInclude Include="SharedPointer.h" />
     <ClInclude Include="SharedPointerInternals.h" />
+    <ClInclude Include="SoftClassPtr.h" />
     <ClInclude Include="SoftObjectPath.h" />
     <ClInclude Include="SoftObjectPtr.h" />
     <ClInclude Include="Sort.h" />
@@ -481,9 +493,10 @@
     <ClInclude Include="Stack.h" />
     <ClInclude Include="StringAssetReference.h" />
     <ClInclude Include="Text.h" />
+    <ClInclude Include="Texture.h" />
     <ClInclude Include="TimerManager.h" />
     <ClInclude Include="Transform.h" />
-    <ClInclude Include="TSubclassOf.h" />
+    <ClInclude Include="SubclassOf.h" />
     <ClInclude Include="Tuple.h" />
     <ClInclude Include="TypeCompatibleBytes.h" />
     <ClInclude Include="TypeWrapper.h" />

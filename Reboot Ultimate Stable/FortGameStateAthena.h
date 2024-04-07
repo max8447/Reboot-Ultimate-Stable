@@ -99,6 +99,12 @@ public:
 		return Get<int>(PlayersLeftOffset);
 	}
 
+	int& GetPlayerBotsLeft()
+	{
+		static auto PlayerBotsLeftOffset = GetOffset("PlayerBotsLeft");
+		return Get<int>(PlayerBotsLeftOffset);
+	}
+
 	bool& IsSafeZonePaused()
 	{
 		static auto bSafeZonePausedOffset = this->GetOffset("bSafeZonePaused");
@@ -161,6 +167,7 @@ public:
 	void OnRep_GamePhase();
 	void OnRep_CurrentPlaylistInfo();
 	void OnRep_PlayersLeft();
+	void OnRep_PlayerBotsLeft();
 	TeamsArrayContainer* GetTeamsArrayContainer();
 	void AddToAdditionalPlaylistLevelsStreamed(const FName& Name, bool bServerOnly = false);
 

@@ -1,15 +1,15 @@
 #pragma once
 
 #include "Actor.h"
-#include "TSubClassOf.h"
+#include "SubClassOf.h"
 
 class APawn : public AActor
 {
 public:
-	UObject* GetPlayerState()
+	class APlayerState* GetPlayerState()
 	{
 		static auto PlayerStateOffset = GetOffset("PlayerState");
-		return Get(PlayerStateOffset);
+		return Get<class APlayerState*>(PlayerStateOffset);
 	}
 
 	class APlayerController* GetController()

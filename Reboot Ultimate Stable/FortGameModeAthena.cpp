@@ -35,7 +35,7 @@
 #include "calendar.h"
 #include "gui.h"
 #include <random>
-#include "TSubclassOf.h"
+#include "SubclassOf.h"
 #include "FortAthenaSupplyDrop.h"
 
 static UFortPlaylistAthena* GetPlaylistToUse()
@@ -458,7 +458,8 @@ bool AFortGameModeAthena::Athena_ReadyToStartMatchHook(AFortGameModeAthena* Game
 				}
 			}
 
-			if (Fortnite_Version == 17.50) {
+			if (Fortnite_Version == 17.50)
+			{
 				auto FarmAfter = FindObject<AActor>(("/Game/Athena/Apollo/Maps/Apollo_Mother.Apollo_Mother.PersistentLevel.farmbase_2"));
 				ShowFoundation(FarmAfter);
 
@@ -466,7 +467,8 @@ bool AFortGameModeAthena::Athena_ReadyToStartMatchHook(AFortGameModeAthena* Game
 				ShowFoundation(FarmPhase);
 			}
 
-			if (Fortnite_Version == 17.40) {
+			if (Fortnite_Version == 17.40)
+			{
 				ShowFoundation(FindObject<AActor>("/Game/Athena/Apollo/Maps/Apollo_Mother.Apollo_Mother.PersistentLevel.CoralPhase_02")); // Coral Castle Phases (CoralPhase_01, CoralPhase_02 and CoralPhase_03)
 				ShowFoundation(FindObject<AActor>("/Game/Athena/Apollo/Maps/Apollo_Mother.Apollo_Mother.PersistentLevel.LF_Athena_16x16_Foundation_0")); // CoralFoundation_01
 				ShowFoundation(FindObject<AActor>("/Game/Athena/Apollo/Maps/Apollo_Mother.Apollo_Mother.PersistentLevel.LF_Athena_16x16_Foundation6")); // CoralFoundation_05
@@ -476,7 +478,8 @@ bool AFortGameModeAthena::Athena_ReadyToStartMatchHook(AFortGameModeAthena* Game
 				ShowFoundation(FindObject<AActor>("/Game/Athena/Apollo/Maps/Apollo_Mother.Apollo_Mother.PersistentLevel.LF_Athena_16x16_Foundation5"));
 			}
 
-			if (Fortnite_Version == 17.30) {
+			if (Fortnite_Version == 17.30)
+			{
 				ShowFoundation(FindObject<AActor>("/Game/Athena/Apollo/Maps/Apollo_Mother.Apollo_Mother.PersistentLevel.Slurpy_Phase03")); // There are 1, 2 and 3
 			}
 
@@ -507,14 +510,11 @@ bool AFortGameModeAthena::Athena_ReadyToStartMatchHook(AFortGameModeAthena* Game
 			{
 				// There are also christmas trees & stuff but we need to find a better way to stream that because there's a lot.
 
-				if (false) // If the client loads this, it says the package doesnt exist...
-				{
-					ShowFoundation(FindObject<AActor>("/Game/Athena/Apollo/Maps/Apollo_POI_Foundations.Apollo_POI_Foundations.PersistentLevel.LF_5x5_Galileo_Ferry_1"));
-					ShowFoundation(FindObject<AActor>("/Game/Athena/Apollo/Maps/Apollo_POI_Foundations.Apollo_POI_Foundations.PersistentLevel.LF_5x5_Galileo_Ferry_2"));
-					ShowFoundation(FindObject<AActor>("/Game/Athena/Apollo/Maps/Apollo_POI_Foundations.Apollo_POI_Foundations.PersistentLevel.LF_5x5_Galileo_Ferry_3"));
-					ShowFoundation(FindObject<AActor>("/Game/Athena/Apollo/Maps/Apollo_POI_Foundations.Apollo_POI_Foundations.PersistentLevel.LF_5x5_Galileo_Ferry_4"));
-					ShowFoundation(FindObject<AActor>("/Game/Athena/Apollo/Maps/Apollo_POI_Foundations.Apollo_POI_Foundations.PersistentLevel.LF_5x5_Galileo_Ferry_5"));
-				}
+				ShowFoundation(FindObject<AActor>("/Game/Athena/Apollo/Maps/Apollo_POI_Foundations.Apollo_POI_Foundations.PersistentLevel.LF_5x5_Galileo_Ferry_1"));
+				ShowFoundation(FindObject<AActor>("/Game/Athena/Apollo/Maps/Apollo_POI_Foundations.Apollo_POI_Foundations.PersistentLevel.LF_5x5_Galileo_Ferry_2"));
+				ShowFoundation(FindObject<AActor>("/Game/Athena/Apollo/Maps/Apollo_POI_Foundations.Apollo_POI_Foundations.PersistentLevel.LF_5x5_Galileo_Ferry_3"));
+				ShowFoundation(FindObject<AActor>("/Game/Athena/Apollo/Maps/Apollo_POI_Foundations.Apollo_POI_Foundations.PersistentLevel.LF_5x5_Galileo_Ferry_4"));
+				ShowFoundation(FindObject<AActor>("/Game/Athena/Apollo/Maps/Apollo_POI_Foundations.Apollo_POI_Foundations.PersistentLevel.LF_5x5_Galileo_Ferry_5"));
 			}
 
 			LOG_INFO(LogDev, "Getting playlist!");
@@ -533,28 +533,34 @@ bool AFortGameModeAthena::Athena_ReadyToStartMatchHook(AFortGameModeAthena* Game
 
 					if (AdditionalLevelsServerOnlyOffset != -1)
 					{
-						/* TArray<TSoftObjectPtr<UWorld>>& AdditionalLevelsServerOnly = CurrentPlaylist->Get<TArray<TSoftObjectPtr<UWorld>>>(AdditionalLevelsServerOnlyOffset);
+						TArray<TSoftObjectPtr<UWorld>>& AdditionalLevelsServerOnly = CurrentPlaylist->Get<TArray<TSoftObjectPtr<UWorld>>>(AdditionalLevelsServerOnlyOffset);
 						LOG_INFO(LogPlaylist, "Loading {} playlist server levels.", AdditionalLevelsServerOnly.Num());
 
 						for (int i = 0; i < AdditionalLevelsServerOnly.Num(); i++)
 						{
+							FVector Loc{};
+							FRotator Rot{};
+							bool Success = false;
+							ULevelStreamingDynamic::LoadLevelInstance(GetWorld(), std::wstring(AdditionalLevelsServerOnly.at(i).Get()->GetPathName().begin(), AdditionalLevels.at(i).Get()->GetPathName().end()).c_str(), 
+								Loc, Rot, &Success);
 							FName LevelFName = AdditionalLevelsServerOnly.at(i).SoftObjectPtr.ObjectID.AssetPathName;
-							auto LevelNameStr = LevelFName.ToString();
-							LOG_INFO(LogPlaylist, "Loading server level {}.", LevelNameStr);
-							auto LevelNameWStr = std::wstring(LevelNameStr.begin(), LevelNameStr.end());
+							LOG_INFO(LogPlaylist, "Loading server level {}.", LevelFName.ToString());
 
 							GameState->AddToAdditionalPlaylistLevelsStreamed(LevelFName, true);
-						} */
+						}
 					}
 
 					LOG_INFO(LogPlaylist, "Loading {} playlist levels.", AdditionalLevels.Num());
 
 					for (int i = 0; i < AdditionalLevels.Num(); i++)
 					{
+						FVector Loc{};
+						FRotator Rot{};
+						bool Success = false;
 						FName LevelFName = AdditionalLevels.at(i).SoftObjectPtr.ObjectID.AssetPathName;
-						auto LevelNameStr = LevelFName.ToString();
-						LOG_INFO(LogPlaylist, "Loading level {}.", LevelNameStr);
-						auto LevelNameWStr = std::wstring(LevelNameStr.begin(), LevelNameStr.end());
+						ULevelStreamingDynamic::LoadLevelInstance(GetWorld(), std::wstring(AdditionalLevels.at(i).Get()->GetPathName().begin(), AdditionalLevels.at(i).Get()->GetPathName().end()).c_str(),
+							Loc, Rot, &Success);
+						LOG_INFO(LogPlaylist, "Loading level {}.", LevelFName.ToString());
 
 						GameState->AddToAdditionalPlaylistLevelsStreamed(LevelFName);
 
@@ -572,9 +578,13 @@ bool AFortGameModeAthena::Athena_ReadyToStartMatchHook(AFortGameModeAthena* Game
 					}
 
 					static auto OnRep_AdditionalPlaylistLevelsStreamedFn = FindObject<UFunction>(L"/Script/FortniteGame.FortGameState.OnRep_AdditionalPlaylistLevelsStreamed");
+					static auto OnFinishedStreamingAdditionalPlaylistLevelFn = FindObject<UFunction>(L"/Script/FortniteGame.FortGameState.OnFinishedStreamingAdditionalPlaylistLevel");
 
 					if (OnRep_AdditionalPlaylistLevelsStreamedFn)
 						GameState->ProcessEvent(OnRep_AdditionalPlaylistLevelsStreamedFn);
+
+					if (OnFinishedStreamingAdditionalPlaylistLevelFn)
+						GameState->ProcessEvent(OnFinishedStreamingAdditionalPlaylistLevelFn);
 				}
 			}
 		}
@@ -663,6 +673,48 @@ bool AFortGameModeAthena::Athena_ReadyToStartMatchHook(AFortGameModeAthena* Game
 		{
 			LOG_INFO(LogDev, "before: {}", GameState->Get<float>(DefaultRebootMachineHotfixOffset));
 			GameState->Get<float>(DefaultRebootMachineHotfixOffset) = 1; // idk i dont think we need to set
+		}
+
+		if (Fortnite_Season == 11)
+		{
+			auto AllGalileoSpawners = UGameplayStatics::GetAllActorsOfClass(GetWorld(), LoadObject<UClass>(L"/Game/Athena/AI/Galileo/BP_Galileo_Spawner.BP_Galileo_Spawner_C", BGACLASS)); // doesnt work
+			auto GalileoBotData = LoadObject<UFortAthenaAIBotCustomizationData>("/Game/Athena/AI/Galileo/BotData_Galileo.BotData_Galileo");
+
+			LOG_INFO(LogGame, "AllGalileoSpawners.Num(): {}", std::to_string(AllGalileoSpawners.Num()));
+
+			if (GalileoBotData)
+			{
+				for (int i = 0; i < AllGalileoSpawners.Num(); i++)
+				{
+					auto Spawner = AllGalileoSpawners.at(i);
+
+					if (Spawner)
+						continue;
+
+					LOG_INFO(LogGame, "Spawner Location: {}", Spawner->GetActorLocation().ToString().ToString());
+
+					FFortAthenaAIBotRunTimeCustomizationData RuntimeBotData{};
+
+					FVector Loc = Spawner->GetActorLocation();
+					FRotator Rot = Spawner->GetActorRotation();
+
+					auto Startwarthoig = GameMode->GetServerBotManager()->SpawnBotHook(GameMode->GetServerBotManager(), Loc, Rot, GalileoBotData, RuntimeBotData);
+
+					if (Startwarthoig)
+					{
+						Startwarthoig->SetMaxShield(60);
+						Startwarthoig->SetShield(60);
+					}
+					else
+					{
+						LOG_WARN(LogGame, "Failed to spawn starwars person!");
+					}
+				}
+			}
+			else
+			{
+				LOG_WARN(LogGame, "Failed to spawn starwars person, invalid BotData!");
+			}
 		}
 
 		LOG_INFO(LogDev, "Finished presetup!");

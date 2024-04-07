@@ -48,6 +48,8 @@
 #include "FortAIEncounterInfo.h"
 #include "FortServerBotManagerAthena.h"
 #include "botnames.h"
+#include "FortAthenaAIBotController.h"
+#include "FortDecoTool.h"
 
 enum class EMeshNetworkNodeType : uint8_t
 {
@@ -880,11 +882,11 @@ DWORD WINAPI Main(LPVOID)
 
     if (Fortnite_Version >= 20 || Fortnite_Version == 12.00)
         ApplyNullAndRetTrues();
-
+    
     // UKismetSystemLibrary::ExecuteConsoleCommand(GetWorld(), L"log LogNetPackageMap VeryVerbose", nullptr);
     // UKismetSystemLibrary::ExecuteConsoleCommand(GetWorld(), L"log LogNetTraffic VeryVerbose", nullptr);
     // UKismetSystemLibrary::ExecuteConsoleCommand(GetWorld(), L"log LogNet VeryVerbose", nullptr);
-    // UKismetSystemLibrary::ExecuteConsoleCommand(GetWorld(), L"log LogNavigation VeryVerbose", nullptr);
+    UKismetSystemLibrary::ExecuteConsoleCommand(GetWorld(), L"log LogNavigation VeryVerbose", nullptr);
     UKismetSystemLibrary::ExecuteConsoleCommand(GetWorld(), L"log LogFortMission VeryVerbose", nullptr);
     UKismetSystemLibrary::ExecuteConsoleCommand(GetWorld(), L"log LogFortAIGoalSelection VeryVerbose", nullptr);
     UKismetSystemLibrary::ExecuteConsoleCommand(GetWorld(), L"log LogFortWorld VeryVerbose", nullptr);
@@ -893,7 +895,7 @@ DWORD WINAPI Main(LPVOID)
     UKismetSystemLibrary::ExecuteConsoleCommand(GetWorld(), L"log LogFortTeams VeryVerbose", nullptr);
     UKismetSystemLibrary::ExecuteConsoleCommand(GetWorld(), L"log LogFortAI VeryVerbose", nullptr);
     UKismetSystemLibrary::ExecuteConsoleCommand(GetWorld(), L"log LogFortAIDirector VeryVerbose", nullptr);
-    // UKismetSystemLibrary::ExecuteConsoleCommand(GetWorld(), L"log LogFortQuest VeryVerbose", nullptr);
+    UKismetSystemLibrary::ExecuteConsoleCommand(GetWorld(), L"log LogFortQuest VeryVerbose", nullptr);
     // UKismetSystemLibrary::ExecuteConsoleCommand(GetWorld(), L"log LogFortUIDirector NoLogging", nullptr);
     // UKismetSystemLibrary::ExecuteConsoleCommand(GetWorld(), L"log LogAbilitySystem VeryVerbose", nullptr);
     UKismetSystemLibrary::ExecuteConsoleCommand(GetWorld(), L"log LogDataTable VeryVerbose", nullptr);
@@ -1119,7 +1121,7 @@ DWORD WINAPI Main(LPVOID)
 
     // Globals::bAbilitiesEnabled = Engine_Version < 500;
 
-    InitBotNames();
+    CreateThread(0, 0, InitBotNames, 0, 0, 0);
 
     if (Engine_Version < 420)
     {
@@ -1207,11 +1209,10 @@ DWORD WINAPI Main(LPVOID)
 
     // HookInstruction(Addresses::UpdateTrackedAttributesLea, (PVOID)AFortPlayerControllerAthena::UpdateTrackedAttributesHook, "/Script/Engine.PlayerController.EnableCheats", ERelativeOffsets::LEA, FortPlayerControllerAthenaDefault);
     // HookInstruction(Addresses::CombinePickupLea, (PVOID)AFortPickup::CombinePickupHook, "/Script/Engine.PlayerController.SetVirtualJoystickVisibility", ERelativeOffsets::LEA, FortPlayerControllerAthenaDefault);
-   
 
     if (Fortnite_Version == 13.40)
     {
-        // HookInstruction(__int64(GetModuleHandleW(0)) + 0x1FC835D, (PVOID)UFortAthenaAIBotCustomizationData::ApplyOverrideCharacterCustomizationHook, "/Script/Engine.PlayerController.SetVirtualJoystickVisibility", ERelativeOffsets::CALL, nullptr);
+        HookInstruction(__int64(GetModuleHandleW(0)) + 0x1FC835D, (PVOID)UFortAthenaAIBotCustomizationData::ApplyOverrideCharacterCustomizationHook, "/Script/Engine.PlayerController.SetVirtualJoystickVisibility", ERelativeOffsets::CALL, nullptr);
     }
 
     Hooking::MinHook::Hook(FortWeaponDefault, FindObject<UFunction>(L"/Script/FortniteGame.FortWeapon.ServerReleaseWeaponAbility"),
@@ -1282,6 +1283,9 @@ DWORD WINAPI Main(LPVOID)
         AFortPlayerController::ServerLoadingScreenDroppedHook, (PVOID*)&AFortPlayerController::ServerLoadingScreenDroppedOriginal, false, true);
     Hooking::MinHook::Hook(FortPlayerControllerAthenaDefault, FindObject<UFunction>(L"/Script/FortniteGame.FortPlayerController.ServerReadyToStartMatch"),
         AFortPlayerControllerAthena::ServerReadyToStartMatchHook, (PVOID*)&AFortPlayerControllerAthena::ServerReadyToStartMatchOriginal, false);
+
+    Hooking::MinHook::Hook(FindObject(L"/Script/FortniteGame.Default__FortDecoTool"), FindObject<UFunction>(L"/Script/FortniteGame.FortDecoTool.ServerCreateBuildingAndSpawnDeco"),
+        AFortDecoTool::ServerCreateBuildingAndSpawnDecoHook, nullptr, false, true);
 
     auto ServerRequestSeatChangeFn = FindObject<UFunction>(L"/Script/FortniteGame.FortPlayerControllerZone.ServerRequestSeatChange");
 
@@ -1545,6 +1549,9 @@ DWORD WINAPI Main(LPVOID)
                 UAthenaMarkerComponent::ServerRemoveMapMarkerHook, nullptr, false);
         }
     }
+
+    Hooking::MinHook::Hook(FindObject<AFortAthenaAIBotController>(L"/Script/FortniteGame.Default__FortAthenaAIBotController"), FindObject<UFunction>(L"/Script/FortniteGame.FortAthenaAIBotController.OnPossesedPawnDied"),
+        AFortAthenaAIBotController::OnPossesedPawnDiedHook, (PVOID*)&AFortAthenaAIBotController::OnPossesedPawnDiedOriginal, false);
 
     Hooking::MinHook::Hook((PVOID)Addresses::GetPlayerViewpoint, (PVOID)AFortPlayerControllerAthena::GetPlayerViewPointHook, (PVOID*)&AFortPlayerControllerAthena::GetPlayerViewPointOriginal);
 

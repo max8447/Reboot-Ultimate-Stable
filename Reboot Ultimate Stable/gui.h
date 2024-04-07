@@ -120,7 +120,7 @@ static inline bool HasAnyCalendarModification()
 
 static inline void Restart() // todo move?
 {
-	InitBotNames();
+	CreateThread(0, 0, InitBotNames, 0, 0, 0);
 
 	FString LevelA = Engine_Version < 424
 		? L"open Athena_Terrain" : Engine_Version >= 500 ? Engine_Version >= 501

@@ -305,6 +305,15 @@
     <ClCompile Include="FortServerBotManagerAthena.cpp">
       <Filter>FortniteGame\Source\FortniteGame\Private\AI</Filter>
     </ClCompile>
+    <ClCompile Include="FortAthenaAIBotCustomizationData.cpp">
+      <Filter>FortniteGame\Source\FortniteGame\Private\AI</Filter>
+    </ClCompile>
+    <ClCompile Include="FortAthenaAIBotController.cpp">
+      <Filter>FortniteGame\Source\FortniteGame\Private\AI</Filter>
+    </ClCompile>
+    <ClCompile Include="FortDecoTool.cpp">
+      <Filter>FortniteGame\Source\FortniteGame\Private\Weapons</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="log.h" />
@@ -960,7 +969,7 @@
     <ClInclude Include="FortPlaylistAthena.h">
       <Filter>FortniteGame\Source\FortniteGame\Public</Filter>
     </ClInclude>
-    <ClInclude Include="TSubclassOf.h">
+    <ClInclude Include="SubclassOf.h">
       <Filter>Engine\Source\Runtime\Engine\Classes\Engine</Filter>
     </ClInclude>
     <ClInclude Include="finder.h">
@@ -989,6 +998,36 @@
     </ClInclude>
     <ClInclude Include="FortAthenaMutator_CobaltHighTower.h">
       <Filter>FortniteGame\Plugins\GameFeatures\LTM\HighTower_Cobalt\Source\HighTowerCobaltRuntime\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="BehaviorTree.h">
+      <Filter>Engine\Source\Runtime\AIModule\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="FortAthenaAIBotInventoryItems.h">
+      <Filter>FortniteGame\Source\FortniteGame\Public\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="FortWeaponRangedItemDefinition.h">
+      <Filter>FortniteGame\Source\FortniteGame\Public\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="FortPoiVolume.h">
+      <Filter>FortniteGame\Source\FortniteGame\Public\Building</Filter>
+    </ClInclude>
+    <ClInclude Include="FortAthenaAISpawnerDataComponent_AIBotInventory.h">
+      <Filter>FortniteGame\Source\FortniteGame\Public\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Engine\Source\Runtime\Core\Public\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="FortAthenaAISpawnerDataComponent_AIBotGameplay.h">
+      <Filter>FortniteGame\Source\FortniteGame\Public\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="FortDecoTool.h">
+      <Filter>FortniteGame\Source\FortniteGame\Public\Weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="FortTrapItemDefinition.h">
+      <Filter>FortniteGame\Source\FortniteGame\Public\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="SoftClassPtr.h">
+      <Filter>Engine\Source\Runtime\Engine\Classes\Engine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

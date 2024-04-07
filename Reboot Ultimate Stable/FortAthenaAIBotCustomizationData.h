@@ -2,8 +2,12 @@
 
 #include "reboot.h"
 #include "FortAthenaAIBotCharacterCustomization.h"
-#include "FortPlayerController.h"
 #include "FortPlayerState.h"
+#include "BehaviorTree.h"
+#include "FortAthenaAIBotInventoryItems.h"
+#include "FortBotNameSettings.h"
+#include "SubclassOf.h"
+#include "FortPlayerPawnAthena.h"
 
 class UFortAthenaAIBotCustomizationData : public UObject // UPrimaryDataAsset
 {
@@ -14,30 +18,37 @@ public:
 		return Get<UFortAthenaAIBotCharacterCustomization*>(CharacterCustomizationOffset);
 	}
 
-	static void ApplyOverrideCharacterCustomizationHook(UFortAthenaAIBotCustomizationData* InBotData, AFortPlayerPawn* NewBot, __int64 idk)
+	TSubclassOf<AFortPlayerPawnAthena> GetPawnClass()
 	{
-		LOG_INFO(LogDev, "ApplyOverrideCharacterCustomizationHook!");
-
-		auto CharacterCustomization = InBotData->GetCharacterCustomization();
-
-		auto Controller = NewBot->GetController();
-
-		LOG_INFO(LogDev, "Controller: {}", Controller->IsValidLowLevel() ? Controller->GetPathName() : "BadRead");
-
-		static auto CosmeticLoadoutBCOffset = Controller->GetOffset("CosmeticLoadoutBC");
-		Controller->GetPtr<FFortAthenaLoadout>(CosmeticLoadoutBCOffset)->GetCharacter() = CharacterCustomization->GetCustomizationLoadout()->GetCharacter();
-
-		auto PlayerStateAsFort = Cast<AFortPlayerState>(Controller->GetPlayerState());
-
-		static auto UpdatePlayerCustomCharacterPartsVisualizationFn = FindObject<UFunction>(L"/Script/FortniteGame.FortKismetLibrary.UpdatePlayerCustomCharacterPartsVisualization");
-		PlayerStateAsFort->ProcessEvent(UpdatePlayerCustomCharacterPartsVisualizationFn, &PlayerStateAsFort);
-
-		PlayerStateAsFort->ForceNetUpdate();
-		NewBot->ForceNetUpdate();
-		Controller->ForceNetUpdate();
-
-		// NewBot->GetCosmeticLoadout()->GetCharacter() = CharacterCustomization->GetCustomizationLoadout()->GetCharacter();
+		static auto PawnClassOffset = GetOffset("PawnClass");
+		return Get<TSubclassOf<AFortPlayerPawnAthena>>(PawnClassOffset);
 	}
+
+	UBehaviorTree* GetBehaviorTree()
+	{
+		static auto BehaviorTreeOffset = GetOffset("BehaviorTree");
+		return Get<UBehaviorTree*>(BehaviorTreeOffset);
+	}
+
+	UFortAthenaAIBotInventoryItems* GetStartupInventory()
+	{
+		static auto StartupInventoryOffset = GetOffset("StartupInventory");
+		return Get<UFortAthenaAIBotInventoryItems*>(StartupInventoryOffset);
+	}
+
+	UFortBotNameSettings* GetBotNameSettings()
+	{
+		static auto BotNameSettingsOffset = GetOffset("BotNameSettings");
+		return Get<UFortBotNameSettings*>(BotNameSettingsOffset);
+	}
+
+	float GetSkillLevel()
+	{
+		static auto SkillLevelOffset = GetOffset("SkillLevel");
+		return Get<float>(SkillLevelOffset);
+	}
+
+	static void ApplyOverrideCharacterCustomizationHook(UFortAthenaAIBotCustomizationData* InBotData, AFortPlayerPawn* NewBot, __int64 idk);
 
 	static UClass* StaticClass()
 	{

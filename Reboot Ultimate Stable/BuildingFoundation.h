@@ -2,6 +2,8 @@
 
 #include "BuildingSMActor.h"
 #include "Stack.h"
+#include "GameplayTagContainer.h"
+#include "Text.h"
 
 /* enum class EDynamicFoundationType : uint8
 {
@@ -34,6 +36,18 @@ class ABuildingFoundation : public ABuildingSMActor
 public:
 	static inline void (*SetDynamicFoundationEnabledOriginal)(UObject* Context, FFrame& Stack, void* Ret);
 	static inline void (*SetDynamicFoundationTransformOriginal)(UObject* Context, FFrame& Stack, void* Ret);
+
+	FGameplayTag GetMapLocationTag()
+	{
+		static auto MapLocationTagOffset = GetOffset("MapLocationTag");
+		return Get<FGameplayTag>(MapLocationTagOffset);
+	}
+
+	FText GetMapLocationText()
+	{
+		static auto MapLocationTextOffset = GetOffset("MapLocationText");
+		return Get<FText>(MapLocationTextOffset);
+	}
 
 	static void SetDynamicFoundationTransformHook(UObject* Context, FFrame& Stack, void* Ret);
 	static void SetDynamicFoundationEnabledHook(UObject* Context, FFrame& Stack, void* Ret);

@@ -7,6 +7,7 @@ class AGameMode : public AGameModeBase
 public:
 
 	void RestartGame();
+	void EndMatch();
 
 	class AGameState*& GetGameState()
 	{

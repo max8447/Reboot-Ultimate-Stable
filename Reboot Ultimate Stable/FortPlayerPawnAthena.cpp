@@ -1,6 +1,10 @@
 #include "FortPlayerPawnAthena.h"
 #include "FortInventory.h"
 #include "FortPlayerControllerAthena.h"
+#include "FortPoiVolume.h"
+#include "GameplayStatics.h"
+#include "BuildingFoundation.h"
+#include "KismetTextLibrary.h"
 
 void AFortPlayerPawnAthena::OnCapsuleBeginOverlapHook(UObject* Context, FFrame* Stack, void* Ret)
 {
@@ -8,7 +12,7 @@ void AFortPlayerPawnAthena::OnCapsuleBeginOverlapHook(UObject* Context, FFrame* 
 
 	auto Pawn = (AFortPlayerPawnAthena*)Context;
 	UPrimitiveComponent* OverlappedComp;
-	AActor* OtherActor;
+	AActor* OtherActor = nullptr;
 	UPrimitiveComponent* OtherComp;
 	int OtherBodyIndex;
 	bool bFromSweep;
@@ -26,7 +30,7 @@ void AFortPlayerPawnAthena::OnCapsuleBeginOverlapHook(UObject* Context, FFrame* 
 	std::free(SweepResultPtr);
 
 	// LOG_INFO(LogDev, "OtherActor: {}", __int64(OtherActor));
-	// LOG_INFO(LogDev, "OtherActorName: {}", OtherActor->IsValidLowLevel() ? OtherActor->GetName() : "BadRead")
+	// LOG_INFO(LogDev, "OtherComp: {}", OtherComp ? OtherComp->GetFullName() : "BadRead");
 	
 	if (!Pawn->IsDBNO())
 	{
@@ -47,6 +51,24 @@ void AFortPlayerPawnAthena::OnCapsuleBeginOverlapHook(UObject* Context, FFrame* 
 				{
 					ServerHandlePickupHook(Pawn, Pickup, 0.4f, FVector(), true);
 				}
+			}
+		}
+	}
+
+	if (auto PoiVolume = Cast<AFortPoiVolume>(OtherActor->GetOuter()))
+	{
+		auto LocationTag = PoiVolume->GetLocationTags().GameplayTags.at(0); // i think
+		auto AllBuildingFoundations = UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABuildingFoundation::StaticClass());
+
+		for (int i = 0; i < AllBuildingFoundations.Num(); i++)
+		{
+			auto CurrentBuildingFoundation = Cast<ABuildingFoundation>(AllBuildingFoundations.at(i));
+
+			if (LocationTag.TagName == CurrentBuildingFoundation->GetMapLocationTag().TagName)
+			{
+				std::string MapLocationTextStr = UKismetTextLibrary::Conv_TextToString(CurrentBuildingFoundation->GetMapLocationText()).ToString();
+
+				LOG_INFO(LogGame, "Entered {}", MapLocationTextStr);
 			}
 		}
 	}

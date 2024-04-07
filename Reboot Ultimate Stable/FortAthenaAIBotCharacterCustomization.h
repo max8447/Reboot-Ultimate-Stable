@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Object.h"
+#include "FortPlayerController.h"
 
 class UFortAthenaAIBotCharacterCustomization : public UObject
 {

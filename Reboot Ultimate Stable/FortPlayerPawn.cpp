@@ -33,7 +33,7 @@ bool DBNOCheck(AFortPlayerPawn* Pawn, AController* EventInstigator)
 
 			if (PlayerState && InstigatorPlayerState)
 			{
-				if (PlayerState->GetTeamIndex() == InstigatorPlayerState->GetTeamIndex())
+				if (PlayerState->GetTeamIndex() == InstigatorPlayerState->GetTeamIndex() || Pawn->IsA(FindObject<UClass>("/Gasket/Pawns/BP_GasketPlayerPawn_Tomato.BP_GasketPlayerPawn_Tomato_C")) /* The stark robots that you could hack */)
 				{
 					res = true;
 				}
@@ -79,8 +79,11 @@ void AFortPlayerPawn::ServerReviveFromDBNOHook(AFortPlayerPawn* Pawn, AControlle
 
 	Pawn->OnRep_IsDBNO();
 
-	PlayerController->ClientOnPawnRevived(EventInstigator); // We should call the function that calls this.
-	PlayerController->RespawnPlayerAfterDeath(false); // nooo
+	if (!PlayerState->IsBot())
+	{
+		PlayerController->ClientOnPawnRevived(EventInstigator); // We should call the function that calls this.
+		PlayerController->RespawnPlayerAfterDeath(false); // nooo
+	}
 
 	if (auto PawnAthena = Cast<AFortPlayerPawnAthena>(Pawn)) // im too lazy to make another hook for fortplayerpawnathena
 	{

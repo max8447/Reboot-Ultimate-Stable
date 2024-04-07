@@ -250,5 +250,11 @@ public:
 		return GetPtr<FFortItemEntry>(ItemEntryOffset);
 	}
 
+	AFortInventory*& GetOwnerInventory()
+	{
+		static auto OwnerInventoryOffset = this->GetOffset("OwnerInventory");
+		return Get<AFortInventory*>(OwnerInventoryOffset);
+	}
+
 	void SetOwningControllerForTemporaryItem(UObject* Controller);
 };

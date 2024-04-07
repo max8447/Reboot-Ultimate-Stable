@@ -17,6 +17,13 @@ struct FRotator
 	float Roll;
 #endif
 
+	FString ToString() const
+	{
+		FString Result;
+		Result.Set((std::to_wstring(Pitch) + L", " + std::to_wstring(Yaw) + L", " + std::to_wstring(Roll)).c_str());
+		return Result;
+	}
+
 	FQuat Quaternion() const;
 
 	FVector Vector() const;

@@ -156,6 +156,70 @@ static inline void ProcessEventHook(UObject* Object, UFunction* Function, void* 
 		{
 			LOG_INFO(LogDev, "Function called: {} with {}", FunctionFullName, ObjectName);
 		}
+
+		if (FunctionFullName.contains("K2_ActivateAbilityFromEvent"))
+		{
+			struct FGameplayAbilityTargetDataHandle
+			{
+				uint8                                         Pad_3965[0x28];                                    // 0x0000(0x0028)(Fixing Struct Size After Last Property [ Dumper-7 ])
+			};
+
+			struct FGameplayEventDataTest
+			{
+				struct FGameplayTag                           EventTag;                                          // 0x0000(0x0008)(Edit, BlueprintVisible, NoDestructor, HasGetValueTypeHash, NativeAccessSpecifierPublic)
+				class AActor* Instigator;                                        // 0x0008(0x0008)(Edit, BlueprintVisible, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash, NativeAccessSpecifierPublic)
+				class AActor* Target;                                            // 0x0010(0x0008)(Edit, BlueprintVisible, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash, NativeAccessSpecifierPublic)
+				class UObject* OptionalObject;                                    // 0x0018(0x0008)(Edit, BlueprintVisible, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash, NativeAccessSpecifierPublic)
+				class UObject* OptionalObject2;                                   // 0x0020(0x0008)(Edit, BlueprintVisible, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash, NativeAccessSpecifierPublic)
+				struct FGameplayEffectContextHandle           ContextHandle;                                     // 0x0028(0x0018)(Edit, BlueprintVisible, NativeAccessSpecifierPublic)
+				struct FGameplayTagContainer                  InstigatorTags;                                    // 0x0040(0x0020)(Edit, BlueprintVisible, NativeAccessSpecifierPublic)
+				struct FGameplayTagContainer                  TargetTags;                                        // 0x0060(0x0020)(Edit, BlueprintVisible, NativeAccessSpecifierPublic)
+				float                                         EventMagnitude;                                    // 0x0080(0x0004)(Edit, BlueprintVisible, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash, NativeAccessSpecifierPublic)
+				uint8                                         Pad_3966[0x4];                                     // 0x0084(0x0004)(Fixing Size After Last Property [ Dumper-7 ])
+				struct FGameplayAbilityTargetDataHandle       TargetData;                                        // 0x0088(0x0028)(Edit, BlueprintVisible, NativeAccessSpecifierPublic)
+			};
+
+			FGameplayEventDataTest EventData = *(FGameplayEventDataTest*)Parameters;
+
+			LOG_ERROR(LogDev, "EventTag: {}", EventData.EventTag.TagName.ToString());
+			if (EventData.Instigator)
+				LOG_ERROR(LogDev, "Instigator: {}", EventData.Instigator->GetFullName());
+			if (EventData.Target)
+				LOG_ERROR(LogDev, "Target: {}", EventData.Target->GetFullName());
+			if (EventData.OptionalObject)
+				LOG_ERROR(LogDev, "OptionalObject: {}", EventData.OptionalObject->GetFullName());
+			if (EventData.OptionalObject2)
+				LOG_ERROR(LogDev, "OptionalObject2: {}", EventData.OptionalObject2->GetFullName());
+			for (int i = 0; i < sizeof(EventData.ContextHandle.UnknownData00); i++)
+			{
+				LOG_ERROR(LogDev, "ContextHandle: {}", EventData.ContextHandle.UnknownData00[i]);
+			}
+			for (int i = 0; i < EventData.InstigatorTags.GameplayTags.Num(); i++)
+			{
+				LOG_ERROR(LogDev, "InstigatorTag: {}", EventData.InstigatorTags.GameplayTags.at(i).TagName.ToString());
+			}
+			for (int i = 0; i < EventData.InstigatorTags.ParentTags.Num(); i++)
+			{
+				LOG_ERROR(LogDev, "InstigatorTag: {}", EventData.InstigatorTags.ParentTags.at(i).TagName.ToString());
+			}
+			for (int i = 0; i < EventData.TargetTags.GameplayTags.Num(); i++)
+			{
+				LOG_ERROR(LogDev, "TargetTag: {}", EventData.TargetTags.GameplayTags.at(i).TagName.ToString());
+			}
+			for (int i = 0; i < EventData.TargetTags.ParentTags.Num(); i++)
+			{
+				LOG_ERROR(LogDev, "TargetTag: {}", EventData.TargetTags.ParentTags.at(i).TagName.ToString());
+			}
+			LOG_ERROR(LogDev, "EventMagnitude: {}", EventData.EventMagnitude);
+			for (int i = 0; i < sizeof(EventData.Pad_3966); i++)
+			{
+				LOG_ERROR(LogDev, "a: {}", EventData.Pad_3966[i]);
+			}
+			for (int i = 0; i < sizeof(EventData.TargetData.Pad_3965); i++)
+			{
+				LOG_ERROR(LogDev, "TargetData: {}", EventData.TargetData.Pad_3965[i]);
+			}
+		}
 	}
 
 	return Object->ProcessEvent(Function, Parameters);

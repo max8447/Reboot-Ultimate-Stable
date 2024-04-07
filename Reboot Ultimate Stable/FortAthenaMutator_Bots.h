@@ -21,6 +21,9 @@ public:
 
 		this->ProcessEvent(SpawnBotFn, &AFortAthenaMutator_Bots_SpawnBot_Params);
 
+		if (bSnapToGround && AFortAthenaMutator_Bots_SpawnBot_Params.ReturnValue)
+			AFortAthenaMutator_Bots_SpawnBot_Params.ReturnValue->TeleportTo(InSpawnLocation, InSpawnRotation); // bro
+
 		return AFortAthenaMutator_Bots_SpawnBot_Params.ReturnValue;
 	}
 

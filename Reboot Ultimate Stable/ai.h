@@ -15,6 +15,7 @@
 #include "KismetTextLibrary.h"
 #include "FortAthenaAIBotCustomizationData.h"
 #include "FortAthenaAIBotSpawnerData.h"
+#include "FortItemDefinition.h"
 
 using UNavigationSystemV1 = UObject;
 using UNavigationSystemConfig = UObject;
@@ -280,9 +281,9 @@ static void SetupNavConfig(const FName& AgentName)
     SetNavigationSystem(NavSystemOverride);
 }
 
-static AFortPlayerPawn* SpawnAIFromSpawnerData(const FVector& Location, UFortAthenaAIBotSpawnerData* SpawnerData)
+static AFortPlayerPawn* SpawnAIFromSpawnerData(AActor* InSpawnLocator, UFortAthenaAIBotSpawnerData* SpawnerData)
 {
-    auto SpawnParamsComponent = SpawnerData->GetSpawnParamsComponent();
+    auto SpawnParamsComponent = Cast<UFortAthenaAISpawnerDataComponent_SpawnParams>(SpawnerData->GetSpawnParamsComponent().Get()->CreateDefaultObject());
 
     if (!SpawnParamsComponent)
     {
@@ -290,7 +291,7 @@ static AFortPlayerPawn* SpawnAIFromSpawnerData(const FVector& Location, UFortAth
         return nullptr;
     }
 
-    auto PawnClass = SpawnerData->GetSpawnParamsComponent()->GetPawnClass();
+    auto PawnClass = SpawnParamsComponent->GetPawnClass().Get();
 
     LOG_INFO(LogAI, "PawnClass: {}", __int64(PawnClass));
 
@@ -301,7 +302,10 @@ static AFortPlayerPawn* SpawnAIFromSpawnerData(const FVector& Location, UFortAth
     }
 
     LOG_INFO(LogAI, "PawnClass Name: {}", PawnClass->GetFullName());
-    auto Pawn = GetWorld()->SpawnActor<AFortPlayerPawn>(PawnClass, Location);
+
+    auto GameMode = Cast<AFortGameModeAthena>(GetWorld()->GetGameMode());
+
+    auto Pawn = GameMode->GetServerBotManager()->GetCachedBotMutator()->SpawnBot(PawnClass, InSpawnLocator, InSpawnLocator->GetActorLocation(), InSpawnLocator->GetActorRotation(), true);
 
     if (!Pawn)
     {
@@ -309,17 +313,75 @@ static AFortPlayerPawn* SpawnAIFromSpawnerData(const FVector& Location, UFortAth
         return nullptr;
     }
 
-    auto CharacterToApply = SpawnerData->GetCosmeticComponent()->GetCosmeticLoadout()->GetCharacter();
-    LOG_INFO(LogAI, "CharacterToApply: {}", __int64(CharacterToApply));
-    ApplyCID(Pawn, CharacterToApply, true); // bruhh
+    auto Controller = Cast<AFortAthenaAIBotController>(Pawn->GetController());
+
+    if (!Controller)
+        Controller = GetWorld()->SpawnActor<AFortAthenaAIBotController>(Pawn->GetAIControllerClass());
+
+    if (Controller->GetPawn() != Pawn)
+        Controller->Possess(Pawn);
+
+    auto PlayerState = Cast<AFortPlayerStateAthena>(Controller->GetPlayerState());
+
+    if (!PlayerState)
+        PlayerState = GetWorld()->SpawnActor<AFortPlayerStateAthena>(AFortPlayerStateAthena::StaticClass());
+
+    PlayerState->SetIsBot(true);
+
+    auto CosmeticComponent = Cast<UFortAthenaAISpawnerDataComponent_CosmeticLoadout>(SpawnerData->GetCosmeticComponent().Get()->CreateDefaultObject());
+
+    if (!CosmeticComponent)
+    {
+        LOG_INFO(LogAI, "Invalid CosmeticComponent for AI!");
+        return Pawn;
+    }
+
+    auto InventoryComponent = Cast<UFortAthenaAISpawnerDataComponent_AIBotInventory>(SpawnerData->GetInventoryComponent().Get()->CreateDefaultObject());
+
+    if (!InventoryComponent)
+    {
+        LOG_INFO(LogAI, "Invalid InventoryComponent for AI!");
+        return Pawn;
+    }
+
+    Controller->StartupInventory = InventoryComponent->GetItems();
+
+    auto CharacterToApply = CosmeticComponent->GetCosmeticLoadout()->GetCharacter();
+    LOG_INFO(LogAI, "CharacterToApply: {}", CharacterToApply->GetName());
+    
+    static auto HeroDefinitionOffset = CharacterToApply->GetOffset("HeroDefinition");
+
+    if (HeroDefinitionOffset != 1)
+    {
+        auto HeroDefinition = CharacterToApply->Get(HeroDefinitionOffset);
+
+        if (HeroDefinition)
+            ApplyHID(Pawn, HeroDefinition, true);
+        else
+            LOG_WARN(LogBots, "Failed to find HeroDefinition!");
+    }
+
+    auto GameplayComponent = Cast<UFortAthenaAISpawnerDataComponent_AIBotGameplay>(SpawnerData->GetGameplayComponent().Get()->CreateDefaultObject());
+
+    if (!GameplayComponent)
+    {
+        LOG_INFO(LogAI, "Invalid GameplayComponent for AI!");
+        return Pawn;
+    }
+
+    FString NewBotName = UKismetTextLibrary::Conv_TextToString(GameplayComponent->GetNameSettings()->GetOverrideName());
+
+    PlayerState->SetPlayerName(NewBotName);
+    Pawn->SetCanBeDamaged(true);
+    Pawn->SetMaxHealth(100);
+    Pawn->SetHealth(100);
 
     return Pawn;
 }
 
 static AFortPlayerPawn* SpawnAIFromCustomizationData(const FVector& Location, UFortAthenaAIBotCustomizationData* CustomizationData)
 {
-    static auto PawnClassOffset = CustomizationData->GetOffset("PawnClass");
-    auto PawnClass = CustomizationData->Get<UClass*>(PawnClassOffset);
+    auto PawnClass = CustomizationData->GetPawnClass();
 
     if (!PawnClass)
     {
@@ -335,7 +397,7 @@ static AFortPlayerPawn* SpawnAIFromCustomizationData(const FVector& Location, UF
         return nullptr;
     }
 
-    auto Controller = Pawn->GetController();
+    auto Controller = Cast<AFortAthenaAIBotController>(Pawn->GetController());
 
     if (!Controller)
     {
@@ -354,20 +416,9 @@ static AFortPlayerPawn* SpawnAIFromCustomizationData(const FVector& Location, UF
         return nullptr;
     }
 
-    static auto CharacterCustomizationOffset = CustomizationData->GetOffset("CharacterCustomization");
-    auto CharacterCustomization = CustomizationData->Get(CharacterCustomizationOffset);
-    auto CharacterCustomizationLoadoutOffset = CharacterCustomization->GetOffset("CustomizationLoadout");
-    auto CharacterCustomizationLoadout = CharacterCustomization->GetPtr<FFortAthenaLoadout>(CharacterCustomizationLoadoutOffset);
-    auto CharacterToApply = CharacterCustomizationLoadout->GetCharacter();
+    auto CharacterToApply = CustomizationData->GetCharacterCustomization()->GetCustomizationLoadout()->GetCharacter();
 
     ApplyCID(Pawn, CharacterToApply, true); // bruhh
-
-    struct FItemAndCount
-    {
-        int                                                Count;                                                    // 0x0000(0x0004) (Edit, BlueprintVisible, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash, NativeAccessSpecifierPublic)
-        unsigned char                                      UnknownData00[0x4];                                       // 0x0004(0x0004) MISSED OFFSET
-        UFortItemDefinition* Item;                                                     // 0x0008(0x0008) (Edit, BlueprintVisible, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash, NativeAccessSpecifierPublic)
-    };
 
     static auto StartupInventoryOffset = CustomizationData->GetOffset("StartupInventory");
     auto StartupInventory = CustomizationData->Get(StartupInventoryOffset);
@@ -382,6 +433,10 @@ static AFortPlayerPawn* SpawnAIFromCustomizationData(const FVector& Location, UF
         for (int i = 0; i < StartupInventoryItems.Num(); ++i)
         {
             ItemsToGrant.push_back({ StartupInventoryItems.at(i), 1 });
+            FItemAndCount ItemAndCount;
+            ItemAndCount.GetCount() = 1;
+            ItemAndCount.GetItem() = StartupInventoryItems.at(i);
+            Controller->StartupInventory.Add(ItemAndCount);
         }
     }
     else
@@ -390,8 +445,10 @@ static AFortPlayerPawn* SpawnAIFromCustomizationData(const FVector& Location, UF
 
         for (int i = 0; i < StartupInventoryItems.Num(); ++i)
         {
-            ItemsToGrant.push_back({ StartupInventoryItems.at(i).Item, StartupInventoryItems.at(i).Count });
+            ItemsToGrant.push_back({ StartupInventoryItems.at(i).GetItem(), StartupInventoryItems.at(i).GetCount()});
         }
+
+        Controller->StartupInventory = StartupInventoryItems;
     }
 
     static auto InventoryOffset = Controller->GetOffset("Inventory");
@@ -431,7 +488,7 @@ static AFortPlayerPawn* SpawnAIFromCustomizationData(const FVector& Location, UF
             Name = UKismetTextLibrary::Conv_TextToString(BotNameSettings->GetOverrideName());
             break;
         case EBotNamingMode::SkinName:
-            Name = CharacterToApply ? UKismetTextLibrary::Conv_TextToString(*(FText*)(__int64(CharacterCustomizationLoadout->GetCharacter()) + DisplayNameOffset)) : L"InvalidCharacter";
+            Name = CharacterToApply ? UKismetTextLibrary::Conv_TextToString(*(FText*)(__int64(CharacterToApply) + DisplayNameOffset)) : L"InvalidCharacter";
             Name.Set((std::wstring(Name.Data.Data) += std::to_wstring(CurrentId++)).c_str());
             break;
         default:
@@ -442,7 +499,7 @@ static AFortPlayerPawn* SpawnAIFromCustomizationData(const FVector& Location, UF
 
     if (Name.Data.Data && Name.Data.Num() > 0)
     {
-        Controller->ServerChangeName(Name);
+        Cast<AFortGameModeAthena>(GetWorld()->GetGameMode())->ChangeName(Controller, Name, true);
     }
 
     return Pawn;

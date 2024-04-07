@@ -9,13 +9,13 @@ namespace Globals
 	extern inline bool bCreative = false;
 	extern inline bool bGoingToPlayEvent = false;
 	extern inline bool bEnableAGIDs = true;
-	extern inline bool bNoMCP = true;
+	extern inline bool bNoMCP = false;
 	extern inline bool bLogProcessEvent = false;
 	// extern inline bool bLateGame = false;
 	extern inline std::atomic<bool> bLateGame(false);
 
-	extern inline bool bInfiniteMaterials = false;
-	extern inline bool bInfiniteAmmo = false;
+	extern inline bool bInfiniteMaterials = true;
+	extern inline bool bInfiniteAmmo = true;
 	extern inline bool bShouldUseReplicationGraph = false;
 
 	extern inline bool bHitReadyToStartMatch = false;
