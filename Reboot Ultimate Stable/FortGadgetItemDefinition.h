@@ -1,7 +1,6 @@
 #pragma once
 
 #include "FortWorldItemDefinition.h"
-#include "FortPlayerController.h"
 #include "AttributeSet.h"
 #include "SoftObjectPtr.h"
 
@@ -49,7 +48,7 @@ public:
 	    return AttributeSetSoft.Get(AttributeClass, true);
 	}
 
-	void UnequipGadgetData(AFortPlayerController* PlayerController, UFortItem* Item);
+	void UnequipGadgetData(class AFortPlayerController* PlayerController, UFortItem* Item);
 
 	static UClass* StaticClass()
 	{

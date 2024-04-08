@@ -1,15 +1,14 @@
 #pragma once
 
 #include "reboot.h"
-#include "FortPlayerController.h"
 
 class UFortAthenaAISpawnerDataComponent_CosmeticLoadout : public UObject
 {
 public:
-	FFortAthenaLoadout* GetCosmeticLoadout()
+	struct FFortAthenaLoadout* GetCosmeticLoadout()
 	{
 		static auto CosmeticLoadoutOffset = GetOffset("CosmeticLoadout");
-		return GetPtr<FFortAthenaLoadout>(CosmeticLoadoutOffset);
+		return GetPtr<struct FFortAthenaLoadout>(CosmeticLoadoutOffset);
 	}
 
 	static UClass* StaticClass()

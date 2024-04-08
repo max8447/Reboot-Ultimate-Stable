@@ -2,6 +2,7 @@
 #include "FortItemDefinition.h"
 #include "FortKismetLibrary.h"
 #include "ScriptInterface.h"
+#include "FortPlayerController.h"
 
 void UInventoryManagementLibrary::SwapItemsHook(UObject* Context, FFrame& Stack, void* Ret)
 {

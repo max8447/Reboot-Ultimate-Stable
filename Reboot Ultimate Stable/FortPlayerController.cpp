@@ -25,6 +25,7 @@
 #include "FortAthenaMutator_InventoryOverride.h"
 #include "FortAthenaMutator_TDM.h"
 #include <unordered_set>
+#include "FortAthenaAIBotController.h"
 
 void AFortPlayerController::ClientReportDamagedResourceBuilding(ABuildingSMActor* BuildingSMActor, EFortResourceType PotentialResourceType, int PotentialResourceCount, bool bDestroyed, bool bJustHitWeakspot)
 {
@@ -1586,25 +1587,25 @@ void AFortPlayerController::ClientOnPawnDiedHook(AFortPlayerController* PlayerCo
 							if (AliveBot != Cast<AController>(DeadPawn->GetController()))
 							{
 								auto TeamIndex = Cast<AFortPlayerStateAthena>(AliveBot->GetPlayerState())->GetTeamIndex();
-
 								AliveTeamIndexes.emplace(TeamIndex);
 							}
 						}
 
 						if (GameMode->GetAliveBots().Num() > 0)
 						{
-							if (!AliveTeamIndexes.empty()) {
+							if (!AliveTeamIndexes.empty())
+							{
 								auto Last = AliveTeamIndexes.begin();
 								std::advance(Last, std::distance(AliveTeamIndexes.begin(), AliveTeamIndexes.end()) - 1);
 								AliveTeamIndexes.erase(Last);
+							}
 						}
 
 						if (AliveTeamIndexes.size() <= 1 && bStartedBus)
 						{
 							GameMode->EndMatch();
 
-							static auto World_NetDriverOffset = GetWorld()->GetOffset("NetDriver");
-							auto WorldNetDriver = GetWorld()->Get<UNetDriver*>(World_NetDriverOffset);
+							auto WorldNetDriver = GetWorld()->GetNetDriver();
 							auto& ClientConnections = WorldNetDriver->GetClientConnections();
 
 							for (int i = 0; i < ClientConnections.Num(); i++)

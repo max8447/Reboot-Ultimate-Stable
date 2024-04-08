@@ -3,7 +3,6 @@
 #include "Object.h"
 
 #include "FortResourceItemDefinition.h"
-#include "FortPlayerController.h"
 #include "BuildingSMActor.h"
 #include "FortPickup.h"
 

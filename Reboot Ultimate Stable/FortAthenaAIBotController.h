@@ -3,7 +3,6 @@
 #include "reboot.h"
 #include "AIController.h"
 #include "FortInventory.h"
-#include "FortAthenaAIBotCustomizationData.h"
 
 class AFortAthenaAIBotController : public AAIController
 {
@@ -18,16 +17,16 @@ public:
 		return Get<AFortInventory*>(InventoryOffset);
 	}
 
-	UFortAthenaAIBotCustomizationData*& GetBotData()
+	class UFortAthenaAIBotCustomizationData*& GetBotData()
 	{
 		static auto BotDataOffset = GetOffset("BotData");
-		return Get<UFortAthenaAIBotCustomizationData*>(BotDataOffset);
+		return Get<class UFortAthenaAIBotCustomizationData*>(BotDataOffset);
 	}
 
-	UFortAthenaAIBotInventoryItems*& GetStartupInventory()
+	class UFortAthenaAIBotInventoryItems*& GetStartupInventory()
 	{
 		static auto StartupInventoryOffset = GetOffset("StartupInventory");
-		return Get<UFortAthenaAIBotInventoryItems*>(StartupInventoryOffset);
+		return Get<class UFortAthenaAIBotInventoryItems*>(StartupInventoryOffset);
 	}
 
 	static void OnPossesedPawnDiedHook(AFortAthenaAIBotController* PlayerController, AActor* DamagedActor, float Damage, AController* InstigatedBy, AActor* DamageCauser, FVector HitLocation, UObject* FHitComponent, FName BoneName, FVector Momentum);

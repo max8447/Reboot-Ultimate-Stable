@@ -4,6 +4,7 @@
 #include "FortLootPackage.h"
 #include "AbilitySystemComponent.h"
 #include "FortGameModeAthena.h"
+#include "FortPlayerController.h"
 
 UFortResourceItemDefinition* UFortKismetLibrary::K2_GetResourceItemDefinition(EFortResourceType ResourceType)
 {

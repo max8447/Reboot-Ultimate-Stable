@@ -11,7 +11,6 @@
 #include "FortPlayerControllerAthena.h"
 #include "FortItemDefinition.h"
 #include "FortServerBotManagerAthena.h"
-#include "FortAthenaAIBotController.h"
 
 struct FAircraftFlightInfo
 {
@@ -275,10 +274,10 @@ public:
 		return Get<TArray<AFortPlayerControllerAthena*>>(AlivePlayersOffset);
 	}
 
-	TArray<AFortAthenaAIBotController*>& GetAliveBots()
+	TArray<class AFortAthenaAIBotController*>& GetAliveBots()
 	{
 		static auto AliveBotsOffset = GetOffset("AliveBots");
-		return Get<TArray<AFortAthenaAIBotController*>>(AliveBotsOffset);
+		return Get<TArray<class AFortAthenaAIBotController*>>(AliveBotsOffset);
 	}
 
 	FName RedirectLootTier(const FName& LootTier);

@@ -7,15 +7,14 @@
 #include "GameplayStatics.h"
 #include "FortPlayerPawn.h"
 #include "FortAthenaMutator.h"
-#include "FortPlayerController.h"
 #include "FortGameModeAthena.h"
 #include "FortGameStateAthena.h"
-#include "FortPlayerControllerAthena.h"
 #include "FortBotNameSettings.h"
 #include "KismetTextLibrary.h"
 #include "FortAthenaAIBotCustomizationData.h"
 #include "FortAthenaAIBotSpawnerData.h"
 #include "FortItemDefinition.h"
+#include "FortAthenaAIBotController.h"
 
 using UNavigationSystemV1 = UObject;
 using UNavigationSystemConfig = UObject;
