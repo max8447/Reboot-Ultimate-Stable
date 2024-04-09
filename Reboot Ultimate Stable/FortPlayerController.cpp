@@ -1589,9 +1589,16 @@ void AFortPlayerController::ClientOnPawnDiedHook(AFortPlayerController* PlayerCo
 								auto TeamIndex = Cast<AFortPlayerStateAthena>(AliveBot->GetPlayerState())->GetTeamIndex();
 								AliveTeamIndexes.emplace(TeamIndex);
 							}
+							else
+							{
+								LOG_INFO(LogBots, "AliveBots: {}", GameMode->GetAliveBots().Num());
+
+								if (GameMode->GetAliveBots().Num() > 1)
+									GameMode->GetAliveBots().Remove(i);
+							}
 						}
 
-						if (GameMode->GetAliveBots().Num() > 0)
+						if (GameMode->GetAliveBots().Num() > 0 && false) // dk what i was cooking here tbh
 						{
 							if (!AliveTeamIndexes.empty())
 							{
@@ -1603,6 +1610,7 @@ void AFortPlayerController::ClientOnPawnDiedHook(AFortPlayerController* PlayerCo
 
 						if (AliveTeamIndexes.size() <= 1 && bStartedBus)
 						{
+							GameMode->GetAliveBots().Free();
 							GameMode->EndMatch();
 
 							auto WorldNetDriver = GetWorld()->GetNetDriver();

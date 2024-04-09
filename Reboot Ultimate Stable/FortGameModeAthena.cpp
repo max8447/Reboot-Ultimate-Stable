@@ -541,8 +541,8 @@ bool AFortGameModeAthena::Athena_ReadyToStartMatchHook(AFortGameModeAthena* Game
 							FVector Loc{};
 							FRotator Rot{};
 							bool Success = false;
-							ULevelStreamingDynamic::LoadLevelInstance(GetWorld(), std::wstring(AdditionalLevelsServerOnly.at(i).Get()->GetPathName().begin(), AdditionalLevels.at(i).Get()->GetPathName().end()).c_str(), 
-								Loc, Rot, &Success);
+							// ULevelStreamingDynamic::LoadLevelInstance(GetWorld(), std::wstring(AdditionalLevelsServerOnly.at(i).Get()->GetPathName().begin(), AdditionalLevels.at(i).Get()->GetPathName().end()).c_str(), 
+								// Loc, Rot, &Success);
 							FName LevelFName = AdditionalLevelsServerOnly.at(i).SoftObjectPtr.ObjectID.AssetPathName;
 							LOG_INFO(LogPlaylist, "Loading server level {}.", LevelFName.ToString());
 
@@ -558,8 +558,8 @@ bool AFortGameModeAthena::Athena_ReadyToStartMatchHook(AFortGameModeAthena* Game
 						FRotator Rot{};
 						bool Success = false;
 						FName LevelFName = AdditionalLevels.at(i).SoftObjectPtr.ObjectID.AssetPathName;
-						ULevelStreamingDynamic::LoadLevelInstance(GetWorld(), std::wstring(AdditionalLevels.at(i).Get()->GetPathName().begin(), AdditionalLevels.at(i).Get()->GetPathName().end()).c_str(),
-							Loc, Rot, &Success);
+						// ULevelStreamingDynamic::LoadLevelInstance(GetWorld(), std::wstring(AdditionalLevels.at(i).Get()->GetPathName().begin(), AdditionalLevels.at(i).Get()->GetPathName().end()).c_str(),
+							// Loc, Rot, &Success);
 						LOG_INFO(LogPlaylist, "Loading level {}.", LevelFName.ToString());
 
 						GameState->AddToAdditionalPlaylistLevelsStreamed(LevelFName);
