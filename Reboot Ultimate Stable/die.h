@@ -154,6 +154,7 @@ static inline void ProcessEventHook(UObject* Object, UFunction* Function, void* 
 			!strstr(ObjectName.c_str(), "FortPhysicsObjectComponent") &&
 			!strstr(FunctionName.c_str(), "GetTextValue") &&
 			!strstr(FunctionName.c_str(), "OnActorBump") &&
+			!strstr(FunctionFullName.c_str(), "OnHit") &&
 			!strstr(FunctionName.c_str(), "ExecuteUbergraph_BGA_Petrol_Pickup"))
 		{
 			LOG_INFO(LogDev, "Function called: {} with {}", FunctionFullName, ObjectName);

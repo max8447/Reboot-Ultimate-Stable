@@ -2,6 +2,8 @@
 
 #include "FortPlayerPawn.h"
 #include "FortPlayerControllerAthena.h"
+#include "DataTableFunctionLibrary.h"
+#include "FortPlayerPawnAthena.h"
 
 void AFortAthenaCreativePortal::TeleportPlayerToLinkedVolumeHook(UObject* Context, FFrame& Stack, void* Ret)
 {
@@ -31,8 +33,16 @@ void AFortAthenaCreativePortal::TeleportPlayerToLinkedVolumeHook(UObject* Contex
 		return TeleportPlayerToLinkedVolumeOriginal(Context, Stack, Ret);
 
 	auto Location = LinkedVolume->GetActorLocation();
-	// Location.Z -= 10000; // proper 1:1
+	auto& TeleportHeightAsScalableFloat = Portal->GetTeleportHeight();
+	float TeleportHeight = Location.Z - 10000;
+
+	if (!IsBadReadPtr(TeleportHeightAsScalableFloat.GetCurve().CurveTable, 8) && TeleportHeightAsScalableFloat.GetCurve().RowName.IsValid())
+		TeleportHeight = UDataTableFunctionLibrary::EvaluateCurveTableRow(TeleportHeightAsScalableFloat.GetCurve().CurveTable, TeleportHeightAsScalableFloat.GetCurve().RowName, 0.f);
+
+	Location.Z = TeleportHeight;
 	PlayerPawn->TeleportTo(Location, FRotator());
+	if (auto PlayerPawnAthena = Cast<AFortPlayerPawnAthena>(PlayerPawn))
+		PlayerPawnAthena->TeleportToSkyDive(0.f);
 
 	return TeleportPlayerToLinkedVolumeOriginal(Context, Stack, Ret);
 }

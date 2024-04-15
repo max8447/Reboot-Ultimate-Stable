@@ -3,6 +3,7 @@
 #include "BuildingActor.h"
 #include "FortVolume.h"
 #include "Stack.h"
+#include "GameplayAbilityTypes.h"
 
 struct FCreativeLoadedLinkData
 {
@@ -71,6 +72,12 @@ public:
 
 		static auto CreatorNameOffset = FindOffsetStruct("/Script/FortniteGame.CreativeLoadedLinkData", "CreatorName");
 		return *(FString*)(__int64(IslandInfo) + CreatorNameOffset);
+	}
+
+	FScalableFloat& GetTeleportHeight()
+	{
+		static auto TeleportHeightOffset = GetOffset("TeleportHeight");
+		return Get<FScalableFloat>(TeleportHeightOffset);
 	}
 
 	static void TeleportPlayerToLinkedVolumeHook(UObject* Context, FFrame& Stack, void* Ret);
