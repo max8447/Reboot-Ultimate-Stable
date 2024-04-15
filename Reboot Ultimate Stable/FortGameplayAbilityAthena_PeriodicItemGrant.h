@@ -10,7 +10,7 @@ struct FActiveItemGrantInfo
 {
 	static UStruct* GetStruct()
 	{
-		static auto Struct = FindObject<UStruct>("/Script/FortniteGame.ActiveItemGrantInfo");
+		static auto Struct = FindObject<UStruct>(L"/Script/FortniteGame.ActiveItemGrantInfo");
 		return Struct;
 	}
 

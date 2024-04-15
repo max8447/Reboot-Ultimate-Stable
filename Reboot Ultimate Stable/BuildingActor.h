@@ -55,7 +55,7 @@ public:
 	float GetHealth()
 	{
 		float Health = 0;
-		static auto fn = FindObject<UFunction>("/Script/FortniteGame.BuildingActor.GetHealth");
+		static auto fn = FindObject<UFunction>(L"/Script/FortniteGame.BuildingActor.GetHealth");
 		this->ProcessEvent(fn, &Health);
 		return Health;
 	}

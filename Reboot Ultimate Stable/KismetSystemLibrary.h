@@ -95,7 +95,7 @@ public:
 	static void ExecuteConsoleCommand(UObject* WorldContextObject, const FString& Command, class APlayerController* SpecificPlayer)
 	{
 		static auto KismetSystemLibrary = FindObject("/Script/Engine.Default__KismetSystemLibrary");
-		static auto fn = FindObject<UFunction>("/Script/Engine.KismetSystemLibrary.ExecuteConsoleCommand");
+		static auto fn = FindObject<UFunction>(L"/Script/Engine.KismetSystemLibrary.ExecuteConsoleCommand");
 
 		struct {
 			UObject* WorldContextObject;                                       // (Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash, NativeAccessSpecifierPublic)
@@ -117,7 +117,7 @@ public:
 		} K2_SetTimer_Params{Object, FunctionName, Time, bLooping};
 
 		static auto KismetSystemLibrary = FindObject("/Script/Engine.Default__KismetSystemLibrary");
-		static auto K2_SetTimerFn = FindObject<UFunction>("/Script/Engine.KismetSystemLibrary.K2_SetTimer");
+		static auto K2_SetTimerFn = FindObject<UFunction>(L"/Script/Engine.KismetSystemLibrary.K2_SetTimer");
 
 		KismetSystemLibrary->ProcessEvent(K2_SetTimerFn, &K2_SetTimer_Params);
 
@@ -128,7 +128,7 @@ public:
 		TArray<AActor*> ActorsToIgnore, EDrawDebugTrace DrawDebugType, bool bIgnoreSelf, FLinearColor TraceColor, FLinearColor TraceHitColor,
 		float DrawTime, FHitResult** OutHit)
 	{
-		static auto LineTraceSingleFn = FindObject<UFunction>("/Script/Engine.KismetSystemLibrary.LineTraceSingle");
+		static auto LineTraceSingleFn = FindObject<UFunction>(L"/Script/Engine.KismetSystemLibrary.LineTraceSingle");
 		
 		if (!LineTraceSingleFn)
 			return false;

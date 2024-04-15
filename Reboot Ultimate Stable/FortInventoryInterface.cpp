@@ -7,7 +7,7 @@ char UFortInventoryInterface::RemoveInventoryItemHook(__int64 a1, FGuid a2, int 
 {
 	// kms bruh
 
-	static auto FortPlayerControllerSuperSize = (*(UClass**)(__int64(FindObject<UClass>("/Script/FortniteGame.FortPlayerController")) + Offsets::SuperStruct))->GetPropertiesSize();
+	static auto FortPlayerControllerSuperSize = (*(UClass**)(__int64(FindObject<UClass>(L"/Script/FortniteGame.FortPlayerController")) + Offsets::SuperStruct))->GetPropertiesSize();
 	int SuperAdditionalOffset = Engine_Version >= 427 ? 16 : 8;
 	auto ControllerObject = (UObject*)(__int64(a1) - (FortPlayerControllerSuperSize + SuperAdditionalOffset));
 

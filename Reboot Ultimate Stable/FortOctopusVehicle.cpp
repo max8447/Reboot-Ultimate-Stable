@@ -7,6 +7,6 @@ void AFortOctopusVehicle::ServerUpdateTowhookHook(AFortOctopusVehicle* OctopusVe
 	static auto NetTowhookAimDirOffset = OctopusVehicle->GetOffset("NetTowhookAimDir");
 	OctopusVehicle->Get<FVector>(NetTowhookAimDirOffset) = InNetTowhookAimDir;
 
-	static auto OnRep_NetTowhookAimDirFn = FindObject<UFunction>("/Script/FortniteGame.FortOctopusVehicle.OnRep_NetTowhookAimDir");
+	static auto OnRep_NetTowhookAimDirFn = FindObject<UFunction>(L"/Script/FortniteGame.FortOctopusVehicle.OnRep_NetTowhookAimDir");
 	OctopusVehicle->ProcessEvent(OnRep_NetTowhookAimDirFn);
 }

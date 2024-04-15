@@ -4,7 +4,7 @@
 
 UStruct* FHitResult::GetStruct()
 {
-	static auto Struct = FindObject<UStruct>("/Script/Engine.HitResult");
+	static auto Struct = FindObject<UStruct>(L"/Script/Engine.HitResult");
 	return Struct;
 }
 

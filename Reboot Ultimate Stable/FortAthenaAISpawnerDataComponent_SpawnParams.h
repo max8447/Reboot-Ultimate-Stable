@@ -15,7 +15,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto Class = FindObject<UClass>("/Script/FortniteGame.FortAthenaAISpawnerDataComponent_SpawnParams");
+		static auto Class = FindObject<UClass>(L"/Script/FortniteGame.FortAthenaAISpawnerDataComponent_SpawnParams");
 		return Class;
 	}
 };

@@ -14,7 +14,7 @@ struct FGunGameGunEntry
 {
 	static UStruct* GetStruct()
 	{
-		static auto Struct = FindObject<UStruct>("/Script/FortniteGame.GunGameGunEntry");
+		static auto Struct = FindObject<UStruct>(L"/Script/FortniteGame.GunGameGunEntry");
 		return Struct;
 	}
 
@@ -70,6 +70,52 @@ public:
 		return Get<TMap<AFortPlayerStateAthena*, FGunGamePlayerData>>(PlayerDataOffset);
 	}
 
+	UFortWeaponItemDefinition* GetWeaponFromElimScore(int KillScore)
+	{
+		for (int i = 0; i < GetWeaponEntries().Num(); ++i)
+		{
+			auto& WeaponEntry = GetWeaponEntries().at(i);
+			auto CurrentWeapon = WeaponEntry.GetWeapon();
+			auto& AwardAtElim = WeaponEntry.GetAwardAtElim();
+
+			float KillToGiveAt = 0;
+
+			if (!IsBadReadPtr(AwardAtElim.GetCurve().CurveTable, 8) && AwardAtElim.GetCurve().RowName.IsValid())
+			{
+				LOG_INFO(LogDev, "CurveTable: {}", AwardAtElim.GetCurve().CurveTable->GetFullName());
+				LOG_INFO(LogDev, "RowName: {}", AwardAtElim.GetCurve().RowName.ToString());
+				KillToGiveAt = UDataTableFunctionLibrary::EvaluateCurveTableRow(AwardAtElim.GetCurve().CurveTable, AwardAtElim.GetCurve().RowName, 0.f);
+			}
+
+			if (KillScore == KillToGiveAt)
+				return CurrentWeapon;
+
+			return nullptr;
+		}
+	}
+
+	void SwapOutWeapons(AFortPlayerController* PlayerController, int KillScore)
+	{
+		auto NewWeapon = GetWeaponFromElimScore(KillScore);
+		auto OldWeapon = GetWeaponFromElimScore(KillScore - 1);
+		auto WorldInventory = PlayerController->GetWorldInventory();
+
+		if (NewWeapon && WorldInventory)
+		{
+			LOG_INFO(LogDev, "NewWeapon: {}", NewWeapon->GetFullName());
+
+			if (OldWeapon && WorldInventory->FindItemInstance(OldWeapon))
+				WorldInventory->RemoveItem(WorldInventory->FindItemInstance(OldWeapon)->GetItemEntry()->GetItemGuid(), nullptr, OldWeapon->GetMaxStackSize());
+
+			WorldInventory->AddItem(NewWeapon, nullptr, NewWeapon->GetMaxStackSize());
+			WorldInventory->Update();
+		}
+		else
+		{
+			LOG_WARN(LogDev, "Couldn't find new weapon!");
+		}
+	}
+
 	FGunGameGunEntries GetEntriesFromAward(const FScalableFloat& AwardAtElim)
 	{
 		auto& AwardEntriesAtElimMap = GetAwardEntriesAtElimMap();
@@ -87,7 +133,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto Class = FindObject<UClass>("/Script/FortniteGame.FortAthenaMutator_GG");
+		static auto Class = FindObject<UClass>(L"/Script/FortniteGame.FortAthenaMutator_GG");
 		return Class;
 	}
 };

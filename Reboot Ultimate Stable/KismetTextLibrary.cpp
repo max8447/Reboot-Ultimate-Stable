@@ -4,7 +4,7 @@
 
 FText UKismetTextLibrary::Conv_StringToText(const FString& inString)
 {
-	static auto Conv_StringToTextFn = FindObject<UFunction>("/Script/Engine.KismetTextLibrary.Conv_StringToText");
+	static auto Conv_StringToTextFn = FindObject<UFunction>(L"/Script/Engine.KismetTextLibrary.Conv_StringToText");
 
 	struct
 	{
@@ -12,7 +12,7 @@ FText UKismetTextLibrary::Conv_StringToText(const FString& inString)
 		FText                                       ReturnValue;                                              // (Parm, OutParm, ReturnParm, NativeAccessSpecifierPublic)
 	}UKismetTextLibrary_Conv_StringToText_Params{inString};
 
-	static auto Default__KismetTextLibrary = FindObject<UKismetTextLibrary>("/Script/Engine.Default__KismetTextLibrary");
+	static auto Default__KismetTextLibrary = FindObject<UKismetTextLibrary>(L"/Script/Engine.Default__KismetTextLibrary");
 	Default__KismetTextLibrary->ProcessEvent(Conv_StringToTextFn, &UKismetTextLibrary_Conv_StringToText_Params);
 
 	return UKismetTextLibrary_Conv_StringToText_Params.ReturnValue;
@@ -20,7 +20,7 @@ FText UKismetTextLibrary::Conv_StringToText(const FString& inString)
 
 FString UKismetTextLibrary::Conv_TextToString(FText InText)
 {
-	static auto Conv_TextToStringFn = FindObject<UFunction>("/Script/Engine.KismetTextLibrary.Conv_TextToString");
+	static auto Conv_TextToStringFn = FindObject<UFunction>(L"/Script/Engine.KismetTextLibrary.Conv_TextToString");
 
 	struct
 	{
@@ -28,7 +28,7 @@ FString UKismetTextLibrary::Conv_TextToString(FText InText)
 		FString                                     ReturnValue;                                              // (Parm, OutParm, ZeroConstructor, ReturnParm, HasGetValueTypeHash, NativeAccessSpecifierPublic)
 	} UKismetTextLibrary_Conv_TextToString_Params{InText};
 
-	static auto Default__KismetTextLibrary = FindObject<UKismetTextLibrary>("/Script/Engine.Default__KismetTextLibrary");
+	static auto Default__KismetTextLibrary = FindObject<UKismetTextLibrary>(L"/Script/Engine.Default__KismetTextLibrary");
 	Default__KismetTextLibrary->ProcessEvent(Conv_TextToStringFn, &UKismetTextLibrary_Conv_TextToString_Params);
 
 	return UKismetTextLibrary_Conv_TextToString_Params.ReturnValue;
@@ -36,6 +36,6 @@ FString UKismetTextLibrary::Conv_TextToString(FText InText)
 
 UClass* UKismetTextLibrary::StaticClass()
 {
-	static auto Class = FindObject<UClass>("/Script/Engine.KismetTextLibrary");
+	static auto Class = FindObject<UClass>(L"/Script/Engine.KismetTextLibrary");
 	return Class;
 }

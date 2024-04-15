@@ -749,7 +749,7 @@ static inline bool CallOnReadys(bool* bWereAllSuccessful = nullptr)
 
 	/* if (Fortnite_Version == 17.30)
 	{
-		static auto onready = FindObject<UFunction>("/Buffet/Gameplay/Blueprints/BP_Buffet_Master_Scripting.BP_Buffet_Master_Scripting_C.OnReady_C6091CF24046D602CBB778A594DB5BA8");
+		static auto onready = FindObject<UFunction>(L"/Buffet/Gameplay/Blueprints/BP_Buffet_Master_Scripting.BP_Buffet_Master_Scripting_C.OnReady_C6091CF24046D602CBB778A594DB5BA8");
 		auto script = FindObject("/Buffet/Levels/Buffet_P.Buffet_P.PersistentLevel.BP_Event_Master_Scripting_2");
 
 		if (!script)
@@ -825,17 +825,17 @@ static inline void StartEvent()
 			Scripting->ProcessEvent(BB, &OnReadyParams);
 
 			auto eventscript = FindObject("/Kiwi/Levels/Kiwi_P.Kiwi_P:PersistentLevel.Kiwi_EventScript_2");
-			auto CC = FindObject<UFunction>("/Kiwi/Gameplay/Kiwi_EventScript.Kiwi_EventScript_C.OnReady_F51BF8E143832CE6C552938B26BEFA93");
-			auto DD = FindObject<UFunction>("/Kiwi/Gameplay/Kiwi_EventScript.Kiwi_EventScript_C.LoadKiwiAssets");
-			auto StartEventAtIndex = FindObject<UFunction>("/Script/SpecialEventGameplayRuntime.SpecialEventScript.StartEventAtIndex");
-			auto BP_OnScriptReady = FindObject<UFunction>("/Kiwi/Gameplay/Kiwi_EventScript.Kiwi_EventScript_C.BP_OnScriptReady");
+			auto CC = FindObject<UFunction>(L"/Kiwi/Gameplay/Kiwi_EventScript.Kiwi_EventScript_C.OnReady_F51BF8E143832CE6C552938B26BEFA93");
+			auto DD = FindObject<UFunction>(L"/Kiwi/Gameplay/Kiwi_EventScript.Kiwi_EventScript_C.LoadKiwiAssets");
+			auto StartEventAtIndex = FindObject<UFunction>(L"/Script/SpecialEventGameplayRuntime.SpecialEventScript.StartEventAtIndex");
+			auto BP_OnScriptReady = FindObject<UFunction>(L"/Kiwi/Gameplay/Kiwi_EventScript.Kiwi_EventScript_C.BP_OnScriptReady");
 
 			// eventscript->ProcessEvent(CC, &bbparms);
 			eventscript->ProcessEvent(DD, &OnReadyParams);
 			eventscript->ProcessEvent(BP_OnScriptReady, &OnReadyParams);
 			eventscript->ProcessEvent(StartEventAtIndex, &SecondsSinceEventBegan);
 
-			static auto StartEvent = FindObject<UFunction>("/Kiwi/Gameplay/BP_Kiwi_Master_Scripting.BP_Kiwi_Master_Scripting_C.startevent");
+			static auto StartEvent = FindObject<UFunction>(L"/Kiwi/Gameplay/BP_Kiwi_Master_Scripting.BP_Kiwi_Master_Scripting_C.startevent");
 			Scripting->ProcessEvent(StartEvent, &SecondsSinceEventBegan);
 		}
 

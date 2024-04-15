@@ -5,6 +5,7 @@
 #include "FortAthenaAISpawnerDataComponent_CosmeticLoadout.h"
 #include "FortAthenaAISpawnerDataComponent_AIBotInventory.h"
 #include "FortAthenaAISpawnerDataComponent_AIBotGameplay.h"
+#include "FortAthenaAISpawnerDataComponent_AIBotGameplayAbilityBase.h"
 #include "SubclassOf.h"
 
 class UFortAthenaAIBotSpawnerData : public UObject
@@ -32,6 +33,12 @@ public:
 	{
 		static auto GameplayComponentOffset = GetOffset("GameplayComponent");
 		return Get<TSubclassOf<UFortAthenaAISpawnerDataComponent_AIBotGameplay>>(GameplayComponentOffset);
+	}
+
+	TSubclassOf<UFortAthenaAISpawnerDataComponent_AIBotGameplayAbilityBase>& GetGameplayAbilityComponent()
+	{
+		static auto GameplayAbilityComponentOffset = GetOffset("GameplayAbilityComponent");
+		return Get<TSubclassOf<UFortAthenaAISpawnerDataComponent_AIBotGameplayAbilityBase>>(GameplayAbilityComponentOffset);
 	}
 
 	static UClass* StaticClass()

@@ -738,7 +738,7 @@ void ServerCheatHook(AFortPlayerControllerAthena* PlayerController, FString Msg)
 				return;
 			}
 
-			static auto WeaponDef = FindObject<UFortWeaponItemDefinition>("/Game/Athena/Items/Weapons/WID_Shotgun_Standard_Athena_SR_Ore_T03.WID_Shotgun_Standard_Athena_SR_Ore_T03");
+			static auto WeaponDef = FindObject<UFortWeaponItemDefinition>(L"/Game/Athena/Items/Weapons/WID_Shotgun_Standard_Athena_SR_Ore_T03.WID_Shotgun_Standard_Athena_SR_Ore_T03");
 
 			int NewClipSize = WeaponDef->GetClipSize();
 
@@ -771,7 +771,7 @@ void ServerCheatHook(AFortPlayerControllerAthena* PlayerController, FString Msg)
 				return;
 			}
 
-			static auto WeaponDef = FindObject<UFortWeaponItemDefinition>("/Game/Athena/Items/Weapons/WID_Shotgun_Standard_Athena_SR_Ore_T03.WID_Shotgun_Standard_Athena_SR_Ore_T03");
+			static auto WeaponDef = FindObject<UFortWeaponItemDefinition>(L"/Game/Athena/Items/Weapons/WID_Shotgun_Standard_Athena_SR_Ore_T03.WID_Shotgun_Standard_Athena_SR_Ore_T03");
 
 			int NewRarity;
 
@@ -808,7 +808,7 @@ void ServerCheatHook(AFortPlayerControllerAthena* PlayerController, FString Msg)
 				return;
 			}
 
-			static auto WeaponDef = FindObject<UFortWeaponItemDefinition>("/Game/Athena/Items/Weapons/WID_Shotgun_Standard_Athena_SR_Ore_T03.WID_Shotgun_Standard_Athena_SR_Ore_T03");
+			static auto WeaponDef = FindObject<UFortWeaponItemDefinition>(L"/Game/Athena/Items/Weapons/WID_Shotgun_Standard_Athena_SR_Ore_T03.WID_Shotgun_Standard_Athena_SR_Ore_T03");
 
 			TArray<int> DamageArray = WeaponDef->GetDamage();
 
@@ -846,8 +846,8 @@ void ServerCheatHook(AFortPlayerControllerAthena* PlayerController, FString Msg)
 				return;
 			}
 
-			static auto WeaponDef = FindObject<UFortWeaponItemDefinition>("/Game/Athena/Items/Weapons/WID_Sniper_BoltAction_Scope_Athena_SR_Ore_T03.WID_Sniper_BoltAction_Scope_Athena_SR_Ore_T03");
-			static auto WeaponDef2 = FindObject<UFortWeaponItemDefinition>("/Game/Athena/Items/Weapons/WID_Assault_Heavy_Athena_R_Ore_T03.WID_Assault_Heavy_Athena_R_Ore_T03");
+			static auto WeaponDef = FindObject<UFortWeaponItemDefinition>(L"/Game/Athena/Items/Weapons/WID_Sniper_BoltAction_Scope_Athena_SR_Ore_T03.WID_Sniper_BoltAction_Scope_Athena_SR_Ore_T03");
+			static auto WeaponDef2 = FindObject<UFortWeaponItemDefinition>(L"/Game/Athena/Items/Weapons/WID_Assault_Heavy_Athena_R_Ore_T03.WID_Assault_Heavy_Athena_R_Ore_T03");
 
 			int NewSpread = WeaponDef->GetSpread();
 
@@ -884,7 +884,7 @@ void ServerCheatHook(AFortPlayerControllerAthena* PlayerController, FString Msg)
 				return;
 			}
 
-			static auto WeaponDef = FindObject<UFortItemDefinition>("/Game/Athena/Items/Weapons/WID_Shotgun_Standard_Athena_SR_Ore_T03.WID_Shotgun_Standard_Athena_SR_Ore_T03");
+			static auto WeaponDef = FindObject<UFortItemDefinition>(L"/Game/Athena/Items/Weapons/WID_Shotgun_Standard_Athena_SR_Ore_T03.WID_Shotgun_Standard_Athena_SR_Ore_T03");
 
 			auto NewName = std::wstring(Arguments[1].begin(), Arguments[1].end()).c_str();
 
@@ -1027,7 +1027,7 @@ void ServerCheatHook(AFortPlayerControllerAthena* PlayerController, FString Msg)
 
 			FString Reason = L"You have been kicked.";
 
-			static auto ClientReturnToMainMenu = FindObject<UFunction>("/Script/Engine.PlayerController.ClientReturnToMainMenu");
+			static auto ClientReturnToMainMenu = FindObject<UFunction>(L"/Script/Engine.PlayerController.ClientReturnToMainMenu");
 			ReceivingController->ProcessEvent(ClientReturnToMainMenu, &Reason);
 
 			std::string KickedPlayerName;
@@ -1051,7 +1051,7 @@ void ServerCheatHook(AFortPlayerControllerAthena* PlayerController, FString Msg)
 
 			FString Reason = L"You have been banned.";
 
-			static auto ClientReturnToMainMenu = FindObject<UFunction>("/Script/Engine.PlayerController.ClientReturnToMainMenu");
+			static auto ClientReturnToMainMenu = FindObject<UFunction>(L"/Script/Engine.PlayerController.ClientReturnToMainMenu");
 			ReceivingController->ProcessEvent(ClientReturnToMainMenu, &Reason);
 
 			std::string BannedPlayerName;
@@ -1245,7 +1245,7 @@ void ServerCheatHook(AFortPlayerControllerAthena* PlayerController, FString Msg)
 
 			SendMessageToConsole(PlayerController, Loc);
 
-			static auto CopyToClipboardFn = FindObject<UFunction>("/Script/FortniteUI.FortGlobalUIContext.CopyToClipboard");
+			static auto CopyToClipboardFn = FindObject<UFunction>(L"/Script/FortniteUI.FortGlobalUIContext.CopyToClipboard");
 
 			if (!CopyToClipboardFn)
 			{
@@ -1459,7 +1459,7 @@ void ServerCheatHook(AFortPlayerControllerAthena* PlayerController, FString Msg)
 		{
 			FString URL = L"https://pastebin.com/4pmMgegz";
 
-			static auto LaunchURLFn = FindObject<UFunction>("/Script/Engine.KismetSystemLibrary.LaunchURL");
+			static auto LaunchURLFn = FindObject<UFunction>(L"/Script/Engine.KismetSystemLibrary.LaunchURL");
 			static auto KismetSystemLibrary = FindObject(L"/Script/Engine.Default__KismetSystemLibrary");
 
 			if (!LaunchURLFn || !KismetSystemLibrary)
@@ -1522,7 +1522,7 @@ void ServerCheatHook(AFortPlayerControllerAthena* PlayerController, FString Msg)
 
 			LOG_ERROR(LogDev, "9");
 
-			auto AbilityClass = LoadObject<UClass>("/Game/Creative/Abilities/Siphon/GA_Creative_OnKillSiphon.GA_Creative_OnKillSiphon_C", BGACLASS);
+			auto AbilityClass = LoadObject<UClass>(L"/Game/Creative/Abilities/Siphon/GA_Creative_OnKillSiphon.GA_Creative_OnKillSiphon_C", BGACLASS);
 			FGameplayAbilitySpec* AbilitySpec = nullptr;
 
 			LOG_ERROR(LogDev, "10");
@@ -1545,7 +1545,7 @@ void ServerCheatHook(AFortPlayerControllerAthena* PlayerController, FString Msg)
 
 			LOG_ERROR(LogDev, "10.75");
 
-			static auto K2_ActivateAbilityFromEventFn = FindObject<UFunction>("/Game/Creative/Abilities/Siphon/GA_Creative_OnKillSiphon.GA_Creative_OnKillSiphon_C:K2_ActivateAbilityFromEvent"); // dont loadobject since we already loaded
+			static auto K2_ActivateAbilityFromEventFn = FindObject<UFunction>(L"/Game/Creative/Abilities/Siphon/GA_Creative_OnKillSiphon.GA_Creative_OnKillSiphon_C:K2_ActivateAbilityFromEvent"); // dont loadobject since we already loaded
 			
 			if (K2_ActivateAbilityFromEventFn)
 				AbilitySpec->GetAbility()->ProcessEvent(K2_ActivateAbilityFromEventFn, &EventData);
@@ -1620,7 +1620,7 @@ void ServerCheatHook(AFortPlayerControllerAthena* PlayerController, FString Msg)
 
 			LOG_ERROR(LogDev, "9");
 
-			auto AbilityClass = FindObject<UClass>("/Game/Athena/Environments/Blueprints/SurfaceEffects/GAB_SurfaceChange.GAB_SurfaceChange_C");
+			auto AbilityClass = FindObject<UClass>(L"/Game/Athena/Environments/Blueprints/SurfaceEffects/GAB_SurfaceChange.GAB_SurfaceChange_C");
 
 			LOG_ERROR(LogDev, "10");
 
@@ -1646,7 +1646,7 @@ void ServerCheatHook(AFortPlayerControllerAthena* PlayerController, FString Msg)
 						
 						LOG_ERROR(LogDev, "Ability: {}", CurrentSpec->GetAbility()->GetFullName());
 
-						static auto K2_ActivateAbilityFromEventFn = FindObject<UFunction>("/Game/Athena/Environments/Blueprints/SurfaceEffects/GAB_SurfaceChange.GAB_SurfaceChange_C.K2_ActivateAbilityFromEvent");
+						static auto K2_ActivateAbilityFromEventFn = FindObject<UFunction>(L"/Game/Athena/Environments/Blueprints/SurfaceEffects/GAB_SurfaceChange.GAB_SurfaceChange_C.K2_ActivateAbilityFromEvent");
 						CurrentSpec->GetAbility()->ProcessEvent(K2_ActivateAbilityFromEventFn, &EventData);
 					}
 				}
@@ -1659,7 +1659,7 @@ void ServerCheatHook(AFortPlayerControllerAthena* PlayerController, FString Msg)
 			// LOG_ERROR(LogDev, "Ability: {}", AbilitySpec->GetAbility()->GetFullName());
 			// LOG_ERROR(LogDev, "Outer: {}", AbilitySpec->GetAbility()->GetOuter()->GetFullName());
 
-			static auto K2_ActivateAbilityFromEventFn = FindObject<UFunction>("/Game/Athena/Environments/Blueprints/SurfaceEffects/GAB_SurfaceChange.GAB_SurfaceChange_C.K2_ActivateAbilityFromEvent");
+			static auto K2_ActivateAbilityFromEventFn = FindObject<UFunction>(L"/Game/Athena/Environments/Blueprints/SurfaceEffects/GAB_SurfaceChange.GAB_SurfaceChange_C.K2_ActivateAbilityFromEvent");
 
 			// if (K2_ActivateAbilityFromEventFn)
 				// AbilitySpec->GetAbility()->ProcessEvent(K2_ActivateAbilityFromEventFn, &EventData);
@@ -1728,7 +1728,7 @@ void ServerCheatHook(AFortPlayerControllerAthena* PlayerController, FString Msg)
 		}
 		else if (Command == "suicide" || Command == "frenchpeople")
 		{
-			static auto ServerSuicideFn = FindObject<UFunction>("/Script/FortniteGame.FortPlayerController.ServerSuicide");
+			static auto ServerSuicideFn = FindObject<UFunction>(L"/Script/FortniteGame.FortPlayerController.ServerSuicide");
 			ReceivingController->ProcessEvent(ServerSuicideFn);
 		}
 		else if (Command == "spawn" || Command == "summon")
@@ -1902,8 +1902,10 @@ void ServerCheatHook(AFortPlayerControllerAthena* PlayerController, FString Msg)
 			}
 
 			static auto BlueprintGeneratedClassClass = FindObject<UClass>(L"/Script/Engine.BlueprintGeneratedClass");
-			auto SpawnerDataClass = LoadObject<UClass>(Arguments[1], BlueprintGeneratedClassClass);
-			// auto SpawnerData = LoadObject<UFortAthenaAIBotSpawnerData>(Arguments[1], UFortAthenaAIBotSpawnerData::StaticClass());
+			auto SpawnerDataClass = FindObject<UClass>(Arguments[1], BlueprintGeneratedClassClass);
+
+			if (!SpawnerDataClass)
+				SpawnerDataClass = LoadObject<UClass>(Arguments[1], BlueprintGeneratedClassClass);
 
 			if (!SpawnerDataClass)
 			{
@@ -1940,7 +1942,7 @@ void ServerCheatHook(AFortPlayerControllerAthena* PlayerController, FString Msg)
 				return;
 			}
 
-			auto MeowsclesBotData = LoadObject<UFortAthenaAIBotCustomizationData>("/Game/Athena/AI/MANG/BotData/BotData_MANG_POI_HMW_Alter.BotData_MANG_POI_HMW_Alter");
+			auto MeowsclesBotData = LoadObject<UFortAthenaAIBotCustomizationData>(L"/Game/Athena/AI/MANG/BotData/BotData_MANG_POI_HMW_Alter.BotData_MANG_POI_HMW_Alter");
 
 			if (!MeowsclesBotData)
 			{
@@ -1976,7 +1978,7 @@ void ServerCheatHook(AFortPlayerControllerAthena* PlayerController, FString Msg)
 				return;
 			}
 
-			auto JulesBotData = LoadObject<UFortAthenaAIBotCustomizationData>("/Game/Athena/AI/MANG/BotData/BotData_MANG_POI_Agency_2.BotData_MANG_POI_Agency_2");
+			auto JulesBotData = LoadObject<UFortAthenaAIBotCustomizationData>(L"/Game/Athena/AI/MANG/BotData/BotData_MANG_POI_Agency_2.BotData_MANG_POI_Agency_2");
 
 			if (!JulesBotData)
 			{
@@ -2012,7 +2014,7 @@ void ServerCheatHook(AFortPlayerControllerAthena* PlayerController, FString Msg)
 				return;
 			}
 
-			auto GalileoBotData = LoadObject<UFortAthenaAIBotCustomizationData>("/Game/Athena/AI/Galileo/BotData_Galileo.BotData_Galileo");
+			auto GalileoBotData = LoadObject<UFortAthenaAIBotCustomizationData>(L"/Game/Athena/AI/Galileo/BotData_Galileo.BotData_Galileo");
 
 			if (!GalileoBotData)
 			{
@@ -2032,6 +2034,13 @@ void ServerCheatHook(AFortPlayerControllerAthena* PlayerController, FString Msg)
 			{
 				SendMessageToConsole(PlayerController, L"Failed to spawn starwars person!");
 				return;
+			}
+		}
+		else if (Command == "spawnmarauders")
+		{
+			if (ReceivingController->GetMyFortPawn())
+			{
+				SpawnMarauderSquad(ReceivingController->GetMyFortPawn());
 			}
 		}
 		else if (Command == "spawnbot" || Command == "bot")
@@ -2100,7 +2109,7 @@ void ServerCheatHook(AFortPlayerControllerAthena* PlayerController, FString Msg)
 		}
 		else if (Command == "settimeofday" || Command == "time" || Command == "hour")
 		{
-			static auto SetTimeOfDayFn = FindObject<UFunction>("/Script/FortniteGame.FortKismetLibrary.SetTimeOfDay");
+			static auto SetTimeOfDayFn = FindObject<UFunction>(L"/Script/FortniteGame.FortKismetLibrary.SetTimeOfDay");
 
 			float NewTimeOfDay = 0.f;
 
@@ -2144,7 +2153,7 @@ void ServerCheatHook(AFortPlayerControllerAthena* PlayerController, FString Msg)
 		}
 		else if (Command == "questtest")
 		{
-			static auto SendComplexCustomStatEventFn = FindObject<UFunction>("/Script/FortniteGame.FortQuestManager.SendComplexCustomStatEvent");
+			static auto SendComplexCustomStatEventFn = FindObject<UFunction>(L"/Script/FortniteGame.FortQuestManager.SendComplexCustomStatEvent");
 
 			struct UFortQuestManager_SendComplexCustomStatEvent_Params
 			{
@@ -2163,12 +2172,12 @@ void ServerCheatHook(AFortPlayerControllerAthena* PlayerController, FString Msg)
 			SourceTags.GameplayTags.Add(SourceTag);
 
 			UFortQuestManager_SendComplexCustomStatEvent_Params Params;
-			Params.TargetObject = GetWorld()->SpawnActor<UObject>(LoadObject<UClass>("/Game/Athena/Environments/Blueprints/DudeBro/BGA_DudeBro_Mini.BGA_DudeBro_Mini_C", BGACLASS), ReceivingController->GetPawn()->GetActorLocation());
+			Params.TargetObject = GetWorld()->SpawnActor<UObject>(LoadObject<UClass>(L"/Game/Athena/Environments/Blueprints/DudeBro/BGA_DudeBro_Mini.BGA_DudeBro_Mini_C", BGACLASS), ReceivingController->GetPawn()->GetActorLocation());
 			Params.AdditionalSourceTags = SourceTags;
 			Params.TargetTags = FGameplayTagContainer();
 			Params.Count = 1;
 
-			static auto GetQuestManagerFn = FindObject<UFunction>("/Script/FortniteGame.FortPlayerController.GetQuestManager");
+			static auto GetQuestManagerFn = FindObject<UFunction>(L"/Script/FortniteGame.FortPlayerController.GetQuestManager");
 
 			struct
 			{
@@ -2200,26 +2209,21 @@ void ServerCheatHook(AFortPlayerControllerAthena* PlayerController, FString Msg)
 			CheatManager = nullptr;
 			SendMessageToConsole(PlayerController, L"Teleported!");
 		}
-		else if (Command == "allowadsinair")
+		else if (Command == "siphontest2")
 		{
-			auto Pawn = ReceivingController->GetMyFortPawn();
+			FGameplayAbilitySpecHandle AbilitySpecHandle;
 
-			if (!Pawn)
-			{
-				SendMessageToConsole(PlayerController, L"No pawn!");
-				return;
-			}
+			auto CompareAbilities = [&AbilitySpecHandle, &ReceivingPlayerState](FGameplayAbilitySpec* Spec)
+				{
+					auto CurrentHandle = Spec->GetHandle();
 
-			auto CurrentWeapon = Pawn->GetCurrentWeapon()->GetWeaponData();
+					LOG_INFO(LogDev, "Ability: {}", Spec->GetAbility()->GetFullName());
 
-			static auto FortWeaponRangedItemDefinitionClass = FindObject<UClass>("/Script/FortniteGame.FortWeaponRangedItemDefinition");
+					ReceivingPlayerState->GetAbilitySystemComponent()->ServerTryActivateAbility(CurrentHandle, false, FPredictionKey());
+					ReceivingPlayerState->GetAbilitySystemComponent()->ClientActivateAbilitySucceed(CurrentHandle, FPredictionKey());
+				};
 
-			if (auto RangedItemDefiniton = Cast<UFortWeaponRangedItemDefinition>(CurrentWeapon))
-			{
-				static auto bAllowADSInAirOffset = RangedItemDefiniton->GetOffset("bAllowADSInAir");
-				static auto bAllowADSInAirFieldMask = GetFieldMask(RangedItemDefiniton->GetProperty("bAllowADSInAir"));
-				RangedItemDefiniton->SetBitfieldValue(bAllowADSInAirOffset, bAllowADSInAirFieldMask, true);
-			}
+			LoopSpecs(ReceivingPlayerState->GetAbilitySystemComponent(), CompareAbilities);
 		}
 		/*
 		else if (Command == "testballermove")
@@ -2293,7 +2297,7 @@ void ServerCheatHook(AFortPlayerControllerAthena* PlayerController, FString Msg)
 		}
 		else if (Command == "testtexture")
 		{
-			UTexture2D* Texture = FindObject<UTexture2D>("/Game/UI/Foundation/Textures/Icons/Weapons/Winter/T-Icon-Weapons-Arctic-Sniper-L.T-Icon-Weapons-Arctic-Sniper-L");
+			UTexture2D* Texture = FindObject<UTexture2D>(L"/Game/UI/Foundation/Textures/Icons/Weapons/Winter/T-Icon-Weapons-Arctic-Sniper-L.T-Icon-Weapons-Arctic-Sniper-L");
 
 			FString FilePath = L"C:/Users/maxfl/Downloads/";
 			FString FileName = L"test.png";
@@ -2344,7 +2348,7 @@ void ServerCheatHook(AFortPlayerControllerAthena* PlayerController, FString Msg)
 			State.AngularVelocity = FVector(0, 0, 0);
 			State.SyncKey = 53640;
 
-			static auto ServerUpdatePhysicsParamsFn = FindObject<UFunction>("/Script/FortniteGame.FortPhysicsPawn.ServerUpdatePhysicsParams");
+			static auto ServerUpdatePhysicsParamsFn = FindObject<UFunction>(L"/Script/FortniteGame.FortPhysicsPawn.ServerUpdatePhysicsParams");
 			Vehicle->ProcessEvent(ServerUpdatePhysicsParamsFn, &State);
 		}
 		else if (Command == "setspeed" || Command == "speed")
@@ -2396,7 +2400,7 @@ void ServerCheatHook(AFortPlayerControllerAthena* PlayerController, FString Msg)
 				LOG_INFO(LogDev, "Name added to whitelist: {}", Name.ToString());
 			}
 
-			static auto Server_SetCanEditCreativeIslandFn = FindObject<UFunction>("/Script/FortniteGame.FortPlayerStateAthena.Server_SetCanEditCreativeIsland");
+			static auto Server_SetCanEditCreativeIslandFn = FindObject<UFunction>(L"/Script/FortniteGame.FortPlayerStateAthena.Server_SetCanEditCreativeIsland");
 
 			struct
 			{
@@ -2695,7 +2699,7 @@ void ServerCheatHook(AFortPlayerControllerAthena* PlayerController, FString Msg)
 		{
 			for (int i = 0; i < ClientConnections.Num(); i++)
 			{
-				static auto GodFn = FindObject<UFunction>("/Script/Engine.CheatManager.God");
+				static auto GodFn = FindObject<UFunction>(L"/Script/Engine.CheatManager.God");
 
 				auto PlayerController = Cast<AFortPlayerController>(ClientConnections.at(i)->GetPlayerController());
 

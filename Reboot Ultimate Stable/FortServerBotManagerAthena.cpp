@@ -63,7 +63,7 @@ AFortPlayerPawnAthena* UFortServerBotManagerAthena::SpawnBotHook(UFortServerBotM
 	SpawnTransform.Rotation = InSpawnRotation.Quaternion();
 	SpawnTransform.Scale3D = FVector(1, 1, 1);
 
-	AActor* SpawnLocator = UGameplayStatics::FinishSpawningActor(UGameplayStatics::BeginDeferredActorSpawnFromClass(GetWorld(), FindObject<UClass>("/Script/Engine.DefaultPawn"), SpawnTransform, ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn), SpawnTransform);
+	AActor* SpawnLocator = UGameplayStatics::FinishSpawningActor(UGameplayStatics::BeginDeferredActorSpawnFromClass(GetWorld(), FindObject<UClass>(L"/Script/Engine.DefaultPawn"), SpawnTransform, ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn), SpawnTransform);
 	AFortPlayerPawnAthena* NewBotPawn = BotManager->GetCachedBotMutator()->SpawnBot(InBotData->GetPawnClass(), SpawnLocator, InSpawnLocation, InSpawnRotation, true);
 	AFortAthenaAIBotController* NewBotController = Cast<AFortAthenaAIBotController>(NewBotPawn->GetController());
 

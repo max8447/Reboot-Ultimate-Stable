@@ -26,7 +26,7 @@ struct FBuildingGameplayActorSpawnDetails
 {
 	static UStruct* GetStruct()
 	{
-		static auto Struct = FindObject<UStruct>("/Script/FortniteGame.BuildingGameplayActorSpawnDetails");
+		static auto Struct = FindObject<UStruct>(L"/Script/FortniteGame.BuildingGameplayActorSpawnDetails");
 		return Struct;
 	}
 

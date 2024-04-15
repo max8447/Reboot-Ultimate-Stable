@@ -209,7 +209,7 @@ public:
 
 	void ClientSendTeamStatsForPlayer(FAthenaMatchTeamStats* TeamStats)
 	{
-		static auto ClientSendTeamStatsForPlayerFn = FindObject<UFunction>("/Script/FortniteGame.FortPlayerControllerAthena.ClientSendTeamStatsForPlayer");
+		static auto ClientSendTeamStatsForPlayerFn = FindObject<UFunction>(L"/Script/FortniteGame.FortPlayerControllerAthena.ClientSendTeamStatsForPlayer");
 		static auto ParamSize = ClientSendTeamStatsForPlayerFn->GetPropertiesSize();
 		auto Params = malloc(ParamSize);
 
@@ -236,7 +236,7 @@ public:
 
 	void PlayWinEffects(APawn* FinisherPawn, UFortWeaponItemDefinition* FinishingWeapon, uint8 DeathCause, bool bAudioOnly)
 	{
-		static auto PlayWinEffectsFn = FindObject<UFunction>("/Script/FortniteGame.FortPlayerControllerAthena.PlayWinEffects");
+		static auto PlayWinEffectsFn = FindObject<UFunction>(L"/Script/FortniteGame.FortPlayerControllerAthena.PlayWinEffects");
 
 		struct
 		{
@@ -251,7 +251,7 @@ public:
 
 	void ClientNotifyWon(APawn* FinisherPawn, UFortWeaponItemDefinition* FinishingWeapon, uint8 DeathCause)
 	{
-		static auto ClientNotifyWonFn = FindObject<UFunction>("/Script/FortniteGame.FortPlayerControllerAthena.ClientNotifyWon");
+		static auto ClientNotifyWonFn = FindObject<UFunction>(L"/Script/FortniteGame.FortPlayerControllerAthena.ClientNotifyWon");
 
 		struct
 		{
@@ -265,7 +265,7 @@ public:
 
 	void ClientNotifyTeamWon(APawn* FinisherPawn, UFortWeaponItemDefinition* FinishingWeapon, uint8 DeathCause)
 	{
-		static auto ClientNotifyTeamWonFn = FindObject<UFunction>("/Script/FortniteGame.FortPlayerControllerAthena.ClientNotifyTeamWon");
+		static auto ClientNotifyTeamWonFn = FindObject<UFunction>(L"/Script/FortniteGame.FortPlayerControllerAthena.ClientNotifyTeamWon");
 
 		struct
 		{

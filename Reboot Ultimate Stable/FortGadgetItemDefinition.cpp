@@ -8,7 +8,7 @@
 
 void UFortGadgetItemDefinition::UnequipGadgetData(AFortPlayerController* PlayerController, UFortItem* Item)
 {
-	static auto FortInventoryOwnerInterfaceClass = FindObject<UClass>("/Script/FortniteGame.FortInventoryOwnerInterface");
+	static auto FortInventoryOwnerInterfaceClass = FindObject<UClass>(L"/Script/FortniteGame.FortInventoryOwnerInterface");
 	__int64 (*RemoveGadgetDataOriginal)(UFortGadgetItemDefinition* a1, __int64 a2, UFortItem* a3) = decltype(RemoveGadgetDataOriginal)(Addresses::RemoveGadgetData);
 	RemoveGadgetDataOriginal(this, __int64(PlayerController->GetInterfaceAddress(FortInventoryOwnerInterfaceClass)), Item);
 

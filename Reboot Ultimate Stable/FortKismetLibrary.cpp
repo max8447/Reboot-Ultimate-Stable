@@ -60,7 +60,7 @@ FVector UFortKismetLibrary::FindGroundLocationAt(UWorld* World, AActor* IgnoreAc
 
 void UFortKismetLibrary::ApplyCharacterCosmetics(UObject* WorldContextObject, const TArray<UObject*>& CharacterParts, UObject* PlayerState, bool* bSuccess)
 {
-	static auto fn = FindObject<UFunction>("/Script/FortniteGame.FortKismetLibrary.ApplyCharacterCosmetics");
+	static auto fn = FindObject<UFunction>(L"/Script/FortniteGame.FortKismetLibrary.ApplyCharacterCosmetics");
 
 	if (fn)
 	{
@@ -87,7 +87,7 @@ void UFortKismetLibrary::ApplyCharacterCosmetics(UObject* WorldContextObject, co
 	{
 		auto CharacterPartsPS = PlayerState->GetPtr<__int64>("CharacterParts");
 
-		static auto CustomCharacterPartsStruct = FindObject<UStruct>("/Script/FortniteGame.CustomCharacterParts");
+		static auto CustomCharacterPartsStruct = FindObject<UStruct>(L"/Script/FortniteGame.CustomCharacterParts");
 
 		// if (CustomCharacterPartsStruct)
 		{
@@ -99,7 +99,7 @@ void UFortKismetLibrary::ApplyCharacterCosmetics(UObject* WorldContextObject, co
 				Parts[i] = CharacterParts.at(i);
 			}
 
-			static auto OnRep_CharacterPartsFn = FindObject<UFunction>("/Script/FortniteGame.FortPlayerState.OnRep_CharacterParts");
+			static auto OnRep_CharacterPartsFn = FindObject<UFunction>(L"/Script/FortniteGame.FortPlayerState.OnRep_CharacterParts");
 			PlayerState->ProcessEvent(OnRep_CharacterPartsFn);
 		}
 	}

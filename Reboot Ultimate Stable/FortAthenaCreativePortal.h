@@ -17,7 +17,7 @@ public:
 
 	FCreativeLoadedLinkData* GetIslandInfo()
 	{
-		static auto CreativeLoadedLinkDataStruct = FindObject<UStruct>("/Script/FortniteGame.CreativeLoadedLinkData");
+		static auto CreativeLoadedLinkDataStruct = FindObject<UStruct>(L"/Script/FortniteGame.CreativeLoadedLinkData");
 
 		if (!CreativeLoadedLinkDataStruct)
 			return nullptr;

@@ -44,7 +44,7 @@ FActiveGameplayEffectHandle UAbilitySystemComponent::ApplyGameplayEffectToSelf(U
 
 /* FGameplayEffectContextHandle UAbilitySystemComponent::MakeEffectContext()
 {
-	static auto MakeEffectContextFn = FindObject<UFunction>("/Script/GameplayAbilities.AbilitySystemComponent.MakeEffectContext");
+	static auto MakeEffectContextFn = FindObject<UFunction>(L"/Script/GameplayAbilities.AbilitySystemComponent.MakeEffectContext");
 	FGameplayEffectContextHandle ContextHandle;
 	this->ProcessEvent(MakeEffectContextFn, &ContextHandle);
 	return ContextHandle;

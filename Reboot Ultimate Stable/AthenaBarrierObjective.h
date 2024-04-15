@@ -25,7 +25,7 @@ class AAthenaBarrierObjective : public ABuildingGameplayActor
 public:
 	void SetHeadMesh(UStaticMesh* NewMesh, const FVector& NewScale, const FVector& NewOffset, const TArray<UMaterialInterface*>& MaterialsToSwap)
 	{
-		static auto SetHeadMeshFn = FindObject<UFunction>("/Script/FortniteGame.AthenaBarrierObjective.SetHeadMesh");
+		static auto SetHeadMeshFn = FindObject<UFunction>(L"/Script/FortniteGame.AthenaBarrierObjective.SetHeadMesh");
 
 		struct
 		{
@@ -53,7 +53,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto Class = FindObject<UClass>("/Script/FortniteGame.AthenaBarrierObjective");
+		static auto Class = FindObject<UClass>(L"/Script/FortniteGame.AthenaBarrierObjective");
 		return Class;
 	}
 };

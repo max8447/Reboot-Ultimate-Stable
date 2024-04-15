@@ -10,19 +10,19 @@ class AFortAthenaSKPushCannon : public AFortAthenaVehicle // : public AFortAthen
 public:
 	bool IsPushCannonBP()
 	{
-		static auto PushCannonBP = FindObject<UClass>("/Game/Athena/DrivableVehicles/PushCannon.PushCannon_C"); // We should loadobject it.
+		static auto PushCannonBP = FindObject<UClass>(L"/Game/Athena/DrivableVehicles/PushCannon.PushCannon_C"); // We should loadobject it.
 		return this->IsA(PushCannonBP);
 	}
 
 	void MultiCastPushCannonLaunchedPlayer()
 	{
-		static auto MultiCastPushCannonLaunchedPlayerFn = FindObject<UFunction>("/Script/FortniteGame.FortAthenaSKPushCannon.MultiCastPushCannonLaunchedPlayer");
+		static auto MultiCastPushCannonLaunchedPlayerFn = FindObject<UFunction>(L"/Script/FortniteGame.FortAthenaSKPushCannon.MultiCastPushCannonLaunchedPlayer");
 		this->ProcessEvent(MultiCastPushCannonLaunchedPlayerFn);
 	}
 
 	void OnLaunchPawn(AFortPlayerPawn* Pawn, FVector LaunchDir)
 	{
-		static auto OnLaunchPawnFn = IsPushCannonBP() ? FindObject<UFunction>("/Game/Athena/DrivableVehicles/PushCannon.PushCannon_C.OnLaunchPawn") : FindObject<UFunction>("/Script/FortniteGame.FortAthenaSKPushCannon.OnLaunchPawn");
+		static auto OnLaunchPawnFn = IsPushCannonBP() ? FindObject<UFunction>(L"/Game/Athena/DrivableVehicles/PushCannon.PushCannon_C.OnLaunchPawn") : FindObject<UFunction>(L"/Script/FortniteGame.FortAthenaSKPushCannon.OnLaunchPawn");
 		struct
 		{
 			AFortPlayerPawn* Pawn;                                                     // (Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash, NativeAccessSpecifierPublic)
@@ -34,7 +34,7 @@ public:
 
 	void OnPreLaunchPawn(AFortPlayerPawn* Pawn, FVector LaunchDir)
 	{
-		static auto OnPreLaunchPawnFn = IsPushCannonBP() ? FindObject<UFunction>("/Game/Athena/DrivableVehicles/PushCannon.PushCannon_C.OnPreLaunchPawn") : FindObject<UFunction>("/Script/FortniteGame.FortAthenaSKPushCannon.OnPreLaunchPawn");
+		static auto OnPreLaunchPawnFn = IsPushCannonBP() ? FindObject<UFunction>(L"/Game/Athena/DrivableVehicles/PushCannon.PushCannon_C.OnPreLaunchPawn") : FindObject<UFunction>(L"/Script/FortniteGame.FortAthenaSKPushCannon.OnPreLaunchPawn");
 		struct
 		{
 			AFortPlayerPawn* Pawn;                                                     // (Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash, NativeAccessSpecifierPublic)
@@ -61,7 +61,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto Class = FindObject<UClass>("/Script/FortniteGame.FortAthenaSKPushCannon");
+		static auto Class = FindObject<UClass>(L"/Script/FortniteGame.FortAthenaSKPushCannon");
 		return Class;
 	}
 };

@@ -444,7 +444,7 @@ namespace Bots
 			{
 				/* if (!CurrentPlayer->IsPlayingEmote())
 				{
-					static auto AthenaDanceItemDefinitionClass = FindObject<UClass>("/Script/FortniteGame.AthenaDanceItemDefinition");
+					static auto AthenaDanceItemDefinitionClass = FindObject<UClass>(L"/Script/FortniteGame.AthenaDanceItemDefinition");
 					auto RandomDanceID = GetRandomObjectOfClass(AthenaDanceItemDefinitionClass);
 
 					CurrentPlayer->ServerPlayEmoteItemHook(CurrentPlayer, RandomDanceID);

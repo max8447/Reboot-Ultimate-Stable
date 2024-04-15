@@ -15,7 +15,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto Class = FindObject<UClass>("/Script/FortniteGame.FortPoiVolume");
+		static auto Class = FindObject<UClass>(L"/Script/FortniteGame.FortPoiVolume");
 		return Class;
 	}
 };

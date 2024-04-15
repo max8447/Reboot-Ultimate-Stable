@@ -360,6 +360,45 @@ static AFortPlayerPawn* SpawnAIFromSpawnerData(AActor* InSpawnLocator, UFortAthe
             LOG_WARN(LogBots, "Failed to find HeroDefinition!");
     }
 
+    auto GameplayAbilityComponent = Cast<UFortAthenaAISpawnerDataComponent_AIBotGameplayAbilityBase>(SpawnerData->GetGameplayAbilityComponent().Get()->CreateDefaultObject());
+
+    if (!GameplayAbilityComponent)
+    {
+        LOG_INFO(LogAI, "Invalid GameplayAbilityComponent for AI!");
+        return Pawn;
+    }
+
+    if (false)
+    {
+        for (int i = 0; i < GameplayAbilityComponent->GetInitialGameplayEffect().Num(); ++i)
+        {
+            auto& CurrentGameplayEffect = GameplayAbilityComponent->GetInitialGameplayEffect().at(i);
+
+            if (!CurrentGameplayEffect.GetGameplayEffect())
+            {
+                continue;
+            }
+
+            LOG_INFO(LogDev, "Giving GameplayEffect {}", CurrentGameplayEffect.GetGameplayEffect()->GetFullName());
+
+            FGameplayEffectContextHandle EffectContext{};
+            PlayerState->GetAbilitySystemComponent()->ApplyGameplayEffectToSelf(CurrentGameplayEffect.GetGameplayEffect(), CurrentGameplayEffect.GetLevel(), EffectContext);
+        }
+
+        for (int i = 0; i < GameplayAbilityComponent->GetInitialGameplayAbilitiesSet().Num(); ++i)
+        {
+            for (int j = 0; j < GameplayAbilityComponent->GetInitialGameplayAbilitiesSet().at(i)->GetGameplayAbilities()->Num(); ++j)
+            {
+                UClass* AbilityClass = GameplayAbilityComponent->GetInitialGameplayAbilitiesSet().at(i)->GetGameplayAbilities()->At(i);
+
+                if (!AbilityClass)
+                    continue;
+
+                PlayerState->GetAbilitySystemComponent()->GiveAbilityEasy(AbilityClass);
+            }
+        }
+    }
+
     auto GameplayComponent = Cast<UFortAthenaAISpawnerDataComponent_AIBotGameplay>(SpawnerData->GetGameplayComponent().Get()->CreateDefaultObject());
 
     if (!GameplayComponent)
@@ -471,8 +510,7 @@ static AFortPlayerPawn* SpawnAIFromCustomizationData(const FVector& Location, UF
         Inventory->Update();
     }
 
-    static auto BotNameSettingsOffset = CustomizationData->GetOffset("BotNameSettings");
-    auto BotNameSettings = CustomizationData->Get<UFortBotNameSettings*>(BotNameSettingsOffset);
+    auto BotNameSettings = CustomizationData->GetBotNameSettings();
 
     FString Name;
 
@@ -497,9 +535,24 @@ static AFortPlayerPawn* SpawnAIFromCustomizationData(const FVector& Location, UF
     }
 
     if (Name.Data.Data && Name.Data.Num() > 0)
-    {
-        Cast<AFortGameModeAthena>(GetWorld()->GetGameMode())->ChangeName(Controller, Name, true);
-    }
+        PlayerState->SetPlayerName(Name);
 
     return Pawn;
+}
+
+static void SpawnMarauderSquad(AActor* DropPod)
+{
+    static UFortAthenaAIBotSpawnerData* EliteSpawnerData = Cast<UFortAthenaAIBotSpawnerData>(LoadObject<UClass>(L"/Gibson/AISpawnerData/Elite/AISpawnerData_Gibson_Elite_BP.AISpawnerData_Gibson_Elite_BP_C", BGACLASS)->CreateDefaultObject());
+    static UFortAthenaAIBotSpawnerData* GruntSpawnerData = Cast<UFortAthenaAIBotSpawnerData>(LoadObject<UClass>(L"/Gibson/AISpawnerData/Grunt/AISpawnerData_Gibson_Grunt_BP.AISpawnerData_Gibson_Grunt_BP_C", BGACLASS)->CreateDefaultObject());
+    static UFortAthenaAIBotSpawnerData* HeavySpawnerData = Cast<UFortAthenaAIBotSpawnerData>(LoadObject<UClass>(L"/Gibson/AISpawnerData/Heavy/AISpawnerData_Gibson_Heavy_BP.AISpawnerData_Gibson_Heavy_BP_C", BGACLASS)->CreateDefaultObject());
+
+    LOG_INFO(LogDev, "EliteSpawnerData: {}", __int64(EliteSpawnerData));
+    LOG_INFO(LogDev, "GruntSpawnerData: {}", __int64(GruntSpawnerData));
+    LOG_INFO(LogDev, "HeavySpawnerData: {}", __int64(HeavySpawnerData));
+
+    SpawnAIFromSpawnerData(DropPod, EliteSpawnerData);
+    SpawnAIFromSpawnerData(DropPod, EliteSpawnerData);
+    SpawnAIFromSpawnerData(DropPod, GruntSpawnerData);
+    SpawnAIFromSpawnerData(DropPod, HeavySpawnerData);
+    SpawnAIFromSpawnerData(DropPod, HeavySpawnerData);
 }

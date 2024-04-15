@@ -36,7 +36,7 @@ struct FDeathInfo
 {
 	static UStruct* GetStruct()
 	{
-		static auto Struct = FindObject<UStruct>("/Script/FortniteGame.DeathInfo");
+		static auto Struct = FindObject<UStruct>(L"/Script/FortniteGame.DeathInfo");
 		return Struct;
 	}
 

@@ -22,7 +22,7 @@ public:
 
 	int GetSizeX()
 	{
-		static auto Blueprint_GetSizeXFn = FindObject<UFunction>("/Script/Engine.Texture2D.Blueprint_GetSizeX");
+		static auto Blueprint_GetSizeXFn = FindObject<UFunction>(L"/Script/Engine.Texture2D.Blueprint_GetSizeX");
 		int ReturnValue;
 		this->ProcessEvent(Blueprint_GetSizeXFn, &ReturnValue);
 		return ReturnValue;
@@ -30,7 +30,7 @@ public:
 
 	int GetSizeY()
 	{
-		static auto Blueprint_GetSizeYFn = FindObject<UFunction>("/Script/Engine.Texture2D.Blueprint_GetSizeY");
+		static auto Blueprint_GetSizeYFn = FindObject<UFunction>(L"/Script/Engine.Texture2D.Blueprint_GetSizeY");
 		int ReturnValue;
 		this->ProcessEvent(Blueprint_GetSizeYFn, &ReturnValue);
 		return ReturnValue;
@@ -39,7 +39,7 @@ public:
 	static void ConvertTextureToImage(UTexture2D* Texture, FString FilePath, FString FileName)
 	{
 		static auto DefaultKismetRenderingLibrary = FindObject("/Script/Engine.Default__KismetRenderingLibrary");
-		static auto ExportTexture2DFn = FindObject<UFunction>("/Script/Engine.KismetRenderingLibrary.ExportTexture2D");
+		static auto ExportTexture2DFn = FindObject<UFunction>(L"/Script/Engine.KismetRenderingLibrary.ExportTexture2D");
 
 		struct
 		{
@@ -54,7 +54,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto Class = FindObject<UClass>("/Script/Engine.Texture2D");
+		static auto Class = FindObject<UClass>(L"/Script/Engine.Texture2D");
 		return Class;
 	}
 };

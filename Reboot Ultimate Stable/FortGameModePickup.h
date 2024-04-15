@@ -7,7 +7,7 @@ class AFortGameModePickup : public AFortPickup//Athena
 public:
 	static UClass* StaticClass()
 	{
-		static auto Class = FindObject<UClass>("/Script/FortniteGame.FortGameModePickup");
+		static auto Class = FindObject<UClass>(L"/Script/FortniteGame.FortGameModePickup");
 		return Class;
 	}
 };

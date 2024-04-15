@@ -7,7 +7,7 @@ class UFortTrapItemDefinition : public UFortDecoItemDefinition
 public:
 	static UClass* StaticClass()
 	{
-		static auto Class = FindObject<UClass>("/Script/FortniteGame.FortTrapItemDefinition");
+		static auto Class = FindObject<UClass>(L"/Script/FortniteGame.FortTrapItemDefinition");
 		return Class;
 	}
 };
@@ -35,7 +35,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto Class = FindObject<UClass>("/Script/FortniteGame.FortContextTrapItemDefinition");
+		static auto Class = FindObject<UClass>(L"/Script/FortniteGame.FortContextTrapItemDefinition");
 		return Class;
 	}
 };

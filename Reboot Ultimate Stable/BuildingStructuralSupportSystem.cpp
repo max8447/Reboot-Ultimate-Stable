@@ -4,7 +4,7 @@
 
 bool UBuildingStructuralSupportSystem::IsWorldLocValid(const FVector& WorldLoc)
 {
-	static auto IsWorldLocValidFn = FindObject<UFunction>("/Script/FortniteGame.BuildingStructuralSupportSystem.IsWorldLocValid");
+	static auto IsWorldLocValidFn = FindObject<UFunction>(L"/Script/FortniteGame.BuildingStructuralSupportSystem.IsWorldLocValid");
 
 	if (!IsWorldLocValidFn)
 		return true;

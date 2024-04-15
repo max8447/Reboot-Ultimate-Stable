@@ -22,13 +22,13 @@ public:
 
 	void SetCurrentPlayset(class UFortPlaysetItemDefinition* NewPlayset)
 	{
-		static auto SetCurrentPlaysetFn = FindObject<UFunction>("/Script/FortniteGame.FortVolume.SetCurrentPlayset");
+		static auto SetCurrentPlaysetFn = FindObject<UFunction>(L"/Script/FortniteGame.FortVolume.SetCurrentPlayset");
 		this->ProcessEvent(SetCurrentPlaysetFn, &NewPlayset);
 	}
 
 	void UpdateSize(const FVector& Scale)
 	{
-		static auto UpdateSizeFn = FindObject<UFunction>("/Script/FortniteGame.FortVolume.UpdateSize");
+		static auto UpdateSizeFn = FindObject<UFunction>(L"/Script/FortniteGame.FortVolume.UpdateSize");
 		this->ProcessEvent(UpdateSizeFn, (FVector*)&Scale);
 	}
 };

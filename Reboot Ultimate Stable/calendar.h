@@ -91,7 +91,7 @@ namespace Calendar
 
 		static auto SetSnowFn = FindObject<UFunction>(L"/Game/Athena/Apollo/Environments/Blueprints/CalendarEvents/BP_ApolloSnowSetup.BP_ApolloSnowSetup_C.SetSnow") ? FindObject<UFunction>(L"/Game/Athena/Apollo/Environments/Blueprints/CalendarEvents/BP_ApolloSnowSetup.BP_ApolloSnowSetup_C.SetSnow") :
 			FindObject<UFunction>(L"/Game/Athena/Environments/Landscape/Blueprints/BP_SnowSetup.BP_SnowSetup_C.SetSnow") ? FindObject<UFunction>(L"/Game/Athena/Environments/Landscape/Blueprints/BP_SnowSetup.BP_SnowSetup_C.SetSnow") :
-			FindObject<UFunction>("/SpecialSurfaceCoverage/Items/BP_Artemis_S19Progression.BP_Artemis_S19Progression_C.SetSnowProgressionPhase");
+			FindObject<UFunction>(L"/SpecialSurfaceCoverage/Items/BP_Artemis_S19Progression.BP_Artemis_S19Progression_C.SetSnowProgressionPhase");
 
 		auto SnowSetup = GetSnowSetup();
 
@@ -108,7 +108,7 @@ namespace Calendar
 
 			if (NewValue != -1 && Engine_Version >= 500 && !Addresses::GIsClient)
 			{
-				auto UpdateSnowVisualsOnClientFn = FindObject<UFunction>("/SpecialSurfaceCoverage/Items/BP_Artemis_S19Progression.BP_Artemis_S19Progression_C.UpdateSnowVisualsOnClient");
+				auto UpdateSnowVisualsOnClientFn = FindObject<UFunction>(L"/SpecialSurfaceCoverage/Items/BP_Artemis_S19Progression.BP_Artemis_S19Progression_C.UpdateSnowVisualsOnClient");
 				SnowSetup->ProcessEvent(UpdateSnowVisualsOnClientFn);
 				LOG_INFO(LogDev, "Called UpdateSnowVisualsOnClientFn!");
 			}
@@ -125,8 +125,8 @@ namespace Calendar
 
 		if (WL && WaterLevel != -1)
 		{
-			static auto SetWaterLevel = FindObject<UFunction>("/Game/Athena/Apollo/Environments/Blueprints/Apollo_WaterSetup.Apollo_WaterSetup_C.SetWaterLevel");
-			static auto OnRep_CurrentWaterLevel = FindObject<UFunction>("/Game/Athena/Apollo/Environments/Blueprints/Apollo_WaterSetup.Apollo_WaterSetup_C.OnRep_CurrentWaterLevel");
+			static auto SetWaterLevel = FindObject<UFunction>(L"/Game/Athena/Apollo/Environments/Blueprints/Apollo_WaterSetup.Apollo_WaterSetup_C.SetWaterLevel");
+			static auto OnRep_CurrentWaterLevel = FindObject<UFunction>(L"/Game/Athena/Apollo/Environments/Blueprints/Apollo_WaterSetup.Apollo_WaterSetup_C.OnRep_CurrentWaterLevel");
 
 			WL->ProcessEvent(SetWaterLevel, &WaterLevel);
 			WL->ProcessEvent(OnRep_CurrentWaterLevel);
@@ -140,14 +140,14 @@ namespace Calendar
 
 	static inline void StartNYE()
 	{
-		static auto NewYearTimer = FindObject<UObject>("/Game/Athena/Maps/Streaming/Athena_NYE_Celebration.Athena_NYE_Celebration.PersistentLevel.BP_NewYearTimer_2") ? FindObject<UObject>("/Game/Athena/Maps/Streaming/Athena_NYE_Celebration.Athena_NYE_Celebration.PersistentLevel.BP_NewYearTimer_2") :
-			FindObject<UObject>("/NewYears/Content/Levels/Apollo_NYE_Celebration.Apollo_NYE_Celebration.PersistentLevel.BP_NewYearTimer_2") ? FindObject<UObject>("/NewYears/Content/Levels/Apollo_NYE_Celebration.Apollo_NYE_Celebration.PersistentLevel.BP_NewYearTimer_2") :
-			FindObject<UObject>("/NewYears/Content/Levels/Artemis_NYE_Celebration.Artemis_NYE_Celebration.PersistentLevel.BP_NewYearTimer_2");
+		static auto NewYearTimer = FindObject<UObject>(L"/Game/Athena/Maps/Streaming/Athena_NYE_Celebration.Athena_NYE_Celebration.PersistentLevel.BP_NewYearTimer_2") ? FindObject<UObject>(L"/Game/Athena/Maps/Streaming/Athena_NYE_Celebration.Athena_NYE_Celebration.PersistentLevel.BP_NewYearTimer_2") :
+			FindObject<UObject>(L"/NewYears/Content/Levels/Apollo_NYE_Celebration.Apollo_NYE_Celebration.PersistentLevel.BP_NewYearTimer_2") ? FindObject<UObject>(L"/NewYears/Content/Levels/Apollo_NYE_Celebration.Apollo_NYE_Celebration.PersistentLevel.BP_NewYearTimer_2") :
+			FindObject<UObject>(L"/NewYears/Content/Levels/Artemis_NYE_Celebration.Artemis_NYE_Celebration.PersistentLevel.BP_NewYearTimer_2");
 
 		LOG_INFO(LogDev, "NewYearTimer: {}", NewYearTimer->IsValidLowLevel() ? NewYearTimer->GetFullName() : "BadRead");
 
-		static auto StartNYE = FindObject<UFunction>("/Game/Athena/Events/NewYear/BP_NewYearTimer.BP_NewYearTimer_C.startNYE") ? FindObject<UFunction>("/Game/Athena/Events/NewYear/BP_NewYearTimer.BP_NewYearTimer_C.startNYE") :
-			FindObject<UFunction>("/NewYears/Blueprints/BP_NewYearTimer.BP_NewYearTimer_C.startNYE");
+		static auto StartNYE = FindObject<UFunction>(L"/Game/Athena/Events/NewYear/BP_NewYearTimer.BP_NewYearTimer_C.startNYE") ? FindObject<UFunction>(L"/Game/Athena/Events/NewYear/BP_NewYearTimer.BP_NewYearTimer_C.startNYE") :
+			FindObject<UFunction>(L"/NewYears/Blueprints/BP_NewYearTimer.BP_NewYearTimer_C.startNYE");
 
 		LOG_INFO(LogDev, "StartNYE: {}", StartNYE->IsValidLowLevel() ? StartNYE->GetFullName() : "BadRead");
 

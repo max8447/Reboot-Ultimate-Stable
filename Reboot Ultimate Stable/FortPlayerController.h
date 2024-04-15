@@ -12,7 +12,7 @@ struct FFortAthenaLoadout
 {
 	static UStruct* GetStruct()
 	{
-		static auto Struct = FindObject<UStruct>("/Script/FortniteGame.FortAthenaLoadout");
+		static auto Struct = FindObject<UStruct>(L"/Script/FortniteGame.FortAthenaLoadout");
 		return Struct;
 	}
 
@@ -189,7 +189,7 @@ public:
 
 	bool IsPlayingEmote()
 	{
-		static auto IsPlayingEmoteFn = FindObject<UFunction>("/Script/FortniteGame.FortPlayerController.IsPlayingEmote");
+		static auto IsPlayingEmoteFn = FindObject<UFunction>(L"/Script/FortniteGame.FortPlayerController.IsPlayingEmote");
 		bool Ret;
 		this->ProcessEvent(IsPlayingEmoteFn, &Ret);
 		return Ret;
@@ -241,7 +241,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto Class = FindObject<UClass>("/Script/FortniteGame.FortPlayerController");
+		static auto Class = FindObject<UClass>(L"/Script/FortniteGame.FortPlayerController");
 		return Class;
 	}
 };

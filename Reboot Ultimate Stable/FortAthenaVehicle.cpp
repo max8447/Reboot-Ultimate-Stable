@@ -2,7 +2,7 @@
 
 UFortWeaponItemDefinition* AFortAthenaVehicle::GetVehicleWeaponForSeat(int SeatIdx)
 {
-	static auto GetSeatWeaponComponentFn = FindObject<UFunction>("/Script/FortniteGame.FortAthenaVehicle.GetSeatWeaponComponent");
+	static auto GetSeatWeaponComponentFn = FindObject<UFunction>(L"/Script/FortniteGame.FortAthenaVehicle.GetSeatWeaponComponent");
 
 	UFortWeaponItemDefinition* VehicleWeaponDefinition = nullptr;
 
@@ -21,7 +21,7 @@ UFortWeaponItemDefinition* AFortAthenaVehicle::GetVehicleWeaponForSeat(int SeatI
 		if (!WeaponComponent)
 			return VehicleWeaponDefinition;
 
-		static auto WeaponSeatDefinitionStructSize = FindObject<UClass>("/Script/FortniteGame.WeaponSeatDefinition")->GetPropertiesSize();
+		static auto WeaponSeatDefinitionStructSize = FindObject<UClass>(L"/Script/FortniteGame.WeaponSeatDefinition")->GetPropertiesSize();
 		static auto VehicleWeaponOffset = FindOffsetStruct("/Script/FortniteGame.WeaponSeatDefinition", "VehicleWeapon");
 		static auto SeatIndexOffset = FindOffsetStruct("/Script/FortniteGame.WeaponSeatDefinition", "SeatIndex");
 		static auto WeaponSeatDefinitionsOffset = WeaponComponent->GetOffset("WeaponSeatDefinitions");
@@ -43,11 +43,11 @@ UFortWeaponItemDefinition* AFortAthenaVehicle::GetVehicleWeaponForSeat(int SeatI
 	}
 	else
 	{
-		static auto FerretWeaponItemDefinition = FindObject<UFortWeaponItemDefinition>("/Game/Athena/Items/Weapons/Ferret_Weapon.Ferret_Weapon");
-		static auto OctopusWeaponItemDefinition = FindObject<UFortWeaponItemDefinition>("/Game/Athena/Items/Weapons/Vehicles/WID_Octopus_Weapon.WID_Octopus_Weapon");
-		static auto InCannonWeaponItemDefinition = FindObject<UFortWeaponItemDefinition>("/Game/Athena/Items/Weapons/Vehicles/ShipCannon_Weapon_InCannon.ShipCannon_Weapon_InCannon");
-		static auto CannonWeaponItemDefinition = FindObject<UFortWeaponItemDefinition>("/Game/Athena/Items/Weapons/Vehicles/ShipCannon_Weapon.ShipCannon_Weapon");
-		static auto TurretWeaponItemDefinition = FindObject<UFortWeaponItemDefinition>("/Game/Athena/Items/Traps/MountedTurret/MountedTurret_Weapon.MountedTurret_Weapon");
+		static auto FerretWeaponItemDefinition = FindObject<UFortWeaponItemDefinition>(L"/Game/Athena/Items/Weapons/Ferret_Weapon.Ferret_Weapon");
+		static auto OctopusWeaponItemDefinition = FindObject<UFortWeaponItemDefinition>(L"/Game/Athena/Items/Weapons/Vehicles/WID_Octopus_Weapon.WID_Octopus_Weapon");
+		static auto InCannonWeaponItemDefinition = FindObject<UFortWeaponItemDefinition>(L"/Game/Athena/Items/Weapons/Vehicles/ShipCannon_Weapon_InCannon.ShipCannon_Weapon_InCannon");
+		static auto CannonWeaponItemDefinition = FindObject<UFortWeaponItemDefinition>(L"/Game/Athena/Items/Weapons/Vehicles/ShipCannon_Weapon.ShipCannon_Weapon");
+		static auto TurretWeaponItemDefinition = FindObject<UFortWeaponItemDefinition>(L"/Game/Athena/Items/Traps/MountedTurret/MountedTurret_Weapon.MountedTurret_Weapon");
 
 		auto ReceivingActorName = this->GetName();
 

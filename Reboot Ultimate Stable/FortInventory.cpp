@@ -152,7 +152,7 @@ std::pair<std::vector<UFortItem*>, std::vector<UFortItem*>> AFortInventory::AddI
 					}
 
 					bool (*ApplyGadgetData)(UFortGadgetItemDefinition* a1, __int64 a2, UFortItem* a3, unsigned __int8 a4) = decltype(ApplyGadgetData)(Addresses::ApplyGadgetData);
-					static auto FortInventoryOwnerInterfaceClass = FindObject<UClass>("/Script/FortniteGame.FortInventoryOwnerInterface");
+					static auto FortInventoryOwnerInterfaceClass = FindObject<UClass>(L"/Script/FortniteGame.FortInventoryOwnerInterface");
 					auto Interface = __int64(FortPlayerController->GetInterfaceAddress(FortInventoryOwnerInterfaceClass));
 					bool idktbh = true; // Something to do with durability
 					
@@ -194,7 +194,7 @@ std::pair<std::vector<UFortItem*>, std::vector<UFortItem*>> AFortInventory::AddI
 					-1
 				};
 
-				static auto ServerAddItemInternalFn = FindObject<UFunction>("/Script/FortniteGame.FortQuickBars.ServerAddItemInternal");
+				static auto ServerAddItemInternalFn = FindObject<UFunction>(L"/Script/FortniteGame.FortQuickBars.ServerAddItemInternal");
 				QuickBars->ProcessEvent(ServerAddItemInternalFn, &AFortQuickBars_ServerAddItemInternal_Params);
 			}
 		}
@@ -564,6 +564,6 @@ FFortItemEntry* AFortInventory::FindReplicatedEntry(const FGuid& Guid)
 
 UClass* AFortInventory::StaticClass()
 {
-	static auto Class = FindObject<UClass>("/Script/FortniteGame.FortInventory");
+	static auto Class = FindObject<UClass>(L"/Script/FortniteGame.FortInventory");
 	return Class;
 }

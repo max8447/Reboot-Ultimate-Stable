@@ -6,7 +6,7 @@ void UFortPlaysetItemDefinition::ShowPlayset(UFortPlaysetItemDefinition* Playset
 {
 	/* This doesn't stream it to the client.
 	
-	static auto SpawnPlaysetFn = FindObject<UFunction>("/Script/FortniteGame.FortPlaysetItemDefinition.SpawnPlayset");
+	static auto SpawnPlaysetFn = FindObject<UFunction>(L"/Script/FortniteGame.FortPlaysetItemDefinition.SpawnPlayset");
 
 	struct
 	{
@@ -17,14 +17,14 @@ void UFortPlaysetItemDefinition::ShowPlayset(UFortPlaysetItemDefinition* Playset
 		char pad[0x100]; // idk out param stuff
 	} UFortPlaysetItemDefinition_SpawnPlayset_Params{GetWorld(), PlaysetItemDef, Volume->GetActorLocation(), FRotator()};
 
-	static auto defaultObj = FindObject<UFortPlaysetItemDefinition>("/Script/FortniteGame.Default__FortPlaysetItemDefinition");
+	static auto defaultObj = FindObject<UFortPlaysetItemDefinition>(L"/Script/FortniteGame.Default__FortPlaysetItemDefinition");
 	defaultObj->ProcessEvent(SpawnPlaysetFn, &UFortPlaysetItemDefinition_SpawnPlayset_Params);
 
 	return; */
 
 	auto VolumeToUse = Volume;
 
-	static auto PlaysetLevelStreamComponentClass = FindObject<UClass>("/Script/FortniteGame.PlaysetLevelStreamComponent");
+	static auto PlaysetLevelStreamComponentClass = FindObject<UClass>(L"/Script/FortniteGame.PlaysetLevelStreamComponent");
 	auto LevelStreamComponent = (UPlaysetLevelStreamComponent*)VolumeToUse->GetComponentByClass(PlaysetLevelStreamComponentClass);
 
 	if (!LevelStreamComponent)
@@ -32,7 +32,7 @@ void UFortPlaysetItemDefinition::ShowPlayset(UFortPlaysetItemDefinition* Playset
 		return;
 	}
 
-	static auto SetPlaysetFn = FindObject<UFunction>("/Script/FortniteGame.PlaysetLevelStreamComponent.SetPlayset");
+	static auto SetPlaysetFn = FindObject<UFunction>(L"/Script/FortniteGame.PlaysetLevelStreamComponent.SetPlayset");
 	LevelStreamComponent->ProcessEvent(SetPlaysetFn, &PlaysetItemDef);
 
 	LoadPlaysetOriginal(LevelStreamComponent);

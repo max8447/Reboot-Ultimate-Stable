@@ -34,7 +34,7 @@ struct FAircraftFlightInfo
 
 	static UStruct* GetStruct()
 	{
-		static auto Struct = FindObject<UStruct>("/Script/FortniteGame.AircraftFlightInfo");
+		static auto Struct = FindObject<UStruct>(L"/Script/FortniteGame.AircraftFlightInfo");
 		return Struct;
 	}
 

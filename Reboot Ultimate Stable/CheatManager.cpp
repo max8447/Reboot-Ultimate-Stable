@@ -10,13 +10,13 @@ void UCheatManager::Teleport()
 
 void UCheatManager::DestroyTarget()
 {
-	static auto DestroyTargetFn = FindObject<UFunction>("/Script/Engine.CheatManager.DestroyTarget");
+	static auto DestroyTargetFn = FindObject<UFunction>(L"/Script/Engine.CheatManager.DestroyTarget");
 	this->ProcessEvent(DestroyTargetFn);
 }
 
 void UCheatManager::DestroyAll(TSubclassOf<AActor> AClass)
 {
-	static auto DestroyAllFn = FindObject<UFunction>("/Script/Engine.CheatManager.DestroyAll");
+	static auto DestroyAllFn = FindObject<UFunction>(L"/Script/Engine.CheatManager.DestroyAll");
 	this->ProcessEvent(DestroyAllFn, &AClass);
 }
 

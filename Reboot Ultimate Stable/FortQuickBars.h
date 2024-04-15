@@ -14,7 +14,7 @@ struct FQuickBarSlot
 {
 	static UStruct* GetStruct()
 	{
-		static auto Struct = FindObject<UStruct>("/Script/FortniteGame.QuickBarSlot");
+		static auto Struct = FindObject<UStruct>(L"/Script/FortniteGame.QuickBarSlot");
 		return Struct;
 	}
 
@@ -44,7 +44,7 @@ class AFortQuickBars : public AActor
 public:
 	void ServerRemoveItemInternal(const FGuid& Item, bool bFindReplacement, bool bForce)
 	{
-		static auto ServerRemoveItemInternalFn = FindObject<UFunction>("/Script/FortniteGame.FortQuickBars.ServerRemoveItemInternal");
+		static auto ServerRemoveItemInternalFn = FindObject<UFunction>(L"/Script/FortniteGame.FortQuickBars.ServerRemoveItemInternal");
 
 		struct
 		{
@@ -57,7 +57,7 @@ public:
 
 	void EmptySlot(EFortQuickBars InQuickBar, int SlotIndex)
 	{
-		static auto EmptySlotFn = FindObject<UFunction>("/Script/FortniteGame.FortQuickBars.EmptySlot");
+		static auto EmptySlotFn = FindObject<UFunction>(L"/Script/FortniteGame.FortQuickBars.EmptySlot");
 		struct
 		{
 			EFortQuickBars                                     InQuickBar;                                               // (Parm, ZeroConstructor, IsPlainOldData)
@@ -119,7 +119,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto Class = FindObject<UClass>("/Script/FortniteGame.FortQuickBars");
+		static auto Class = FindObject<UClass>(L"/Script/FortniteGame.FortQuickBars");
 		return Class;
 	}
 };

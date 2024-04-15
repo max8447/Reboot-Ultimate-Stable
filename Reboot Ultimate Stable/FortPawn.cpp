@@ -88,7 +88,7 @@ void AFortPawn::SetMaxHealth(float NewHealthVal)
 
 void AFortPawn::SetShield(float NewShield)
 {
-	static auto SetShieldFn = FindObject<UFunction>("/Script/FortniteGame.FortPawn.SetShield");
+	static auto SetShieldFn = FindObject<UFunction>(L"/Script/FortniteGame.FortPawn.SetShield");
 
 	if (SetShieldFn)
 		this->ProcessEvent(SetShieldFn, &NewShield);
@@ -148,6 +148,6 @@ void AFortPawn::MovingEmoteStoppedHook(UObject* Context, FFrame* Stack, void* Re
 
 UClass* AFortPawn::StaticClass()
 {
-	static auto Class = FindObject<UClass>("/Script/FortniteGame.FortPawn");
+	static auto Class = FindObject<UClass>(L"/Script/FortniteGame.FortPawn");
 	return Class;
 }

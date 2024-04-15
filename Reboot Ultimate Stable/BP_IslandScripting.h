@@ -15,13 +15,13 @@ public:
 
 	void OnRep_IsDeimosActive()
 	{
-		static auto OnRep_IsDeimosActiveFn = FindObject<UFunction>("/Game/Athena/Prototype/Blueprints/Island/BP_IslandScripting.BP_IslandScripting_C.OnRep_IsDeimosActive");
+		static auto OnRep_IsDeimosActiveFn = FindObject<UFunction>(L"/Game/Athena/Prototype/Blueprints/Island/BP_IslandScripting.BP_IslandScripting_C.OnRep_IsDeimosActive");
 		this->ProcessEvent(OnRep_IsDeimosActiveFn);
 	}
 
 	void OnRep_UpdateMap()
 	{
-		static auto OnRep_UpdateMapFn = FindObject<UFunction>("/Game/Athena/Prototype/Blueprints/Island/BP_IslandScripting.BP_IslandScripting_C.OnRep_UpdateMap");
+		static auto OnRep_UpdateMapFn = FindObject<UFunction>(L"/Game/Athena/Prototype/Blueprints/Island/BP_IslandScripting.BP_IslandScripting_C.OnRep_UpdateMap");
 		this->ProcessEvent(OnRep_UpdateMapFn);
 	}
 
@@ -31,7 +31,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		/* static */ auto Class = FindObject<UClass>("/Game/Athena/Prototype/Blueprints/Island/BP_IslandScripting.BP_IslandScripting_C");
+		/* static */ auto Class = FindObject<UClass>(L"/Game/Athena/Prototype/Blueprints/Island/BP_IslandScripting.BP_IslandScripting_C");
 		return Class;
 	}
 };

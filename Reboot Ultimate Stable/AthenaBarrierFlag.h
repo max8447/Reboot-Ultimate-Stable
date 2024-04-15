@@ -7,7 +7,7 @@ struct FBarrierFlagDisplayData
 {
 	static UStruct* GetStruct()
 	{
-		static auto Struct = FindObject<UStruct>("/Script/FortniteGame.BarrierFlagDisplayData");
+		static auto Struct = FindObject<UStruct>(L"/Script/FortniteGame.BarrierFlagDisplayData");
 		return Struct;
 	}
 

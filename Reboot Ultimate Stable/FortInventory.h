@@ -23,12 +23,12 @@ static bool IsPrimaryQuickbar(UFortItemDefinition* ItemDefinition)
 	else if (ItemDefinition->IsA(UFortWeaponItemDefinition::StaticClass()))
 		return true; */
 
-	static auto FortWeaponMeleeItemDefinitionClass = FindObject<UClass>("/Script/FortniteGame.FortWeaponMeleeItemDefinition");
-	static auto FortEditToolItemDefinitionClass = FindObject<UClass>("/Script/FortniteGame.FortEditToolItemDefinition");
-	static auto FortBuildingItemDefinitionClass = FindObject<UClass>("/Script/FortniteGame.FortBuildingItemDefinition");
-	static auto FortAmmoItemDefinitionClass = FindObject<UClass>("/Script/FortniteGame.FortAmmoItemDefinition");
-	static auto FortResourceItemDefinitionClass = FindObject<UClass>("/Script/FortniteGame.FortResourceItemDefinition");
-	static auto FortTrapItemDefinitionClass = FindObject<UClass>("/Script/FortniteGame.FortTrapItemDefinition");
+	static auto FortWeaponMeleeItemDefinitionClass = FindObject<UClass>(L"/Script/FortniteGame.FortWeaponMeleeItemDefinition");
+	static auto FortEditToolItemDefinitionClass = FindObject<UClass>(L"/Script/FortniteGame.FortEditToolItemDefinition");
+	static auto FortBuildingItemDefinitionClass = FindObject<UClass>(L"/Script/FortniteGame.FortBuildingItemDefinition");
+	static auto FortAmmoItemDefinitionClass = FindObject<UClass>(L"/Script/FortniteGame.FortAmmoItemDefinition");
+	static auto FortResourceItemDefinitionClass = FindObject<UClass>(L"/Script/FortniteGame.FortResourceItemDefinition");
+	static auto FortTrapItemDefinitionClass = FindObject<UClass>(L"/Script/FortniteGame.FortTrapItemDefinition");
 
 	if (!ItemDefinition->IsA(FortWeaponMeleeItemDefinitionClass) && !ItemDefinition->IsA(FortEditToolItemDefinitionClass) &&
 		!ItemDefinition->IsA(FortBuildingItemDefinitionClass) && !ItemDefinition->IsA(FortAmmoItemDefinitionClass)

@@ -4,7 +4,7 @@
 
 AActor* AController::GetViewTarget()
 {
-	static auto GetViewTargetFn = FindObject<UFunction>("/Script/Engine.Controller.GetViewTarget");
+	static auto GetViewTargetFn = FindObject<UFunction>(L"/Script/Engine.Controller.GetViewTarget");
 	AActor* ViewTarget = nullptr;
 	this->ProcessEvent(GetViewTargetFn, &ViewTarget);
 	return ViewTarget;

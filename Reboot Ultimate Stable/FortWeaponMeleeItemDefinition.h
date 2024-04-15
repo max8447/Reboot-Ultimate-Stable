@@ -8,7 +8,7 @@ class UFortWeaponMeleeItemDefinition : public UFortWeaponItemDefinition
 public:
 	static UClass* StaticClass()
 	{
-		static auto Class = FindObject<UClass>("/Script/FortniteGame.FortWeaponMeleeItemDefinition");
+		static auto Class = FindObject<UClass>(L"/Script/FortniteGame.FortWeaponMeleeItemDefinition");
 		return Class;
 	}
 };

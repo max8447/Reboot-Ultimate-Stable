@@ -23,7 +23,7 @@ void AFortPickup::TossPickup(FVector FinalLocation, AFortPawn* ItemOwner, int Ov
 
 void AFortPickup::SpawnMovementComponent()
 {
-	static auto ProjectileMovementComponentClass = FindObject<UClass>("/Script/Engine.ProjectileMovementComponent"); // UFortProjectileMovementComponent
+	static auto ProjectileMovementComponentClass = FindObject<UClass>(L"/Script/Engine.ProjectileMovementComponent"); // UFortProjectileMovementComponent
 
 	static auto MovementComponentOffset = this->GetOffset("MovementComponent");
 	
@@ -535,6 +535,6 @@ char AFortPickup::CompletePickupAnimationHook(AFortPickup* Pickup)
 
 UClass* AFortPickup::StaticClass()
 {
-	static auto Class = FindObject<UClass>("/Script/FortniteGame.FortPickup");
+	static auto Class = FindObject<UClass>(L"/Script/FortniteGame.FortPickup");
 	return Class;
 }

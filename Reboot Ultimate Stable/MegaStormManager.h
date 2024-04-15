@@ -8,7 +8,7 @@ struct FMegaStormCircle
 {
 	int GetStructSize()
 	{
-		static auto MegaStormCircleStruct = FindObject<UStruct>("/Script/FortniteGame.MegaStormCircle");
+		static auto MegaStormCircleStruct = FindObject<UStruct>(L"/Script/FortniteGame.MegaStormCircle");
 		return MegaStormCircleStruct->GetPropertiesSize();
 	}
 };

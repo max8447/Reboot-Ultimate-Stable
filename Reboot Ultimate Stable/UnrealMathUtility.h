@@ -1,6 +1,7 @@
 #pragma once
 
 #include "GenericPlatformMath.h"
+#include "Vector.h"
 
 struct FMath : public FGenericPlatformMath
 {
@@ -15,6 +16,39 @@ struct FMath : public FGenericPlatformMath
 	{
 		return A * A;
 	}
+
+	static FORCEINLINE int Rand()
+	{
+		return rand();
+	}
+
+	static FORCEINLINE float FRand()
+	{
+		// FP32 mantissa can only represent 24 bits before losing precision
+		constexpr int32 RandMax = 0x00ffffff < RAND_MAX ? 0x00ffffff : RAND_MAX;
+		return (Rand() & RandMax) / (float)RandMax;
+	}
+
+#define KINDA_SMALL_NUMBER	(1.e-4f)
+	/** Return a uniformly distributed random unit length vector = point on the unit sphere surface. */
+	static FORCEINLINE FVector VRand()
+	{
+		FVector Result;
+
+		float L;
+
+		do
+		{
+			// Check random vectors in the unit sphere so result is statistically uniform.
+			Result.X = FRand() * 2.f - 1.f;
+			Result.Y = FRand() * 2.f - 1.f;
+			Result.Z = FRand() * 2.f - 1.f;
+			L = Result.SizeSquared();
+		} while (L > 1.0f || L < KINDA_SMALL_NUMBER);
+
+		return Result * (1.0f / Sqrt(L));
+	}
+#undef KINDA_SMALL_NUMBER
 
 #define FASTASIN_HALF_PI (1.5707963050f)
 	/**

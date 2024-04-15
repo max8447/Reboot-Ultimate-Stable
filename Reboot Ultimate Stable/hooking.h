@@ -8,6 +8,10 @@
 
 #include "reboot.h"
 
+#define VTableOff(Function) ((GetFunctionIdxOrPtr2(Function) > 0 && GetFunctionIdxOrPtr(Function) > 0) ? \
+    ((GetFunctionIdxOrPtr(Function) - GetFunctionIdxOrPtr2(Function) == -8) ? GetFunctionIdxOrPtr2(Function) + 8 : GetFunctionIdxOrPtr(Function)) : \
+    (GetFunctionIdxOrPtr2(Function) > 0 ? GetFunctionIdxOrPtr2(Function) + 16 : GetFunctionIdxOrPtr(Function) + 8)) >> 3
+
 struct FunctionHooks
 {
     void* Original;
@@ -374,6 +378,26 @@ namespace Hooking
             return bWasUnHookSuccessful;
 		}
 	}
+}
+
+static inline void SwapVTable(void* Base, UFunction* Function, void* Detour, void** Original = nullptr)
+{
+    if (!Base)
+        return;
+
+    __int64 Idx = VTableOff(Function);
+    void** VTable = *(void***)Base;
+
+    if (!VTable || !VTable[Idx])
+        return;
+
+    if (Original)
+        *Original = VTable[Idx];
+
+    DWORD OldProtection;
+    VirtualProtect(&VTable[Idx], sizeof(void*), PAGE_EXECUTE_READWRITE, &OldProtection);
+    VTable[Idx] = Detour;
+    VirtualProtect(&VTable[Idx], sizeof(void*), OldProtection, NULL);
 }
 
 static inline void ChangeBytesThing(uint8_t* instrAddr, uint8_t* DetourAddr, int Offset)

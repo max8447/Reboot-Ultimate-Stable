@@ -160,7 +160,7 @@ static inline void Restart() // todo move?
 	/*
 
 	auto& LevelCollections = GetWorld()->Get<TArray<__int64>>("LevelCollections");
-	int LevelCollectionSize = FindObject<UStruct>("/Script/Engine.LevelCollection")->GetPropertiesSize();
+	int LevelCollectionSize = FindObject<UStruct>(L"/Script/Engine.LevelCollection")->GetPropertiesSize();
 
 	*(UNetDriver**)(__int64(LevelCollections.AtPtr(0, LevelCollectionSize)) + 0x10) = nullptr;
 	*(UNetDriver**)(__int64(LevelCollections.AtPtr(1, LevelCollectionSize)) + 0x10) = nullptr;
@@ -759,8 +759,8 @@ static inline void MainUI()
 				/*
 				if (ImGui::Button("New"))
 				{
-					static auto NextFn = FindObject<UFunction>("/Game/Athena/Prototype/Blueprints/Cube/CUBE.CUBE_C.Next");
-					static auto NewFn = FindObject<UFunction>("/Game/Athena/Prototype/Blueprints/Cube/CUBE.CUBE_C.New");					
+					static auto NextFn = FindObject<UFunction>(L"/Game/Athena/Prototype/Blueprints/Cube/CUBE.CUBE_C.Next");
+					static auto NewFn = FindObject<UFunction>(L"/Game/Athena/Prototype/Blueprints/Cube/CUBE.CUBE_C.New");					
 					auto Loader = GetEventLoader("/Game/Athena/Prototype/Blueprints/Cube/CUBE.CUBE_C");
 
 					LOG_INFO(LogDev, "Loader: {}", __int64(Loader));
@@ -775,8 +775,8 @@ static inline void MainUI()
 
 				if (ImGui::Button("Next"))
 				{
-					static auto NextFn = FindObject<UFunction>("/Game/Athena/Prototype/Blueprints/Cube/CUBE.CUBE_C.Next");
-					static auto NewFn = FindObject<UFunction>("/Game/Athena/Prototype/Blueprints/Cube/CUBE.CUBE_C.New");
+					static auto NextFn = FindObject<UFunction>(L"/Game/Athena/Prototype/Blueprints/Cube/CUBE.CUBE_C.Next");
+					static auto NewFn = FindObject<UFunction>(L"/Game/Athena/Prototype/Blueprints/Cube/CUBE.CUBE_C.New");
 					auto Loader = GetEventLoader("/Game/Athena/Prototype/Blueprints/Cube/CUBE.CUBE_C");
 
 					LOG_INFO(LogDev, "Loader: {}", __int64(Loader));
@@ -1045,7 +1045,7 @@ static inline void MainUI()
 				{
 					SkinsFile << FortniteVersionStr;
 
-					static auto CIDClass = FindObject<UClass>("/Script/FortniteGame.AthenaCharacterItemDefinition");
+					static auto CIDClass = FindObject<UClass>(L"/Script/FortniteGame.AthenaCharacterItemDefinition");
 
 					auto AllObjects = GetAllObjectsOfClass(CIDClass);
 
@@ -1072,7 +1072,7 @@ static inline void MainUI()
 				if (PlaylistsFile.is_open())
 				{
 					PlaylistsFile << FortniteVersionStr;
-					static auto FortPlaylistClass = FindObject<UClass>("/Script/FortniteGame.FortPlaylist");
+					static auto FortPlaylistClass = FindObject<UClass>(L"/Script/FortniteGame.FortPlaylist");
 					// static auto FortPlaylistClass = FindObject("Class /Script/FortniteGame.FortPlaylistAthena");
 
 					auto AllObjects = GetAllObjectsOfClass(FortPlaylistClass);
@@ -1127,7 +1127,7 @@ static inline void MainUI()
 
 					DumpItemDefinitionClass(UFortWeaponItemDefinition::StaticClass());
 					DumpItemDefinitionClass(UFortGadgetItemDefinition::StaticClass());
-					DumpItemDefinitionClass(FindObject<UClass>("/Script/FortniteGame.FortAmmoItemDefinition"));
+					DumpItemDefinitionClass(FindObject<UClass>(L"/Script/FortniteGame.FortAmmoItemDefinition"));
 				}
 				else
 					std::cout << "Failed to open playlist file!\n";
@@ -1355,7 +1355,7 @@ static inline void MainUI()
 
 			/* if (ImGui::Button("Load BGA Class (and spawn so no GC)"))
 			{
-				static auto BGAClass = FindObject<UClass>("/Script/Engine.BlueprintGeneratedClass");
+				static auto BGAClass = FindObject<UClass>(L"/Script/Engine.BlueprintGeneratedClass");
 				auto Class = LoadObject<UClass>(ClassNameToDump, BGAClass);
 
 				if (Class)

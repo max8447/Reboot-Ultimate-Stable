@@ -2,6 +2,7 @@
 
 #include "reboot.h"
 #include "FortGameModeAthena.h"
+#include "ai.h"
 
 extern inline void (*SetZoneToIndexOriginal)(AFortGameModeAthena* GameModeAthena, int OverridePhaseMaybeIDFK) = nullptr;
 
@@ -152,6 +153,7 @@ static inline void ProcessEventHook(UObject* Object, UFunction* Function, void* 
 			!strstr(FunctionName.c_str(), "SpinCubeTimeline__UpdateFunc") &&
 			!strstr(ObjectName.c_str(), "FortPhysicsObjectComponent") &&
 			!strstr(FunctionName.c_str(), "GetTextValue") &&
+			!strstr(FunctionName.c_str(), "OnActorBump") &&
 			!strstr(FunctionName.c_str(), "ExecuteUbergraph_BGA_Petrol_Pickup"))
 		{
 			LOG_INFO(LogDev, "Function called: {} with {}", FunctionFullName, ObjectName);
@@ -218,6 +220,32 @@ static inline void ProcessEventHook(UObject* Object, UFunction* Function, void* 
 			for (int i = 0; i < sizeof(EventData.TargetData.Pad_3965); i++)
 			{
 				LOG_ERROR(LogDev, "TargetData: {}", EventData.TargetData.Pad_3965[i]);
+			}
+		}
+		else if (FunctionFullName.contains("ServerTryActivateAbility"))
+		{
+			struct AbilitySystemComponent_ServerTryActivateAbility
+			{
+			public:
+				struct FGameplayAbilitySpecHandle             AbilityToActivate;                                 // 0x0000(0x0004)(Parm, NoDestructor, HasGetValueTypeHash, NativeAccessSpecifierPublic)
+				bool                                          InputPressed;                                      // 0x0004(0x0001)(Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash, NativeAccessSpecifierPublic)
+				uint8                                         Pad_3CA3[0x3];                                     // 0x0005(0x0003)(Fixing Size After Last Property [ Dumper-7 ])
+				struct FPredictionKey                         PredictionKey;                                     // 0x0008(0x0010)(Parm, NoDestructor, HasGetValueTypeHash, NativeAccessSpecifierPublic)
+			};
+
+			auto NewParams = *(AbilitySystemComponent_ServerTryActivateAbility*)Parameters;
+
+			LOG_ERROR(LogDev, "AbilityToActivate: {}", NewParams.AbilityToActivate.Handle);
+			LOG_ERROR(LogDev, "InputPressed: {}", (bool)NewParams.InputPressed);
+			for (int i = 0; i < sizeof(NewParams.Pad_3CA3); i++)
+				LOG_ERROR(LogDev, "Pad_3CA3: {}", NewParams.Pad_3CA3[i]);
+			// LOG_ERROR(LogDev, "PredictionKey: {}", NewParams.PredictionKey);
+		}
+		else if (FunctionFullName.contains("OnDeathServer") && ObjectName.contains("AthenaSupplyDrop_Gibson_C"))
+		{
+			if (Object && Object->IsValidLowLevel())
+			{
+				SpawnMarauderSquad(Cast<AActor>(Object));
 			}
 		}
 	}

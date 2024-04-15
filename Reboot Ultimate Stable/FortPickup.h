@@ -188,7 +188,7 @@ public:
 
 	void OnRep_PrimaryPickupItemEntry()
 	{
-		static auto OnRep_PrimaryPickupItemEntryFn = FindObject<UFunction>("/Script/FortniteGame.FortPickup.OnRep_PrimaryPickupItemEntry");
+		static auto OnRep_PrimaryPickupItemEntryFn = FindObject<UFunction>(L"/Script/FortniteGame.FortPickup.OnRep_PrimaryPickupItemEntry");
 		this->ProcessEvent(OnRep_PrimaryPickupItemEntryFn);
 	}
 

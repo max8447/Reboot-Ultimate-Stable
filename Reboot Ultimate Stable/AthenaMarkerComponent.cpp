@@ -147,7 +147,7 @@ void UAthenaMarkerComponent::ServerRemoveMapMarkerHook(UAthenaMarkerComponent* M
 		if (!CurrentTeamMemberMarkerComponent)
 			continue;
 
-		static auto ClientCancelMarkerFn = FindObject<UFunction>("/Script/FortniteGame.AthenaMarkerComponent.ClientCancelMarker");
+		static auto ClientCancelMarkerFn = FindObject<UFunction>(L"/Script/FortniteGame.AthenaMarkerComponent.ClientCancelMarker");
 
 		if (ClientCancelMarkerFn)
 		{

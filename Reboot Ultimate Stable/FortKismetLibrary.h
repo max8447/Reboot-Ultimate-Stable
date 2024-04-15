@@ -12,7 +12,7 @@ struct FSpawnItemVariantParams
 {
 	static UStruct* GetStruct()
 	{
-		static auto SpawnItemVariantsParamsStruct = FindObject<UStruct>("/Script/FortniteGame.SpawnItemVariantParams");
+		static auto SpawnItemVariantsParamsStruct = FindObject<UStruct>(L"/Script/FortniteGame.SpawnItemVariantParams");
 		return SpawnItemVariantsParamsStruct;
 	}
 

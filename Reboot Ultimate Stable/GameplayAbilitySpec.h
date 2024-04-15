@@ -29,7 +29,7 @@ struct FPredictionKey // todo move
 
 	static UStruct* GetStruct()
 	{
-		static auto Struct = FindObject<UStruct>("/Script/GameplayAbilities.PredictionKey");
+		static auto Struct = FindObject<UStruct>(L"/Script/GameplayAbilities.PredictionKey");
 		return Struct;
 	}
 
@@ -40,7 +40,7 @@ struct FGameplayAbilityActivationInfo // TODO Move
 {
 	static UStruct* GetStruct()
 	{
-		static auto Struct = FindObject<UStruct>("/Script/GameplayAbilities.GameplayAbilityActivationInfo");
+		static auto Struct = FindObject<UStruct>(L"/Script/GameplayAbilities.GameplayAbilityActivationInfo");
 		return Struct;
 	}
 
@@ -57,7 +57,7 @@ struct FGameplayAbilitySpec : FFastArraySerializerItem
 {
 	static int GetStructSize()
 	{
-		static auto GameplayAbilitySpecStruct = FindObject<UClass>("/Script/GameplayAbilities.GameplayAbilitySpec");
+		static auto GameplayAbilitySpecStruct = FindObject<UClass>(L"/Script/GameplayAbilities.GameplayAbilitySpec");
 		static auto StructSize = GameplayAbilitySpecStruct->GetPropertiesSize();
 			// *(int*)(__int64(GameplayAbilitySpecStruct) + Offsets::PropertiesSize);
 		// LOG_INFO(LogAbilities, "StructSize: {}", StructSize);

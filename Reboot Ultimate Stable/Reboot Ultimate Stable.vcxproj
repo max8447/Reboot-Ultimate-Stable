@@ -342,6 +342,7 @@
     <ClInclude Include="FortAthenaAIBotInventoryItems.h" />
     <ClInclude Include="FortAthenaAIBotSpawnerData.h" />
     <ClInclude Include="FortAthenaAISpawnerDataComponent_AIBotGameplay.h" />
+    <ClInclude Include="FortAthenaAISpawnerDataComponent_AIBotGameplayAbilityBase.h" />
     <ClInclude Include="FortAthenaAISpawnerDataComponent_AIBotInventory.h" />
     <ClInclude Include="FortAthenaAISpawnerDataComponent_CosmeticLoadout.h" />
     <ClInclude Include="FortAthenaAISpawnerDataComponent_SpawnParams.h" />

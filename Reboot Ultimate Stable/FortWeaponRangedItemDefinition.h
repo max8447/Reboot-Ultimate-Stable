@@ -7,7 +7,7 @@ class UFortWeaponRangedItemDefinition : public UFortWeaponItemDefinition
 public:
 	static UClass* StaticClass()
 	{
-		static auto Class = FindObject<UClass>("/Script/FortniteGame.FortWeaponRangedItemDefinition");
+		static auto Class = FindObject<UClass>(L"/Script/FortniteGame.FortWeaponRangedItemDefinition");
 		return Class;
 	}
 };

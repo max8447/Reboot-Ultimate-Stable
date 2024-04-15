@@ -29,7 +29,7 @@ float UFortItemDefinition::GetMaxStackSize()
         FCurveTableRowHandle                  Curve;                                             // 0x8(0x10)(Edit, BlueprintVisible, NoDestructor, HasGetValueTypeHash, NativeAccessSpecifierPublic)
     };
 
-    static auto AthenaGameData = FindObject<UDataTable>("/Game/Athena/Balance/DataTables/AthenaGameData.AthenaGameData");
+    static auto AthenaGameData = FindObject<UDataTable>(L"/Game/Athena/Balance/DataTables/AthenaGameData.AthenaGameData");
 
     auto& ScalableFloat = Get<FScalableFloat>(MaxStackSizeOffset);
     auto& RowMap = AthenaGameData->GetRowMap();

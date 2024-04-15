@@ -10,7 +10,7 @@ class AFortAthenaVehicle : public AActor// : public AFortPhysicsPawn // Super ch
 public:
 	class AFortPlayerPawn* GetPawnAtSeat(int SeatIdx)
 	{
-		static auto GetPawnAtSeatFn = FindObject<UFunction>("/Script/FortniteGame.FortAthenaVehicle.GetPawnAtSeat");
+		static auto GetPawnAtSeatFn = FindObject<UFunction>(L"/Script/FortniteGame.FortAthenaVehicle.GetPawnAtSeat");
 		struct { int SeatIdx; class AFortPlayerPawn* ReturnValue; } GetPawnAtSeat_Params{SeatIdx};
 		this->ProcessEvent(GetPawnAtSeatFn, &GetPawnAtSeat_Params);
 
@@ -19,7 +19,7 @@ public:
 
 	int FindSeatIndex(class AFortPlayerPawn* PlayerPawn)
 	{
-		static auto FindSeatIndexFn = FindObject<UFunction>("/Script/FortniteGame.FortAthenaVehicle.FindSeatIndex");
+		static auto FindSeatIndexFn = FindObject<UFunction>(L"/Script/FortniteGame.FortAthenaVehicle.FindSeatIndex");
 		struct { AFortPlayerPawn* PlayerPawn; int ReturnValue; } AFortAthenaVehicle_FindSeatIndex_Params{ PlayerPawn };
 		this->ProcessEvent(FindSeatIndexFn, &AFortAthenaVehicle_FindSeatIndex_Params);
 
@@ -30,7 +30,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto Class = FindObject<UClass>("/Script/FortniteGame.FortAthenaVehicle");
+		static auto Class = FindObject<UClass>(L"/Script/FortniteGame.FortAthenaVehicle");
 		return Class;
 	}
 };

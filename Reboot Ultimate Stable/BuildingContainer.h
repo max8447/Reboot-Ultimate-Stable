@@ -67,7 +67,7 @@ public:
 
 	void BounceContainer()
 	{
-		static auto BounceContainerFn = FindObject<UFunction>("/Script/FortniteGame.BuildingContainer.BounceContainer");
+		static auto BounceContainerFn = FindObject<UFunction>(L"/Script/FortniteGame.BuildingContainer.BounceContainer");
 		this->ProcessEvent(BounceContainerFn);
 	}
 
@@ -75,7 +75,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto Class = FindObject<UClass>("/Script/FortniteGame.BuildingContainer");
+		static auto Class = FindObject<UClass>(L"/Script/FortniteGame.BuildingContainer");
 		return Class;
 	}
 };

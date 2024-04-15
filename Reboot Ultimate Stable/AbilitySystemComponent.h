@@ -69,12 +69,28 @@ public:
 		this->ProcessEvent(fn, &UAbilitySystemComponent_ClientActivateAbilityFailed_Params);
 	}
 
+	void ClientActivateAbilitySucceed(FGameplayAbilitySpecHandle AbilityToActivate, FPredictionKey PredictionKey)
+	{
+		struct { FGameplayAbilitySpecHandle AbilityToActivate; FPredictionKey PredictionKey; } UAbilitySystemComponent_ClientActivateAbilitySucceed{ AbilityToActivate, PredictionKey };
+		static auto fn = FindObject<UFunction>(L"/Script/GameplayAbilities.AbilitySystemComponent.ClientActivateAbilitySucceed");
+
+		this->ProcessEvent(fn, &UAbilitySystemComponent_ClientActivateAbilitySucceed);
+	}
+
 	void ServerTryActivateAbilityWithEventData(FGameplayAbilitySpecHandle AbilityToActivate, bool InputPressed, FPredictionKey PredictionKey, FGameplayEventDataTest TriggerEventData)
 	{
 		struct { FGameplayAbilitySpecHandle AbilityToActivate; bool InputPressed; FPredictionKey PredictionKey; FGameplayEventDataTest TriggerEventData; } AbilitySystemComponent_ServerTryActivateAbilityWithEventData{ AbilityToActivate , InputPressed, PredictionKey , TriggerEventData };
 		static auto fn = FindObject<UFunction>(L"/Script/GameplayAbilities.AbilitySystemComponent.ServerTryActivateAbilityWithEventData");
 		
 		this->ProcessEvent(fn, &AbilitySystemComponent_ServerTryActivateAbilityWithEventData);
+	}
+
+	void ServerTryActivateAbility(FGameplayAbilitySpecHandle AbilityToActivate, bool InputPressed, FPredictionKey PredictionKey)
+	{
+		struct { FGameplayAbilitySpecHandle AbilityToActivate; bool InputPressed; FPredictionKey PredictionKey; } AbilitySystemComponent_ServerTryActivateAbility{ AbilityToActivate , InputPressed, PredictionKey };
+		static auto fn = FindObject<UFunction>(L"/Script/GameplayAbilities.AbilitySystemComponent.ServerTryActivateAbility");
+
+		this->ProcessEvent(fn, &AbilitySystemComponent_ServerTryActivateAbility);
 	}
 
 	TArray<UAttributeSet*>& GetSpawnedAttributes()

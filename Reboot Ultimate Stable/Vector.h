@@ -2,6 +2,7 @@
 
 #include "inc.h"
 #include "UnrealString.h"
+#include "GenericPlatformMath.h"
 
 struct FVector
 {
@@ -26,6 +27,18 @@ public:
 	bool CompareVectors(const FVector& A)
 	{
 		return X == A.X && Y == A.Y && Z == A.Z;
+	}
+
+	FORCEINLINE bool Normalize(float Tolerance)
+	{
+		const float SquareSum = X * X + Y * Y + Z * Z;
+		if (SquareSum > Tolerance)
+		{
+			const float Scale = FGenericPlatformMath::InvSqrt(SquareSum);
+			X *= Scale; Y *= Scale; Z *= Scale;
+			return true;
+		}
+		return false;
 	}
 
 	FVector() : X(0), Y(0), Z(0) {}

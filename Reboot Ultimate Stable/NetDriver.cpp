@@ -11,6 +11,7 @@
 #include "AssertionMacros.h"
 #include "bots.h"
 #include "gui.h"
+#include "UnrealMathUtility.h"
 
 FNetworkObjectList& UNetDriver::GetNetworkObjectList()
 {
@@ -135,16 +136,6 @@ enum class ENetRole : uint8_t
 	ROLE_MAX = 4
 };
 
-FORCEINLINE float FRand()
-{
-	std::random_device rd;
-	std::mt19937 gen(rd());
-	std::uniform_real_distribution<> dis(0, 1);
-	float random_number = dis(gen);
-
-	return random_number;
-}
-
 static FORCEINLINE bool ShouldActorGoDormant(AActor* Actor, const std::vector<FNetViewer>& ConnectionViewers, UActorChannel* Channel, const float Time, const bool bLowNetBandwidth)
 {
 	using enum ENetDormancy;
@@ -267,7 +258,7 @@ void UNetDriver::ServerReplicateActors_BuildConsiderList(std::vector<FNetworkObj
 
 				// then set the next update time
 				float ServerTickTime = 1.f / 30;
-				ActorInfo->NextUpdateTime = UGameplayStatics::GetTimeSeconds(World) + FRand() * ServerTickTime + NextUpdateDelta;
+				ActorInfo->NextUpdateTime = UGameplayStatics::GetTimeSeconds(World) + FMath::FRand() * ServerTickTime + NextUpdateDelta;
 				static auto TimeOffset = GetOffset("Time");
 				ActorInfo->LastNetUpdateTime = Get<float>(TimeOffset);
 			}
@@ -839,7 +830,7 @@ int32 UNetDriver::ServerReplicateActors()
 
 				else if (Actor->GetNetUpdateFrequency() < 1.0f)
 				{
-					ActorInfo->NextUpdateTime = UGameplayStatics::GetTimeSeconds(GetWorld()) + 0.2f * FRand();
+					ActorInfo->NextUpdateTime = UGameplayStatics::GetTimeSeconds(GetWorld()) + 0.2f * FMath::FRand();
 				}
 			}
 

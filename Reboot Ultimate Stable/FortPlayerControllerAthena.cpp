@@ -98,7 +98,7 @@ void AFortPlayerControllerAthena::EndGhostModeHook(AFortPlayerControllerAthena* 
 
 	if (!GhostModeItemDef) // bro IDFK
 	{
-		GhostModeItemDef = FindObject<UFortWorldItemDefinition>("/Game/Athena/Items/Gameplay/SpookyMist/AGID_SpookyMist.AGID_SpookyMist");
+		GhostModeItemDef = FindObject<UFortWorldItemDefinition>(L"/Game/Athena/Items/Gameplay/SpookyMist/AGID_SpookyMist.AGID_SpookyMist");
 	}
 
 	if (!GhostModeItemDef)
@@ -139,7 +139,7 @@ void AFortPlayerControllerAthena::ServerCreativeSetFlightSpeedIndexHook(UObject*
 
 	// LOG_INFO(LogDev, "Player {} wanting to change creative flight speed at index {}", Context->GetName(), Index);
 
-	static auto WantedFlightSpeedChangedFn = FindObject<UFunction>("/Script/FortniteGame.FortPlayerControllerGameplay:OnRep_FlyingModifierIndex");
+	static auto WantedFlightSpeedChangedFn = FindObject<UFunction>(L"/Script/FortniteGame.FortPlayerControllerGameplay:OnRep_FlyingModifierIndex");
 
 	if (!WantedFlightSpeedChangedFn)
 	{
@@ -198,43 +198,6 @@ void AFortPlayerControllerAthena::EnterAircraftHook(UObject* PC, AActor* Aircraf
 
 	std::vector<std::pair<AFortAthenaMutator*, UFunction*>> FunctionsToCall;
 	LoopMutators([&](AFortAthenaMutator* Mutator) { FunctionsToCall.push_back(std::make_pair(Mutator, Mutator->FindFunction("OnGamePhaseStepChanged"))); });
-
-	auto HandleGiveItemsAtGamePhaseStepMutator = [&](AFortAthenaMutator* Mutator) {
-		if (auto GiveItemsAtGamePhaseStepMutator = Cast<AFortAthenaMutator_GiveItemsAtGamePhaseStep>(Mutator))
-		{
-			auto PhaseToGive = GiveItemsAtGamePhaseStepMutator->GetPhaseToGiveItems();
-			auto& ItemsToGive = GiveItemsAtGamePhaseStepMutator->GetItemsToGive();
-
-			LOG_INFO(LogDev, "PhaseToGiveItems: {} ItemsToGive.Num(): {}", (int)PhaseToGive, ItemsToGive.Num());
-
-			if (PhaseToGive <= 5) // Flying or lower
-			{
-				for (int j = 0; j < ItemsToGive.Num(); j++)
-				{
-					auto ItemToGive = ItemsToGive.AtPtr(j, FItemsToGive::GetStructSize());
-
-					if (!ItemToGive->GetItemToDrop())
-						continue;
-
-					float Out2 = 0;
-
-					if (!IsBadReadPtr(ItemToGive->GetNumberToGive().GetCurve().CurveTable, 8) && ItemToGive->GetNumberToGive().GetCurve().RowName.IsValid())
-					{
-						Out2 = UDataTableFunctionLibrary::EvaluateCurveTableRow(ItemToGive->GetNumberToGive().GetCurve().CurveTable, ItemToGive->GetNumberToGive().GetCurve().RowName, 0.f);
-					}
-
-					LOG_INFO(LogDev, "[{}] Out2: {} ItemToGive.ItemToDrop: {}", j, Out2, ItemToGive->GetItemToDrop()->IsValidLowLevel() ? ItemToGive->GetItemToDrop()->GetFullName() : "BadRead");
-
-					if (!Out2) // ?
-						continue;
-
-					WorldInventory->AddItem(ItemToGive->GetItemToDrop(), nullptr, Out2);
-				}
-			}
-		}
-	};
-
-	LoopMutators(HandleGiveItemsAtGamePhaseStepMutator);
 
 	/* if (auto GGMutator = Cast<AFortAthenaMutator_GG>(Mutator))
 	{
@@ -547,7 +510,7 @@ void AFortPlayerControllerAthena::ServerReadyToStartMatchHook(AFortPlayerControl
 			if (QuickBars)
 				return ServerReadyToStartMatchOriginal(PlayerController);
 
-			static auto FortQuickBarsClass = FindObject<UClass>("/Script/FortniteGame.FortQuickBars");
+			static auto FortQuickBarsClass = FindObject<UClass>(L"/Script/FortniteGame.FortQuickBars");
 
 			QuickBars = GetWorld()->SpawnActor<AActor>(FortQuickBarsClass);
 

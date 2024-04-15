@@ -438,8 +438,8 @@ bool AFortGameModeAthena::Athena_ReadyToStartMatchHook(AFortGameModeAthena* Game
 			{
 				if (Fortnite_Season == 7)
 				{
-					ShowFoundation(FindObject<AActor>("/Game/Athena/Maps/Athena_POI_Foundations.Athena_POI_Foundations.PersistentLevel.LF_Athena_POI_25x36")); // Polar Peak
-					ShowFoundation(FindObject<AActor>("/Game/Athena/Maps/Athena_POI_Foundations.Athena_POI_Foundations.PersistentLevel.ShopsNew")); // Tilted Tower Shops, is this 7.40 specific? (not on 7.20)
+					ShowFoundation(FindObject<AActor>(L"/Game/Athena/Maps/Athena_POI_Foundations.Athena_POI_Foundations.PersistentLevel.LF_Athena_POI_25x36")); // Polar Peak
+					ShowFoundation(FindObject<AActor>(L"/Game/Athena/Maps/Athena_POI_Foundations.Athena_POI_Foundations.PersistentLevel.ShopsNew")); // Tilted Tower Shops, is this 7.40 specific? (not on 7.20)
 				}
 				// not sure what other build is needed idrc
 				else if (Fortnite_Season == 8 || Fortnite_Version == 9.10)
@@ -452,7 +452,7 @@ bool AFortGameModeAthena::Athena_ReadyToStartMatchHook(AFortGameModeAthena* Game
 				{
 					if (Fortnite_Version >= 10.20)
 					{
-						auto Island = FindObject<AActor>("/Game/Athena/Maps/Athena_POI_Foundations.Athena_POI_Foundations.PersistentLevel.LF_Athena_StreamingTest16");
+						auto Island = FindObject<AActor>(L"/Game/Athena/Maps/Athena_POI_Foundations.Athena_POI_Foundations.PersistentLevel.LF_Athena_StreamingTest16");
 						ShowFoundation(Island);
 					}
 				}
@@ -469,23 +469,23 @@ bool AFortGameModeAthena::Athena_ReadyToStartMatchHook(AFortGameModeAthena* Game
 
 			if (Fortnite_Version == 17.40)
 			{
-				ShowFoundation(FindObject<AActor>("/Game/Athena/Apollo/Maps/Apollo_Mother.Apollo_Mother.PersistentLevel.CoralPhase_02")); // Coral Castle Phases (CoralPhase_01, CoralPhase_02 and CoralPhase_03)
-				ShowFoundation(FindObject<AActor>("/Game/Athena/Apollo/Maps/Apollo_Mother.Apollo_Mother.PersistentLevel.LF_Athena_16x16_Foundation_0")); // CoralFoundation_01
-				ShowFoundation(FindObject<AActor>("/Game/Athena/Apollo/Maps/Apollo_Mother.Apollo_Mother.PersistentLevel.LF_Athena_16x16_Foundation6")); // CoralFoundation_05
-				ShowFoundation(FindObject<AActor>("/Game/Athena/Apollo/Maps/Apollo_Mother.Apollo_Mother.PersistentLevel.LF_Athena_16x16_Foundation3")); // CoralFoundation_07
-				ShowFoundation(FindObject<AActor>("/Game/Athena/Apollo/Maps/Apollo_Mother.Apollo_Mother.PersistentLevel.LF_Athena_16x16_Foundation2_1")); // CoralFoundation_10
-				ShowFoundation(FindObject<AActor>("/Game/Athena/Apollo/Maps/Apollo_Mother.Apollo_Mother.PersistentLevel.LF_Athena_16x16_Foundation4"));
-				ShowFoundation(FindObject<AActor>("/Game/Athena/Apollo/Maps/Apollo_Mother.Apollo_Mother.PersistentLevel.LF_Athena_16x16_Foundation5"));
+				ShowFoundation(FindObject<AActor>(L"/Game/Athena/Apollo/Maps/Apollo_Mother.Apollo_Mother.PersistentLevel.CoralPhase_02")); // Coral Castle Phases (CoralPhase_01, CoralPhase_02 and CoralPhase_03)
+				ShowFoundation(FindObject<AActor>(L"/Game/Athena/Apollo/Maps/Apollo_Mother.Apollo_Mother.PersistentLevel.LF_Athena_16x16_Foundation_0")); // CoralFoundation_01
+				ShowFoundation(FindObject<AActor>(L"/Game/Athena/Apollo/Maps/Apollo_Mother.Apollo_Mother.PersistentLevel.LF_Athena_16x16_Foundation6")); // CoralFoundation_05
+				ShowFoundation(FindObject<AActor>(L"/Game/Athena/Apollo/Maps/Apollo_Mother.Apollo_Mother.PersistentLevel.LF_Athena_16x16_Foundation3")); // CoralFoundation_07
+				ShowFoundation(FindObject<AActor>(L"/Game/Athena/Apollo/Maps/Apollo_Mother.Apollo_Mother.PersistentLevel.LF_Athena_16x16_Foundation2_1")); // CoralFoundation_10
+				ShowFoundation(FindObject<AActor>(L"/Game/Athena/Apollo/Maps/Apollo_Mother.Apollo_Mother.PersistentLevel.LF_Athena_16x16_Foundation4"));
+				ShowFoundation(FindObject<AActor>(L"/Game/Athena/Apollo/Maps/Apollo_Mother.Apollo_Mother.PersistentLevel.LF_Athena_16x16_Foundation5"));
 			}
 
 			if (Fortnite_Version == 17.30)
 			{
-				ShowFoundation(FindObject<AActor>("/Game/Athena/Apollo/Maps/Apollo_Mother.Apollo_Mother.PersistentLevel.Slurpy_Phase03")); // There are 1, 2 and 3
+				ShowFoundation(FindObject<AActor>(L"/Game/Athena/Apollo/Maps/Apollo_Mother.Apollo_Mother.PersistentLevel.Slurpy_Phase03")); // There are 1, 2 and 3
 			}
 
 			if (Fortnite_Season == 13)
 			{
-				ShowFoundation(FindObject<AActor>("/Game/Athena/Apollo/Maps/Apollo_POI_Foundations.Apollo_POI_Foundations.PersistentLevel.Lobby_Foundation"));
+				ShowFoundation(FindObject<AActor>(L"/Game/Athena/Apollo/Maps/Apollo_POI_Foundations.Apollo_POI_Foundations.PersistentLevel.Lobby_Foundation"));
 
 				// SpawnIsland->RepData->Soemthing = FoundationSetup->LobbyLocation;
 			}
@@ -498,23 +498,23 @@ bool AFortGameModeAthena::Athena_ReadyToStartMatchHook(AFortGameModeAthena* Game
 
 			if (Fortnite_Version == 12.41)
 			{
-				ShowFoundation(FindObject<AActor>("/Game/Athena/Apollo/Maps/Apollo_POI_Foundations.Apollo_POI_Foundations.PersistentLevel.LF_Athena_POI_19x19_2"));
-				ShowFoundation(FindObject<AActor>("/Game/Athena/Apollo/Maps/Apollo_POI_Foundations.Apollo_POI_Foundations.PersistentLevel.BP_Jerky_Head6_18"));
-				ShowFoundation(FindObject<AActor>("/Game/Athena/Apollo/Maps/Apollo_POI_Foundations.Apollo_POI_Foundations.PersistentLevel.BP_Jerky_Head5_14"));
-				ShowFoundation(FindObject<AActor>("/Game/Athena/Apollo/Maps/Apollo_POI_Foundations.Apollo_POI_Foundations.PersistentLevel.BP_Jerky_Head3_8"));
-				ShowFoundation(FindObject<AActor>("/Game/Athena/Apollo/Maps/Apollo_POI_Foundations.Apollo_POI_Foundations.PersistentLevel.BP_Jerky_Head_2"));
-				ShowFoundation(FindObject<AActor>("/Game/Athena/Apollo/Maps/Apollo_POI_Foundations.Apollo_POI_Foundations.PersistentLevel.BP_Jerky_Head4_11"));
+				ShowFoundation(FindObject<AActor>(L"/Game/Athena/Apollo/Maps/Apollo_POI_Foundations.Apollo_POI_Foundations.PersistentLevel.LF_Athena_POI_19x19_2"));
+				ShowFoundation(FindObject<AActor>(L"/Game/Athena/Apollo/Maps/Apollo_POI_Foundations.Apollo_POI_Foundations.PersistentLevel.BP_Jerky_Head6_18"));
+				ShowFoundation(FindObject<AActor>(L"/Game/Athena/Apollo/Maps/Apollo_POI_Foundations.Apollo_POI_Foundations.PersistentLevel.BP_Jerky_Head5_14"));
+				ShowFoundation(FindObject<AActor>(L"/Game/Athena/Apollo/Maps/Apollo_POI_Foundations.Apollo_POI_Foundations.PersistentLevel.BP_Jerky_Head3_8"));
+				ShowFoundation(FindObject<AActor>(L"/Game/Athena/Apollo/Maps/Apollo_POI_Foundations.Apollo_POI_Foundations.PersistentLevel.BP_Jerky_Head_2"));
+				ShowFoundation(FindObject<AActor>(L"/Game/Athena/Apollo/Maps/Apollo_POI_Foundations.Apollo_POI_Foundations.PersistentLevel.BP_Jerky_Head4_11"));
 			}
 
 			if (Fortnite_Version == 11.31)
 			{
 				// There are also christmas trees & stuff but we need to find a better way to stream that because there's a lot.
 
-				ShowFoundation(FindObject<AActor>("/Game/Athena/Apollo/Maps/Apollo_POI_Foundations.Apollo_POI_Foundations.PersistentLevel.LF_5x5_Galileo_Ferry_1"));
-				ShowFoundation(FindObject<AActor>("/Game/Athena/Apollo/Maps/Apollo_POI_Foundations.Apollo_POI_Foundations.PersistentLevel.LF_5x5_Galileo_Ferry_2"));
-				ShowFoundation(FindObject<AActor>("/Game/Athena/Apollo/Maps/Apollo_POI_Foundations.Apollo_POI_Foundations.PersistentLevel.LF_5x5_Galileo_Ferry_3"));
-				ShowFoundation(FindObject<AActor>("/Game/Athena/Apollo/Maps/Apollo_POI_Foundations.Apollo_POI_Foundations.PersistentLevel.LF_5x5_Galileo_Ferry_4"));
-				ShowFoundation(FindObject<AActor>("/Game/Athena/Apollo/Maps/Apollo_POI_Foundations.Apollo_POI_Foundations.PersistentLevel.LF_5x5_Galileo_Ferry_5"));
+				ShowFoundation(FindObject<AActor>(L"/Game/Athena/Apollo/Maps/Apollo_POI_Foundations.Apollo_POI_Foundations.PersistentLevel.LF_5x5_Galileo_Ferry_1"));
+				ShowFoundation(FindObject<AActor>(L"/Game/Athena/Apollo/Maps/Apollo_POI_Foundations.Apollo_POI_Foundations.PersistentLevel.LF_5x5_Galileo_Ferry_2"));
+				ShowFoundation(FindObject<AActor>(L"/Game/Athena/Apollo/Maps/Apollo_POI_Foundations.Apollo_POI_Foundations.PersistentLevel.LF_5x5_Galileo_Ferry_3"));
+				ShowFoundation(FindObject<AActor>(L"/Game/Athena/Apollo/Maps/Apollo_POI_Foundations.Apollo_POI_Foundations.PersistentLevel.LF_5x5_Galileo_Ferry_4"));
+				ShowFoundation(FindObject<AActor>(L"/Game/Athena/Apollo/Maps/Apollo_POI_Foundations.Apollo_POI_Foundations.PersistentLevel.LF_5x5_Galileo_Ferry_5"));
 			}
 
 			LOG_INFO(LogDev, "Getting playlist!");
@@ -531,22 +531,25 @@ bool AFortGameModeAthena::Athena_ReadyToStartMatchHook(AFortGameModeAthena* Game
 
 					static auto AdditionalLevelsServerOnlyOffset = CurrentPlaylist->GetOffset("AdditionalLevelsServerOnly", false);
 
-					if (AdditionalLevelsServerOnlyOffset != -1)
+					if (Fortnite_Version != 13.40)
 					{
-						TArray<TSoftObjectPtr<UWorld>>& AdditionalLevelsServerOnly = CurrentPlaylist->Get<TArray<TSoftObjectPtr<UWorld>>>(AdditionalLevelsServerOnlyOffset);
-						LOG_INFO(LogPlaylist, "Loading {} playlist server levels.", AdditionalLevelsServerOnly.Num());
-
-						for (int i = 0; i < AdditionalLevelsServerOnly.Num(); i++)
+						if (AdditionalLevelsServerOnlyOffset != -1)
 						{
-							FVector Loc{};
-							FRotator Rot{};
-							bool Success = false;
-							// ULevelStreamingDynamic::LoadLevelInstance(GetWorld(), std::wstring(AdditionalLevelsServerOnly.at(i).Get()->GetPathName().begin(), AdditionalLevels.at(i).Get()->GetPathName().end()).c_str(), 
-								// Loc, Rot, &Success);
-							FName LevelFName = AdditionalLevelsServerOnly.at(i).SoftObjectPtr.ObjectID.AssetPathName;
-							LOG_INFO(LogPlaylist, "Loading server level {}.", LevelFName.ToString());
+							TArray<TSoftObjectPtr<UWorld>>& AdditionalLevelsServerOnly = CurrentPlaylist->Get<TArray<TSoftObjectPtr<UWorld>>>(AdditionalLevelsServerOnlyOffset);
+							LOG_INFO(LogPlaylist, "Loading {} playlist server levels.", AdditionalLevelsServerOnly.Num());
 
-							GameState->AddToAdditionalPlaylistLevelsStreamed(LevelFName, true);
+							for (int i = 0; i < AdditionalLevelsServerOnly.Num(); i++)
+							{
+								FVector Loc{};
+								FRotator Rot{};
+								bool Success = false;
+								// ULevelStreamingDynamic::LoadLevelInstance(GetWorld(), std::wstring(AdditionalLevelsServerOnly.at(i).Get()->GetPathName().begin(), AdditionalLevels.at(i).Get()->GetPathName().end()).c_str(), 
+									// Loc, Rot, &Success);
+								FName LevelFName = AdditionalLevelsServerOnly.at(i).SoftObjectPtr.ObjectID.AssetPathName;
+								LOG_INFO(LogPlaylist, "Loading server level {}.", LevelFName.ToString());
+
+								GameState->AddToAdditionalPlaylistLevelsStreamed(LevelFName, true);
+							}
 						}
 					}
 
@@ -678,7 +681,7 @@ bool AFortGameModeAthena::Athena_ReadyToStartMatchHook(AFortGameModeAthena* Game
 		if (Fortnite_Season == 11)
 		{
 			auto AllGalileoSpawners = UGameplayStatics::GetAllActorsOfClass(GetWorld(), LoadObject<UClass>(L"/Game/Athena/AI/Galileo/BP_Galileo_Spawner.BP_Galileo_Spawner_C", BGACLASS)); // doesnt work
-			auto GalileoBotData = LoadObject<UFortAthenaAIBotCustomizationData>("/Game/Athena/AI/Galileo/BotData_Galileo.BotData_Galileo");
+			auto GalileoBotData = LoadObject<UFortAthenaAIBotCustomizationData>(L"/Game/Athena/AI/Galileo/BotData_Galileo.BotData_Galileo");
 
 			LOG_INFO(LogGame, "AllGalileoSpawners.Num(): {}", std::to_string(AllGalileoSpawners.Num()));
 
@@ -1316,7 +1319,7 @@ void AFortGameModeAthena::Athena_HandleStartingNewPlayerHook(AFortGameModeAthena
 			{
 				XPComponent->Get<bool>(bRegisteredWithQuestManagerOffset) = true;
 
-				static auto OnRep_bRegisteredWithQuestManagerFn = FindObject<UFunction>("/Script/FortniteGame.FortPlayerControllerAthenaXPComponent.OnRep_bRegisteredWithQuestManager");
+				static auto OnRep_bRegisteredWithQuestManagerFn = FindObject<UFunction>(L"/Script/FortniteGame.FortPlayerControllerAthenaXPComponent.OnRep_bRegisteredWithQuestManager");
 
 				if (OnRep_bRegisteredWithQuestManagerFn)
 					XPComponent->ProcessEvent(OnRep_bRegisteredWithQuestManagerFn);
@@ -1376,7 +1379,7 @@ void AFortGameModeAthena::Athena_HandleStartingNewPlayerHook(AFortGameModeAthena
 			}
 			else
 			{
-				auto VendingMachineClass = FindObject<UClass>("/Game/Athena/Items/Gameplay/VendingMachine/B_Athena_VendingMachine.B_Athena_VendingMachine_C");
+				auto VendingMachineClass = FindObject<UClass>(L"/Game/Athena/Items/Gameplay/VendingMachine/B_Athena_VendingMachine.B_Athena_VendingMachine_C");
 				auto AllVendingMachines = UGameplayStatics::GetAllActorsOfClass(GetWorld(), VendingMachineClass);
 
 				for (int i = 0; i < AllVendingMachines.Num(); i++)
@@ -1607,10 +1610,10 @@ void AFortGameModeAthena::Athena_HandleStartingNewPlayerHook(AFortGameModeAthena
 		{
 #if 0
 			static auto BGAClass = FindObject<UClass>(L"/Script/Engine.BlueprintGeneratedClass");
-			auto TacticalSprintClass = LoadObject<UClass>("/TacticalSprint/Gameplay/GA_Athena_GrantTacticalSprint.GA_Athena_GrantTacticalSprint_C", BGAClass);
+			auto TacticalSprintClass = LoadObject<UClass>(L"/TacticalSprint/Gameplay/GA_Athena_GrantTacticalSprint.GA_Athena_GrantTacticalSprint_C", BGAClass);
 			AbilitySystemComponent->GiveAbilityEasy(TacticalSprintClass);
 #else
-			auto TacticalSprintAbilitySet = LoadObject<UFortAbilitySet>("/TacticalSprint/Gameplay/AS_TacticalSprint.AS_TacticalSprint");
+			auto TacticalSprintAbilitySet = LoadObject<UFortAbilitySet>(L"/TacticalSprint/Gameplay/AS_TacticalSprint.AS_TacticalSprint");
 			// TacticalSprintAbilitySet->GiveToAbilitySystem(AbilitySystemComponent);
 #endif
 		}
@@ -1713,14 +1716,14 @@ void AFortGameModeAthena::Athena_HandleStartingNewPlayerHook(AFortGameModeAthena
 
 			Portal->GetLinkedVolume()->GetVolumeState() = EVolumeState::Ready;
 
-			static auto IslandPlayset = FindObject<UFortPlaysetItemDefinition>("/Game/Playsets/PID_Playset_60x60_Composed.PID_Playset_60x60_Composed");
+			static auto IslandPlayset = FindObject<UFortPlaysetItemDefinition>(L"/Game/Playsets/PID_Playset_60x60_Composed.PID_Playset_60x60_Composed");
 
 			if (auto Volume = NewPlayer->GetCreativePlotLinkedVolume())
 			{
 				// if (IslandPlayset)
 					// Volume->UpdateSize({ (float)IslandPlayset->Get<int>("SizeX"), (float)IslandPlayset->Get<int>("SizeY"), (float)IslandPlayset->Get<int>("SizeZ") });
 
-				static auto FortLevelSaveComponentClass = FindObject<UClass>("/Script/FortniteGame.FortLevelSaveComponent");
+				static auto FortLevelSaveComponentClass = FindObject<UClass>(L"/Script/FortniteGame.FortLevelSaveComponent");
 				auto LevelSaveComponent = (UObject*)Volume->GetComponentByClass(FortLevelSaveComponentClass);
 
 				if (LevelSaveComponent)

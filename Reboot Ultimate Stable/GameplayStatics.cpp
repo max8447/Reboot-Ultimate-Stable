@@ -29,7 +29,7 @@ float UGameplayStatics::GetTimeSeconds(UObject* WorldContextObject)
 
 UObject* UGameplayStatics::SpawnObject(UClass* ObjectClass, UObject* Outer)
 {
-	static auto fn = FindObject<UFunction>("/Script/Engine.GameplayStatics.SpawnObject");
+	static auto fn = FindObject<UFunction>(L"/Script/Engine.GameplayStatics.SpawnObject");
 
 	struct
 	{
@@ -46,7 +46,7 @@ UObject* UGameplayStatics::SpawnObject(UClass* ObjectClass, UObject* Outer)
 
 /* void UGameplayStatics::OpenLevel(UObject* WorldContextObject, FName LevelName, bool bAbsolute, const FString& Options)
 {
-	static auto fn = FindObject<UFunction>("/Script/Engine.GameplayStatics.OpenLevel");
+	static auto fn = FindObject<UFunction>(L"/Script/Engine.GameplayStatics.OpenLevel");
 
 	struct
 	{
@@ -62,7 +62,7 @@ UObject* UGameplayStatics::SpawnObject(UClass* ObjectClass, UObject* Outer)
 
 void UGameplayStatics::RemovePlayer(APlayerController* Player, bool bDestroyPawn)
 {
-	static auto fn = FindObject<UFunction>("/Script/Engine.GameplayStatics.RemovePlayer");
+	static auto fn = FindObject<UFunction>(L"/Script/Engine.GameplayStatics.RemovePlayer");
 
 	struct
 	{

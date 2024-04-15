@@ -226,7 +226,7 @@ public:
 			{
 				auto& CurrentGameplayEffectInfo = CurrentGameplayEffects.at(j);
 				auto& CurrentGameplayEffectSoft = CurrentGameplayEffectInfo.GameplayEffect;
-				static auto ClassClass = FindObject<UClass>("/Script/CoreUObject.Class");
+				static auto ClassClass = FindObject<UClass>(L"/Script/CoreUObject.Class");
 				auto CurrentGameplayEffect = CurrentGameplayEffectSoft.Get(ClassClass, true);
 
 				if (!CurrentGameplayEffect)
@@ -249,7 +249,7 @@ struct FWinConditionScoreData
 {
 	static UStruct* GetStruct()
 	{
-		static auto Struct = FindObject<UStruct>("/Script/FortniteGame.WinConditionScoreData");
+		static auto Struct = FindObject<UStruct>(L"/Script/FortniteGame.WinConditionScoreData");
 		return Struct;
 	}
 

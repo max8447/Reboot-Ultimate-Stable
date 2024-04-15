@@ -10,7 +10,7 @@ public:
 
 	void OnLaunchPawn(AFortPlayerPawn* Pawn)
 	{
-		static auto OnLaunchPawnFn = FindObject<UFunction>("/Script/FortniteGame.FortMountedCannon.OnLaunchPawn");
+		static auto OnLaunchPawnFn = FindObject<UFunction>(L"/Script/FortniteGame.FortMountedCannon.OnLaunchPawn");
 		this->ProcessEvent(OnLaunchPawnFn, &Pawn);
 	}
 
@@ -29,7 +29,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto Class = FindObject<UClass>("/Script/FortniteGame.FortMountedCannon");
+		static auto Class = FindObject<UClass>(L"/Script/FortniteGame.FortMountedCannon");
 		return Class;
 	}
 };
