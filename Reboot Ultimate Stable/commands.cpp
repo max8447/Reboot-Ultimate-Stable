@@ -2211,16 +2211,16 @@ void ServerCheatHook(AFortPlayerControllerAthena* PlayerController, FString Msg)
 		}
 		else if (Command == "siphontest2")
 		{
-			FGameplayAbilitySpecHandle AbilitySpecHandle;
-
-			auto CompareAbilities = [&AbilitySpecHandle, &ReceivingPlayerState](FGameplayAbilitySpec* Spec)
+			auto CompareAbilities = [&ReceivingPlayerState](FGameplayAbilitySpec* Spec)
 				{
 					auto CurrentHandle = Spec->GetHandle();
 
-					LOG_INFO(LogDev, "Ability: {}", Spec->GetAbility()->GetFullName());
+					if (Spec->GetAbility()->GetFullName().contains("OnKillSiphon"))
+					{
+						LOG_INFO(LogDev, "Ability: {}", Spec->GetAbility()->GetFullName());
 
-					ReceivingPlayerState->GetAbilitySystemComponent()->ServerTryActivateAbility(CurrentHandle, false, FPredictionKey());
-					ReceivingPlayerState->GetAbilitySystemComponent()->ClientActivateAbilitySucceed(CurrentHandle, FPredictionKey());
+						ReceivingPlayerState->GetAbilitySystemComponent()->ServerTryActivateAbility(CurrentHandle, false, FPredictionKey());
+					}
 				};
 
 			LoopSpecs(ReceivingPlayerState->GetAbilitySystemComponent(), CompareAbilities);

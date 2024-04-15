@@ -13,5 +13,11 @@ public:
 		return Get<uint8>(DBNORevivalStackingOffset);
 	}
 
+	void TeleportToSkyDive(float HeightAboveGround)
+	{
+		static auto fn = FindObject<UFunction>("/Script/FortniteGame.FortPlayerPawnAthena.TeleportToSkyDive");
+		this->ProcessEvent(fn, &HeightAboveGround);
+	}
+
 	static void OnCapsuleBeginOverlapHook(UObject* Context, FFrame* Stack, void* Ret);
 };
