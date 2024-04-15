@@ -107,6 +107,14 @@ static inline void CleanupDeviceD3D();
 static inline void ResetDevice();
 static inline LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
+template<typename T> // ChatGPT ahh shit but I cba
+T GetRandomItem(const std::vector<T>& vec) {
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_int_distribution<> dis(0, static_cast<int>(vec.size()) - 1);
+	return vec[dis(gen)];
+}
+
 static inline void SetIsLategame(bool Value)
 {
 	Globals::bLateGame.store(Value);
@@ -169,6 +177,155 @@ static inline void Restart() // todo move?
 
 	// UGameplayStatics::OpenLevel(GetWorld(), UKismetStringLibrary::Conv_StringToName(LevelA), true, FString());
 }
+
+template<typename T>
+static inline T GetRandomItem(std::vector<T>& Vector, int ConnectionIndex)
+{
+	std::srand(static_cast<unsigned>(std::time(0) + ConnectionIndex));
+	int RandomIndex = std::rand() % Vector.size();
+	// LOG_INFO(LogDev, "RandomIndex: {}", __int64(RandomIndex));
+	return Vector[RandomIndex];
+}
+
+static std::vector Tertiaries = {
+	"WID_Sniper_NoScope_Athena_SR_Ore_T03",
+	"WID_Sniper_NoScope_Athena_VR_Ore_T03",
+	"WID_Sniper_NoScope_Athena_R_Ore_T03",
+	"WID_Sniper_NoScope_Athena_UC_Ore_T03",
+	"WID_Sniper_Heavy_Athena_SR_Ore_T03",
+	"WID_Sniper_Heavy_Athena_VR_Ore_T03",
+	"WID_Sniper_BoltAction_Scope_Athena_SR_Ore_T03",
+	"WID_Sniper_BoltAction_Scope_Athena_VR_Ore_T03",
+	"WID_Sniper_BoltAction_Scope_Athena_R_Ore_T03",
+	"WID_Sniper_BoltAction_Scope_Athena_UC_Ore_T03",
+	"WID_Sniper_Standard_Scope_Athena_SR_Ore_T03",
+	"WID_Sniper_Standard_Scope_Athena_VR_Ore_T03",
+	"WID_Sniper_Suppressed_Scope_Athena_SR_Ore_T03",
+	"WID_Sniper_Suppressed_Scope_Athena_VR_Ore_T03",
+	"WID_Sniper_Weather_Athena_VR",
+	"WID_Sniper_Weather_Athena_SR",
+	"WID_WaffleTruck_Sniper_StormScout",
+	"WID_WaffleTruck_Sniper_DragonBreath"
+	"WID_Sniper_CoreSniper_Athena_SR",
+	"WID_Sniper_CoreSniper_Athena_VR",
+	"WID_Sniper_CoreSniper_Athena_R",
+	"WID_Sniper_CoreSniper_Athena_UC",
+};
+
+static std::vector Secondaries = {
+	"WID_Shotgun_Standard_Athena_C_Ore_T03",
+	"WID_Shotgun_Standard_Athena_UC_Ore_T03",
+	"WID_Shotgun_Standard_Athena_VR_Ore_T03",
+	"WID_Shotgun_Standard_Athena_SR_Ore_T03",
+	"WID_Shotgun_SemiAuto_Athena_R_Ore_T03",
+	"WID_Shotgun_SemiAuto_Athena_VR_Ore_T03",
+	"WID_Shotgun_HighSemiAuto_Athena_VR_Ore_T03",
+	"WID_Shotgun_HighSemiAuto_Athena_SR_Ore_T03",
+	"WID_Shotgun_SlugFire_Athena_VR",
+	"WID_Shotgun_SlugFire_Athena_SR",
+	"WID_Shotgun_Charge_Athena_UC_Ore_T03",
+	"WID_Shotgun_Charge_Athena_R_Ore_T03",
+	"WID_Shotgun_Charge_Athena_VR_Ore_T03",
+	"WID_Shotgun_Charge_Athena_SR_Ore_T03",
+	"WID_Shotgun_Combat_Athena_R_Ore_T03",
+	"WID_Shotgun_Combat_Athena_VR_Ore_T03",
+	"WID_Shotgun_Combat_Athena_SR_Ore_T03",
+	"WID_Shotgun_Swing_Athena_UC",
+	"WID_Shotgun_Swing_Athena_R",
+	"WID_Shotgun_Swing_Athena_VR",
+	"WID_Shotgun_Swing_Athena_SR",
+	"WID_Shotgun_Charge_Athena_R_Ore_T03",
+	"WID_Shotgun_Charge_Athena_VR_Ore_T03",
+	"WID_Shotgun_Charge_Athena_SR_Ore_T03",
+	"WID_Shotgun_CoreBurst_Athena_UC",
+	"WID_Shotgun_CoreBurst_Athena_R",
+	"WID_Shotgun_CoreBurst_Athena_VR",
+	"WID_Shotgun_CoreBurst_Athena_SR"
+};
+
+static std::vector Primaries = {
+	"WID_Assault_Auto_Athena_UC_Ore_T03",
+	"WID_Assault_Auto_Athena_R_Ore_T03",
+	"WID_Assault_AutoHigh_Athena_VR_Ore_T03",
+	"WID_Assault_AutoHigh_Athena_SR_Ore_T03",
+	"WID_Assault_SemiAuto_Athena_VR_Ore_T03",
+	"WID_Assault_SemiAuto_Athena_SR_Ore_T03",
+	"WID_Assault_Suppressed_Athena_VR_Ore_T03",
+	"WID_Assault_Suppressed_Athena_SR_Ore_T03",
+	"WID_Assault_Infantry_Athena_VR",
+	"WID_Assault_Infantry_Athena_SR",
+	"WID_Assault_Heavy_Athena_R_Ore_T03",
+	"WID_Assault_Heavy_Athena_VR_Ore_T03",
+	"WID_Assault_Heavy_Athena_SR_Ore_T03",
+	"WID_Assault_PistolCaliber_AR_Athena_R_Ore_T03",
+	"WID_Assault_PistolCaliber_AR_Athena_VR_Ore_T03",
+	"WID_Assault_PistolCaliber_AR_Athena_SR_Ore_T03",
+	"WID_Assault_RedDotAR_Athena_UC",
+	"WID_Assault_RedDotAR_Athena_R",
+	"WID_Assault_RedDotAR_Athena_VR",
+	"WID_Assault_RedDotAR_Athena_SR",
+	"WID_Assault_Stark_Athena_R_Ore_T03",
+	"WID_Assault_Stark_Athena_VR_Ore_T03",
+	"WID_Assault_Stark_Athena_SR_Ore_T03"
+};
+
+static std::vector Consumables1 = {
+	"Athena_ShockGrenade",
+	"WID_Hook_Gun_VR_Ore_T03",
+	"WID_Badger_Grape_VR",
+	"WID_Athena_BadgerBangsNew",
+	"WID_Athena_HappyGhost",
+	"Athena_KnockGrenade",
+	"Athena_Rift_Item",
+	"Athena_GasGrenade",
+	"Athena_SilverBlazer_V2",
+	"Athena_HolidayGiftBox",
+	"Athena_GiftBox",
+	"Athena_Balloons_Consumable",
+	"Athena_Balloons",
+	"Athena_TowerGrenade",
+	"WID_Athena_AppleSun",
+	"Athena_DanceGrenade",
+	"Athena_IceGrenade",
+	"WID_Athena_Bucket_Old",
+	"ID_ValetMod_Tires_OffRoad_Thrown",
+	"WID_Pistol_Flintlock_Athena_C",
+	"WID_Pistol_Flintlock_Athena_UC",
+	"WID_Launcher_Rocket_Athena_R_Ore_T03",
+	"WID_Launcher_Rocket_Athena_VR_Ore_T03",
+	"WID_Launcher_Rocket_Athena_SR_Ore_T03",
+	"WID_Launcher_Grenade_Athena_R_Ore_T03",
+	"WID_Launcher_Grenade_Athena_VR_Ore_T03",
+	"WID_Launcher_Grenade_Athena_SR_Ore_T03",
+	"WID_HighTower_Tomato_Repulsor_CoreBR",
+	"WID_HighTower_Date_ChainLightning_CoreBR",
+	"WID_HighTower_Tapas_SkyStrike_CoreBR"
+};
+
+static std::vector Consumables2 = {
+	"Athena_ShieldSmall",
+	"Athena_Shields",
+	"Athena_SuperMedkit",
+	"Athena_Medkit",
+	"Athena_PurpleStuff",
+	"Athena_ChillBronco",
+	"WID_Athena_SpicySoda",
+	"WID_Athena_ShieldHops",
+	"WID_Athena_Flopper",
+	"WID_Athena_Flopper_Effective",
+	"WID_Athena_Flopper_HopFlopper",
+	"WID_Athena_SpicySoda",
+	"WID_Athena_ShieldGenerator",
+	"WID_Athena_HealSpray"
+};
+
+static std::vector Traps = {
+	"TID_Context_BouncePad_Athena",
+	"TID_Floor_Player_Launch_Pad_Athena",
+	"TID_Context_Freeze_Athena",
+	"TID_Floor_Player_Campfire_Athena",
+	"TID_ContextTrap_Athena"
+};
 
 static inline std::string wstring_to_utf8(const std::wstring& str)
 {
@@ -669,36 +826,98 @@ static inline DWORD WINAPI LateGameThread(LPVOID)
 		if (!WorldInventory)
 			continue;
 
-		static auto WoodItemData = FindObject<UFortItemDefinition>(L"/Game/Items/ResourcePickups/WoodItemData.WoodItemData");
-		static auto StoneItemData = FindObject<UFortItemDefinition>(L"/Game/Items/ResourcePickups/StoneItemData.StoneItemData");
-		static auto MetalItemData = FindObject<UFortItemDefinition>(L"/Game/Items/ResourcePickups/MetalItemData.MetalItemData");
+		static auto WoodItemData = FindObject<UFortItemDefinition>(
+			L"/Game/Items/ResourcePickups/WoodItemData.WoodItemData");
+		static auto StoneItemData = FindObject<UFortItemDefinition>(
+			L"/Game/Items/ResourcePickups/StoneItemData.StoneItemData");
+		static auto MetalItemData = FindObject<UFortItemDefinition>(
+			L"/Game/Items/ResourcePickups/MetalItemData.MetalItemData");
+		static auto Gold = FindObject<UFortItemDefinition>(
+			L"/Game/Items/ResourcePickups/Athena_WadsItemData.Athena_WadsItemData");
+		static auto Crown = FindObject<UFortItemDefinition>(
+			L"/VictoryCrownsGameplay/Items/AGID_VictoryCrown.AGID_VictoryCrown");
 
-		static auto Rifle = FindObject<UFortItemDefinition>(L"/Game/Athena/Items/Weapons/WID_Assault_AutoHigh_Athena_SR_Ore_T03.WID_Assault_AutoHigh_Athena_SR_Ore_T03");
-		static auto Shotgun = FindObject<UFortItemDefinition>(L"/Game/Athena/Items/Weapons/WID_Shotgun_Standard_Athena_SR_Ore_T03.WID_Shotgun_Standard_Athena_SR_Ore_T03")
-			? FindObject<UFortItemDefinition>(L"/Game/Athena/Items/Weapons/WID_Shotgun_Standard_Athena_SR_Ore_T03.WID_Shotgun_Standard_Athena_SR_Ore_T03")
-			: FindObject<UFortItemDefinition>(L"/Game/Athena/Items/Weapons/WID_Shotgun_Standard_Athena_C_Ore_T03.WID_Shotgun_Standard_Athena_C_Ore_T03");
-		static auto SMG = FindObject<UFortItemDefinition>(L"/Game/Athena/Items/Weapons/WID_Pistol_AutoHeavyPDW_Athena_R_Ore_T03.WID_Pistol_AutoHeavyPDW_Athena_R_Ore_T03")
-			? FindObject<UFortItemDefinition>(L"/Game/Athena/Items/Weapons/WID_Pistol_AutoHeavyPDW_Athena_R_Ore_T03.WID_Pistol_AutoHeavyPDW_Athena_R_Ore_T03")
-			: FindObject<UFortItemDefinition>(L"/Game/Athena/Items/Weapons/WID_Pistol_AutoHeavySuppressed_Athena_R_Ore_T03.WID_Pistol_AutoHeavySuppressed_Athena_R_Ore_T03");
+		static UFortItemDefinition* Primary = nullptr;
 
-		static auto MiniShields = FindObject<UFortItemDefinition>(L"/Game/Athena/Items/Consumables/ShieldSmall/Athena_ShieldSmall.Athena_ShieldSmall");
+		do
+		{
+			Primary = FindObject<UFortItemDefinition>(GetRandomItem(Primaries, z), nullptr, ANY_PACKAGE);
+		} while (!Primary);
 
-		static auto Shells = FindObject<UFortItemDefinition>(L"/Game/Athena/Items/Ammo/AthenaAmmoDataShells.AthenaAmmoDataShells");
-		static auto Medium = FindObject<UFortItemDefinition>(L"/Game/Athena/Items/Ammo/AthenaAmmoDataBulletsMedium.AthenaAmmoDataBulletsMedium");
-		static auto Light = FindObject<UFortItemDefinition>(L"/Game/Athena/Items/Ammo/AthenaAmmoDataBulletsLight.AthenaAmmoDataBulletsLight");
-		static auto Heavy = FindObject<UFortItemDefinition>(L"/Game/Athena/Items/Ammo/AthenaAmmoDataBulletsHeavy.AthenaAmmoDataBulletsHeavy");
+		static UFortItemDefinition* Secondary = nullptr;
 
-		WorldInventory->AddItem(WoodItemData, nullptr, 500);
-		WorldInventory->AddItem(StoneItemData, nullptr, 500);
-		WorldInventory->AddItem(MetalItemData, nullptr, 500);
-		WorldInventory->AddItem(Rifle, nullptr, 1);
-		WorldInventory->AddItem(Shotgun, nullptr, 1);
-		WorldInventory->AddItem(SMG, nullptr, 1);
-		WorldInventory->AddItem(MiniShields, nullptr, 6);
-		WorldInventory->AddItem(Shells, nullptr, 999);
-		WorldInventory->AddItem(Medium, nullptr, 999);
-		WorldInventory->AddItem(Light, nullptr, 999);
-		WorldInventory->AddItem(Heavy, nullptr, 999);
+		do
+		{
+			Secondary = FindObject<UFortItemDefinition>(GetRandomItem(Secondaries, z), nullptr, ANY_PACKAGE);
+		} while (!Secondary);
+
+		static UFortItemDefinition* Tertiary = nullptr;
+
+		do
+		{
+			Tertiary = FindObject<UFortItemDefinition>(GetRandomItem(Tertiaries, z), nullptr, ANY_PACKAGE);
+		} while (!Tertiary);
+
+		static UFortItemDefinition* Consumable1 = nullptr;
+
+		do
+		{
+			Consumable1 = FindObject<UFortItemDefinition>(GetRandomItem(Consumables1, z), nullptr, ANY_PACKAGE);
+		} while (!Consumable1);
+
+		static UFortItemDefinition* Consumable2 = nullptr;
+
+		do
+		{
+			Consumable2 = FindObject<UFortItemDefinition>(GetRandomItem(Consumables2, z), nullptr, ANY_PACKAGE);
+		} while (!Consumable2);
+
+		static UFortItemDefinition* Trap = nullptr;
+
+		do
+		{
+			Trap = FindObject<UFortItemDefinition>(GetRandomItem(Traps, z), nullptr, ANY_PACKAGE);
+		} while (!Trap);
+
+		static auto HeavyAmmo = FindObject<UFortItemDefinition>(
+			L"/Game/Athena/Items/Ammo/AthenaAmmoDataBulletsHeavy.AthenaAmmoDataBulletsHeavy");
+		static auto ShellsAmmo = FindObject<UFortItemDefinition>(
+			L"/Game/Athena/Items/Ammo/AthenaAmmoDataShells.AthenaAmmoDataShells");
+		static auto MediumAmmo = FindObject<UFortItemDefinition>(
+			L"/Game/Athena/Items/Ammo/AthenaAmmoDataBulletsMedium.AthenaAmmoDataBulletsMedium");
+		static auto LightAmmo = FindObject<UFortItemDefinition>(
+			L"/Game/Athena/Items/Ammo/AthenaAmmoDataBulletsLight.AthenaAmmoDataBulletsLight");
+		static auto RocketAmmo = FindObject<UFortItemDefinition>(
+			L"/Game/Athena/Items/Ammo/AmmoDataRockets.AmmoDataRockets");
+		static auto ExplosiveAmmo = FindObject<UFortItemDefinition>(
+			L"/Game/Items/Ammo/AmmoDataExplosive.AmmoDataExplosive");
+		static auto EnergyCells = FindObject<UFortItemDefinition>(
+			L"/Game/Items/Ammo/AmmoDataEnergyCell.AmmoDataEnergyCell");
+		static auto Arrows = FindObject<UFortItemDefinition>(
+			L"/PrimalGameplay/Items/Ammo/AthenaAmmoDataArrows.AthenaAmmoDataArrows");
+		static auto ReconAmmo = FindObject<UFortItemDefinition>(
+			L"/MotherGameplay/Items/Scooter/Ammo_Athena_Mother_Scooter.Ammo_Athena_Mother_Scooter");
+
+		WorldInventory->AddItem(WoodItemData, nullptr, 999);
+		WorldInventory->AddItem(StoneItemData, nullptr, 999);
+		WorldInventory->AddItem(MetalItemData, nullptr, 999);
+		WorldInventory->AddItem(Gold, nullptr, 5000);
+		WorldInventory->AddItem(Primary, nullptr, 1);
+		WorldInventory->AddItem(Secondary, nullptr, 1);
+		WorldInventory->AddItem(Tertiary, nullptr, 1);
+		WorldInventory->AddItem(Consumable1, nullptr, Consumable1->GetMaxStackSize());
+		WorldInventory->AddItem(Consumable2, nullptr, Consumable2->GetMaxStackSize());
+		WorldInventory->AddItem(ShellsAmmo, nullptr, (std::rand() % 876) + 87);
+		WorldInventory->AddItem(HeavyAmmo, nullptr, (std::rand() % 876) + 50);
+		WorldInventory->AddItem(MediumAmmo, nullptr, (std::rand() % 999) + 186);
+		WorldInventory->AddItem(LightAmmo, nullptr, (std::rand() % 999) + 124);
+		WorldInventory->AddItem(RocketAmmo, nullptr, (std::rand() % 12) + 3);
+		WorldInventory->AddItem(ExplosiveAmmo, nullptr, 999);
+		WorldInventory->AddItem(EnergyCells, nullptr, 999);
+		WorldInventory->AddItem(Arrows, nullptr, (std::rand() % 30) + 12);
+		WorldInventory->AddItem(ReconAmmo, nullptr, 999);
+		WorldInventory->AddItem(Crown, nullptr, 1);
+		WorldInventory->AddItem(Trap, nullptr, (std::rand() % 5) + 2);
 
 		WorldInventory->Update();
 	}
@@ -1476,7 +1695,7 @@ static inline DWORD WINAPI GuiThread(LPVOID)
 {
 	WNDCLASSEX wc = { sizeof(WNDCLASSEX), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(NULL), NULL, NULL, NULL, NULL, L"RebootClass", NULL };
 	::RegisterClassEx(&wc);
-	HWND hwnd = ::CreateWindowExW(0L, wc.lpszClassName, (L"Project Reboot " + std::to_wstring(Fortnite_Version)).c_str(), (WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_MAXIMIZEBOX), 100, 100, Width, Height, NULL, NULL, wc.hInstance, NULL);
+	HWND hwnd = ::CreateWindowExW(0L, wc.lpszClassName, (L"Reboot Ultimate Stable" + std::to_wstring(Fortnite_Version)).c_str(), (WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_MAXIMIZEBOX), 100, 100, Width, Height, NULL, NULL, wc.hInstance, NULL);
 
 	if (false) // idk why this dont work
 	{

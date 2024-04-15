@@ -842,7 +842,7 @@ DWORD WINAPI Main(LPVOID)
         return 1;
     }
 
-    LOG_INFO(LogInit, "Initializing Project Reboot!");
+    LOG_INFO(LogInit, "Initializing Reboot Ultimate!");
     LOG_INFO(LogDev, "Built on {} {}", __DATE__, __TIME__);
 
     Addresses::SetupVersion();
