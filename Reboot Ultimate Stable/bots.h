@@ -501,7 +501,7 @@ namespace Bots
 				CurrentPlayerState->SetHasThankedBusDriver(true);
 			}
 
-			if (CurrentPawn)
+			if (CurrentPawn && !CurrentPlayerState->IsInAircraft())
 			{
 				if (PlayerBot.NextJumpTime <= UGameplayStatics::GetTimeSeconds(GetWorld()))
 				{

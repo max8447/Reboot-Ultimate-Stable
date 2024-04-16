@@ -1631,7 +1631,18 @@ static inline void PregameUI()
 
 	if (Engine_Version >= 422 && Engine_Version < 424)
 	{
-		ImGui::Checkbox("Creative", &Globals::bCreative);
+		if (ImGui::Checkbox("Creative", &Globals::bCreative))
+		{
+			Globals::bPartyRoyale = false;
+		}
+	}
+
+	if (Fortnite_Version >= 12.50)
+	{
+		if (ImGui::Checkbox("Party Royale", &Globals::bPartyRoyale))
+		{
+			Globals::bCreative = false;
+		}
 	}
 
 	if (Addresses::SetZoneToIndex)
