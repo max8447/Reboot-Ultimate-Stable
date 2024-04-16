@@ -149,6 +149,21 @@ public:
 		return Params.Ret;
 	}
 
+	AActor* GetAircraft(int AircraftIndex)
+	{
+		static auto GetAircraftFn = FindObject<UFunction>("/Script/FortniteGame.FortGameStateAthena.GetAircraft");
+
+		struct
+		{
+			int AircraftIndex;
+			AActor* ReturnValue;
+		}params{ AircraftIndex };
+
+		this->ProcessEvent(GetAircraftFn, &params);
+
+		return params.ReturnValue;
+	}
+
 	EAthenaGamePhaseStep& GetGamePhaseStep()
 	{
 		static auto GamePhaseStepOffset = GetOffset("GamePhaseStep");

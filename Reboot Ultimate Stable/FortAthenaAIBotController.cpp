@@ -2,6 +2,37 @@
 
 #include "bots.h"
 
+void AFortAthenaAIBotController::AddDigestedSkillSets()
+{
+	for (int i = 0; i < GetDigestedBotSkillSets().Num(); i++)
+	{
+		auto CurrentDigestedBotSkillSet = GetDigestedBotSkillSets().at(i);
+
+		UClass* AimingDigestedSkillSetClass = FindObject<UClass>("/Script/FortniteGame.FortAthenaAIBotAimingDigestedSkillSet");
+		UClass* HarvestDigestedSkillSetClass = FindObject<UClass>("/Script/FortniteGame.FortAthenaAIBotHarvestDigestedSkillSet");
+		UClass* InventoryDigestedSkillSetClass = FindObject<UClass>("/Script/FortniteGame.FortAthenaAIBotInventoryDigestedSkillSet");
+		UClass* LootingDigestedSkillSetClass = FindObject<UClass>("/Script/FortniteGame.FortAthenaAIBotLootingDigestedSkillSet");
+		UClass* MovementDigestedSkillSetClass = FindObject<UClass>("/Script/FortniteGame.FortAthenaAIBotMovementDigestedSkillSet");
+		UClass* PerceptionDigestedSkillSetClass = FindObject<UClass>("/Script/FortniteGame.FortAthenaAIBotPerceptionDigestedSkillSet");
+		UClass* PlayStyleDigestedSkillSetClass = FindObject<UClass>("/Script/FortniteGame.FortAthenaAIBotPlayStyleDigestedSkillSet");
+
+		if (CurrentDigestedBotSkillSet->IsA(AimingDigestedSkillSetClass))
+			Get("CacheAimingDigestedSkillSet") = CurrentDigestedBotSkillSet;
+		if (CurrentDigestedBotSkillSet->IsA(HarvestDigestedSkillSetClass))
+			Get("CacheHarvestDigestedSkillSet") = CurrentDigestedBotSkillSet;
+		if (CurrentDigestedBotSkillSet->IsA(InventoryDigestedSkillSetClass))
+			Get("CacheInventoryDigestedSkillSet") = CurrentDigestedBotSkillSet;
+		if (CurrentDigestedBotSkillSet->IsA(LootingDigestedSkillSetClass))
+			Get("CacheLootingSkillSet") = CurrentDigestedBotSkillSet;
+		if (CurrentDigestedBotSkillSet->IsA(MovementDigestedSkillSetClass))
+			Get("CacheMovementSkillSet") = CurrentDigestedBotSkillSet;
+		if (CurrentDigestedBotSkillSet->IsA(PerceptionDigestedSkillSetClass))
+			Get("CachePerceptionDigestedSkillSet") = CurrentDigestedBotSkillSet;
+		if (CurrentDigestedBotSkillSet->IsA(PlayStyleDigestedSkillSetClass))
+			Get("CachePlayStyleSkillSet") = CurrentDigestedBotSkillSet;
+	}
+}
+
 void AFortAthenaAIBotController::OnPossesedPawnDiedHook(AFortAthenaAIBotController* PlayerController, AActor* DamagedActor, float Damage, AController* InstigatedBy, AActor* DamageCauser, FVector HitLocation, UObject* FHitComponent, FName BoneName, FVector Momentum)
 {
 	LOG_INFO(LogDev, "OnPossesedPawnDiedHook!");

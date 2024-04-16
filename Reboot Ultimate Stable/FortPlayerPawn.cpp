@@ -208,6 +208,12 @@ AActor* AFortPlayerPawn::ServerOnExitVehicle(ETryExitVehicleBehavior ExitForceBe
 	return AFortPlayerPawn_ServerOnExitVehicle_Params.ReturnValue;
 }
 
+void AFortPlayerPawn::BeginSkydiving(bool bFromBus)
+{
+	static auto BeginSkydivingFn = FindObject<UFunction>("/Script/FortniteGame.FortPlayerPawn.BeginSkydiving");
+	this->ProcessEvent(BeginSkydivingFn, &bFromBus);
+}
+
 AFortAthenaVehicle* AFortPlayerPawn::GetVehicle() // hm should we call the reflecterd function?
 {
 	static auto VehicleStateLocalOffset = this->GetOffset("VehicleStateLocal");

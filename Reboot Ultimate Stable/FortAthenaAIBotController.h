@@ -29,6 +29,14 @@ public:
 		return Get<class UFortAthenaAIBotInventoryItems*>(StartupInventoryOffset);
 	}
 
+	TArray<UObject*> GetDigestedBotSkillSets()
+	{
+		static auto DigestedBotSkillSetsOffset = GetOffset("DigestedBotSkillSets");
+		return Get<TArray<UObject*>>(DigestedBotSkillSetsOffset);
+	}
+
+	void AddDigestedSkillSets();
+
 	static void OnPossesedPawnDiedHook(AFortAthenaAIBotController* PlayerController, AActor* DamagedActor, float Damage, AController* InstigatedBy, AActor* DamageCauser, FVector HitLocation, UObject* FHitComponent, FName BoneName, FVector Momentum);
 
 	static UClass* StaticClass();

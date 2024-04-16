@@ -8,6 +8,7 @@
 #include "FortInventory.h"
 #include "FortWeaponRangedItemDefinition.h"
 #include "GameplayTagContainer.h"
+#include "KismetMathLibrary.h"
 
 class BotPOI
 {
@@ -37,6 +38,8 @@ public:
 	int TotalPlayersEncountered;
 	std::vector<BotPOI> POIsTraveled;
 	float NextJumpTime = 1.0f;
+	bool bIsEmoting = false;
+	bool bHasJumpedFromBus = false;
 
 	void OnPlayerEncountered()
 	{
@@ -250,6 +253,50 @@ public:
 		LOG_INFO(LogBots, "NewName: {}", NewName.ToString());
 	}
 
+	void StartEmoting()
+	{
+		if (!Controller || !Pawn || bIsEmoting)
+			return;
+
+		static auto AthenaDanceItemDefinitionClass = FindObject<UClass>("/Script/FortniteGame.AthenaDanceItemDefinition");
+		auto RandomDanceID = GetRandomObjectOfClass(AthenaDanceItemDefinitionClass);
+
+		if (!RandomDanceID)
+			return;
+
+		auto AbilitySystemComponent = PlayerState->GetAbilitySystemComponent();
+
+		if (!AbilitySystemComponent)
+			return;
+
+		UObject* AbilityToUse = nullptr;
+
+		if (!AbilityToUse)
+		{
+			static auto EmoteGameplayAbilityDefault = FindObject(L"/Game/Abilities/Emotes/GAB_Emote_Generic.Default__GAB_Emote_Generic_C");
+			AbilityToUse = EmoteGameplayAbilityDefault;
+		}
+
+		if (!AbilityToUse)
+			return;
+
+		int outHandle = 0;
+
+		FGameplayAbilitySpec* Spec = MakeNewSpec((UClass*)AbilityToUse, RandomDanceID, true);
+
+		if (!Spec)
+			return;
+
+		static unsigned int* (*GiveAbilityAndActivateOnce)(UAbilitySystemComponent * ASC, int* outHandle, __int64 Spec, FGameplayEventData * TriggerEventData) = decltype(GiveAbilityAndActivateOnce)(Addresses::GiveAbilityAndActivateOnce); // EventData is only on ue500?
+
+		if (GiveAbilityAndActivateOnce)
+		{
+			GiveAbilityAndActivateOnce(AbilitySystemComponent, &outHandle, __int64(Spec), nullptr);
+		}
+
+		bIsEmoting = true;
+	}
+
 	void Initialize(const FTransform& SpawnTransform, AActor* InSpawnLocator)
 	{
 		auto GameState = Cast<AFortGameStateAthena>(GetWorld()->GetGameState());
@@ -329,6 +376,11 @@ public:
 
 			if (auto FortPlayerControllerAthena = Cast<AFortPlayerControllerAthena>(Controller))
 				GameMode->GetAlivePlayers().Add(FortPlayerControllerAthena);
+		}
+		else
+		{
+			if (auto AIBotController = Cast<AFortAthenaAIBotController>(Controller))
+				AIBotController->AddDigestedSkillSets();
 		}
 
 		LOG_INFO(LogDev, "Finished spawning bot!")
@@ -418,9 +470,6 @@ namespace Bots
 		auto GameState = Cast<AFortGameStateAthena>(GetWorld()->GetGameState());
 		auto GameMode = Cast<AFortGameModeAthena>(GetWorld()->GetGameMode());
 
-		// auto AllBuildingContainers = UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABuildingContainer::StaticClass());
-
-		// for (int i = 0; i < GameMode->GetAlivePlayers().Num(); ++i)
 		for (auto& PlayerBot : AllPlayerBotsToTick)
 		{
 			auto CurrentPlayer = PlayerBot.Controller;
@@ -428,7 +477,7 @@ namespace Bots
 			if (CurrentPlayer->IsActorBeingDestroyed())
 				continue;
 
-			auto CurrentPawn = CurrentPlayer->GetPawn();
+			auto CurrentPawn = PlayerBot.Pawn;
 
 			if (CurrentPawn->IsActorBeingDestroyed())
 				continue;
@@ -442,19 +491,14 @@ namespace Bots
 
 			if (GameState->GetGamePhase() == EAthenaGamePhase::Warmup)
 			{
-				/* if (!CurrentPlayer->IsPlayingEmote())
-				{
-					static auto AthenaDanceItemDefinitionClass = FindObject<UClass>(L"/Script/FortniteGame.AthenaDanceItemDefinition");
-					auto RandomDanceID = GetRandomObjectOfClass(AthenaDanceItemDefinitionClass);
-
-					CurrentPlayer->ServerPlayEmoteItemHook(CurrentPlayer, RandomDanceID);
-				} */
-			}	
+				PlayerBot.StartEmoting();
+			}
 
 			if (PlayerBot.bIsAthenaController && CurrentPlayerState->IsInAircraft() && !CurrentPlayerState->HasThankedBusDriver())
 			{
-				static auto ServerThankBusDriverFn = FindObject<UFunction>(L"/Script/FortniteGame.FortPlayerControllerAthena.ServerThankBusDriver");
-				CurrentPlayer->ProcessEvent(ServerThankBusDriverFn);
+				static auto ThankBusDriverFn = FindObject<UFunction>("/Script/FortniteGame.FortAthenaAIBotController.ThankBusDriver");
+				CurrentPlayer->ProcessEvent(ThankBusDriverFn);
+				CurrentPlayerState->SetHasThankedBusDriver(true);
 			}
 
 			if (CurrentPawn)
@@ -468,12 +512,17 @@ namespace Bots
 				}
 			}
 
-			/* bool bShouldJumpFromBus = CurrentPlayerState->IsInAircraft(); // TODO (Milxnor) add a random percent thing
+			bool bShouldJumpFromBus = CurrentPlayerState->IsInAircraft() && CurrentPlayerState->HasThankedBusDriver() && UKismetMathLibrary::RandomBoolWithWeight(0.03f) && !PlayerBot.bHasJumpedFromBus;
 
 			if (bShouldJumpFromBus)
 			{
-				CurrentPlayer->ServerAttemptAircraftJumpHook(CurrentPlayer, FRotator());
-			} */
+				int AircraftIndex = GameState->GetAircraftIndex(PlayerBot.PlayerState);
+				auto Aircraft = GameState->GetAircraft(AircraftIndex);
+
+				CurrentPawn->TeleportTo(Aircraft->GetActorLocation(), FRotator());
+				CurrentPawn->BeginSkydiving(true);
+				PlayerBot.bHasJumpedFromBus = true;
+			}
 		}
 
 		// AllBuildingContainers.Free();

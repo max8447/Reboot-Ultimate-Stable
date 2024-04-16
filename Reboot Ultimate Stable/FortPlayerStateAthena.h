@@ -85,11 +85,25 @@ public:
 		return ReadBitfieldValue(bInAircraftOffset, bInAircraftFieldMask);
 	}
 
+	void SetIsInAircraft(bool NewValue)
+	{
+		static auto bInAircraftOffset = GetOffset("bInAircraft");
+		static auto bInAircraftFieldMask = GetFieldMask(GetProperty("bInAircraft"));
+		SetBitfieldValue(bInAircraftOffset, bInAircraftFieldMask, NewValue);
+	}
+
 	bool HasThankedBusDriver()
 	{
 		static auto bThankedBusDriverOffset = GetOffset("bThankedBusDriver");
 		static auto bThankedBusDriverFieldMask = GetFieldMask(GetProperty("bThankedBusDriver"));
 		return ReadBitfieldValue(bThankedBusDriverOffset, bThankedBusDriverFieldMask);
+	}
+
+	void SetHasThankedBusDriver(bool NewValue)
+	{
+		static auto bThankedBusDriverOffset = GetOffset("bThankedBusDriver");
+		static auto bThankedBusDriverFieldMask = GetFieldMask(GetProperty("bThankedBusDriver"));
+		SetBitfieldValue(bThankedBusDriverOffset, bThankedBusDriverFieldMask, NewValue);
 	}
 
 	bool& IsResurrectingNow()

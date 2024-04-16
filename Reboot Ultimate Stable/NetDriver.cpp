@@ -49,11 +49,56 @@ void UNetDriver::TickFlushHook(UNetDriver* NetDriver)
 		AllBuildingSMActors.Free();
 		bShouldDestroyAllPlayerBuilds = false;
 	}
-	
-	/* if (bEnableBotTick)
+
+	if (bEnableBotTick)
 	{
+		static TArray<AActor*> PlayerStarts;
+		static bool bFirst = false;
+		static int AmountSpawned = 0;
+		static int TimeBetween = 0;
+
+		auto GameState = Cast<AFortGameStateAthena>(GetWorld()->GetGameState());
+		auto GameMode = Cast<AFortGameModeAthena>(GetWorld()->GetGameMode());
+
+		if (!bFirst)
+		{
+			static auto FortPlayerStartWarmupClass = FindObject<UClass>(L"/Script/FortniteGame.FortPlayerStartWarmup");
+			PlayerStarts = UGameplayStatics::GetAllActorsOfClass(GetWorld(), FortPlayerStartWarmupClass);
+
+			LOG_INFO(LogGame, "PlayerStarts.Num(): {}", PlayerStarts.Num());
+
+			bFirst = true;
+		}
+
+		if (GameState->GetGamePhase() < EAthenaGamePhase::Aircraft && GameMode->GetAlivePlayers().Num() >= 1 && GameMode->GetAlivePlayers().Num() + AmountSpawned < 100)
+		{
+			TimeBetween++;
+
+			if (TimeBetween == 75)
+			{
+				int RandomPlayerStartIndex = UKismetMathLibrary::RandomIntegerInRange(0, PlayerStarts.Num() - 1);
+
+				AActor* PlayerStart = PlayerStarts.at(RandomPlayerStartIndex);
+
+				if (PlayerStart)
+				{
+					Bots::SpawnBot(PlayerStart->GetTransform(), PlayerStart);
+
+					PlayerStarts.Remove(RandomPlayerStartIndex);
+
+					AmountSpawned++;
+
+					std::srand(static_cast<unsigned int>(std::time(nullptr)));
+
+					int RandomNumber = rand() % 2 == 0 ? 75 : (rand() % 21) + 10;
+
+					TimeBetween -= RandomNumber;
+				}
+			}
+		}
+
 		Bots::Tick();
-	} */
+	}
 
 	if (Globals::bStartedListening)
 	{
