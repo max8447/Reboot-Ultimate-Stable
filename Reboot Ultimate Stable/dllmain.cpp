@@ -693,34 +693,31 @@ void ChangeLevels()
     // auto bruh = std::wstring(CustomMapName.begin(), CustomMapName.end());
     // auto bruhh = (L"open " + bruh);
 
-    FString LevelB = /* bUseCustomMap ? bruhh.c_str() : */ (Engine_Version < 424
-        ? L"open Athena_Terrain" : Engine_Version >= 500 ? Engine_Version >= 501
-        ? L"open Asteria_Terrain"
-        : Globals::bCreative ? L"open Creative_NoApollo_Terrain"
-        : L"open Artemis_Terrain"
-        : Globals::bCreative ? L"open Creative_NoApollo_Terrain"
-        : L"open Apollo_Terrain");
+    auto FortGlobalsDefault = FindObject("/Script/FortniteGame.Default__FortGlobals");
+    static auto BRMapOffset = FortGlobalsDefault->GetOffset("BRMap");
+    std::string BRMap;
+    if (BRMapOffset != -1)
+        BRMap = FortGlobalsDefault->Get<FString>(BRMapOffset).ToString();
 
-    FString Level = /* bUseCustomMap ? bruh.c_str() : */ (Engine_Version < 424
-        ? L"Athena_Terrain" : Engine_Version >= 500 ? Engine_Version >= 501
-        ? L"Asteria_Terrain"
-        : Globals::bCreative ? L"Creative_NoApollo_Terrain"
-        : L"Artemis_Terrain"
-        : Globals::bCreative ? L"Creative_NoApollo_Terrain"
-        : L"Apollo_Terrain");
+    FString Level;
 
-    LOG_INFO(LogDev, "Using {}.", bUseSwitchLevel ? Level.ToString() : LevelB.ToString());
+    if (!BRMap.empty())
+        Level = std::wstring(("open " + BRMap).begin(), ("open " + BRMap).end()).c_str();
+
+    if (Globals::bCreative)
+    {
+        if (Fortnite_Version >= 11)
+            Level = L"open Creative_NoApollo_Terrain";
+    }
+
+    LOG_INFO(LogDev, "Using {}.", Level.ToString());
 
     auto LocalPC = GetLocalPlayerController();
 
     LOG_INFO(LogDev, "Got PC: {}", __int64(LocalPC));
 
-    if (bUseSwitchLevel)
+    if (Fortnite_Version != 18.10)
     {
-        static auto SwitchLevelFn = FindObject<UFunction>(L"/Script/Engine.PlayerController.SwitchLevel");
-
-        LocalPC->ProcessEvent(SwitchLevelFn, &Level);
-
         if (FindGIsServer())
         {
             *(bool*)FindGIsServer() = true;
@@ -731,40 +728,25 @@ void ChangeLevels()
             *(bool*)FindGIsClient() = false;
         }
     }
-    else
+
+    if (bShouldRemoveLocalPlayer)
     {
-        if (Fortnite_Version != 18.10)
+        if (!bUseRemovePlayer)
         {
-            if (FindGIsServer())
-            {
-                *(bool*)FindGIsServer() = true;
-            }
+            auto& LocalPlayers = GetLocalPlayers();
 
-            if (FindGIsClient())
+            if (LocalPlayers.Num() && LocalPlayers.Data)
             {
-                *(bool*)FindGIsClient() = false;
+                LocalPlayers.Remove(0);
             }
         }
-
-        if (bShouldRemoveLocalPlayer)
+        else if (bUseRemovePlayer)
         {
-            if (!bUseRemovePlayer)
-            {
-                auto& LocalPlayers = GetLocalPlayers();
-
-                if (LocalPlayers.Num() && LocalPlayers.Data)
-                {
-                    LocalPlayers.Remove(0);
-                }
-            }
-            else if (bUseRemovePlayer)
-            {
-                UGameplayStatics::RemovePlayer((APlayerController*)LocalPC, true);
-            }
+            UGameplayStatics::RemovePlayer((APlayerController*)LocalPC, true);
         }
-
-        UKismetSystemLibrary::ExecuteConsoleCommand(GetWorld(), LevelB, nullptr);
     }
+
+    UKismetSystemLibrary::ExecuteConsoleCommand(GetWorld(), Level, nullptr);
 
     LOG_INFO(LogPlayer, "Switched level.");
 
