@@ -694,23 +694,44 @@ void ChangeLevels()
     // auto bruhh = (L"open " + bruh);
 
     auto FortGlobalsDefault = FindObject("/Script/FortniteGame.Default__FortGlobals");
-    static auto BRMapOffset = FortGlobalsDefault->GetOffset("BRMap");
-    std::string BRMap;
-    if (BRMapOffset != -1)
-        BRMap = FortGlobalsDefault->Get<FString>(BRMapOffset).ToString();
 
-    FString Level;
+    FString LevelToOpen;
 
-    if (!BRMap.empty())
-        Level = std::wstring(("open " + BRMap).begin(), ("open " + BRMap).end()).c_str();
-
-    if (Globals::bCreative)
+    if (FortGlobalsDefault->GetOffset("BRMapFullName", false) == -1)
     {
-        if (Fortnite_Version >= 11)
-            Level = L"open Creative_NoApollo_Terrain";
+        LevelToOpen = L"open Athena_Terrain";
+    }
+    else
+    {
+        if (Globals::bCreative)
+        {
+            LevelToOpen = L"open Creative_NoApollo_Terrain"; // stays the same on all versions ch2+
+        }
+        else if (Globals::bPartyRoyale)
+        {
+            LevelToOpen = L"open Apollo_Papaya";
+        }
+        else
+        {
+            std::string BRMapFullName = FortGlobalsDefault->Get<FString>("BRMapFullName").ToString();
+
+            if (!BRMapFullName.empty())
+            {
+                size_t LastSlash = BRMapFullName.find_last_of('/');
+                if (LastSlash != std::string::npos) {
+                    std::string MapName = "open " + BRMapFullName.substr(LastSlash + 1);
+                    LevelToOpen = std::wstring(MapName.begin(), MapName.end()).c_str();
+                }
+                else
+                {
+                    MessageBoxA(0, "FAILED TO OPEN MAP", "Reboot Ultimate Stable", MB_ICONERROR);
+                    return;
+                }
+            }
+        }
     }
 
-    LOG_INFO(LogDev, "Using {}.", Level.ToString());
+    LOG_INFO(LogDev, "Using {}.", LevelToOpen.ToString());
 
     auto LocalPC = GetLocalPlayerController();
 
@@ -746,7 +767,7 @@ void ChangeLevels()
         }
     }
 
-    UKismetSystemLibrary::ExecuteConsoleCommand(GetWorld(), Level, nullptr);
+    UKismetSystemLibrary::ExecuteConsoleCommand(GetWorld(), LevelToOpen, nullptr);
 
     LOG_INFO(LogPlayer, "Switched level.");
 
