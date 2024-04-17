@@ -1083,13 +1083,13 @@ void ServerCheatHook(AFortPlayerControllerAthena* PlayerController, FString Msg)
 		}
 		else if (Command == "tptorandombot")
 		{
-			AFortPawn* RandomBotPawn = AllPlayerBotsToTick[UKismetMathLibrary::RandomIntegerInRange(0, AllPlayerBotsToTick.size() - 1)].Pawn;
+			auto& RandomBot = AllPlayerBotsToTick[UKismetMathLibrary::RandomIntegerInRange(0, AllPlayerBotsToTick.size() - 1)];
 
-			if (RandomBotPawn)
+			if (RandomBot.Pawn && RandomBot.bShouldTick)
 			{
 				if (ReceivingController->GetMyFortPawn())
 				{
-					ReceivingController->GetMyFortPawn()->TeleportTo(RandomBotPawn->GetActorLocation(), FRotator());
+					ReceivingController->GetMyFortPawn()->TeleportTo(RandomBot.Pawn->GetActorLocation(), FRotator());
 				}
 				else
 				{
