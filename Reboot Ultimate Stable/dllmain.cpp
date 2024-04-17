@@ -1241,10 +1241,10 @@ DWORD WINAPI Main(LPVOID)
     {
         HookInstruction(__int64(GetModuleHandleW(0)) + 0x1FC835D, (PVOID)UFortAthenaAIBotCustomizationData::ApplyOverrideCharacterCustomizationHook, "/Script/Engine.PlayerController.SetVirtualJoystickVisibility", ERelativeOffsets::CALL, nullptr);
     
-        static auto AthenaSupplyDropDefault = FindObject("/Game/Athena/SupplyDrops/AthenaSupplyDrop.Default__AthenaSupplyDrop_C");
+        // static auto AthenaSupplyDropDefault = FindObject("/Game/Athena/SupplyDrops/AthenaSupplyDrop.Default__AthenaSupplyDrop_C");
 
-        SwapVTable(AthenaSupplyDropDefault, FindObject<UFunction>(L"/Game/Athena/SupplyDrops/AthenaSupplyDrop.AthenaSupplyDrop_C.OnDeathServer"),
-            AthenaSupplyDrop_OnDeathServerHook, (PVOID*)&AthenaSupplyDrop_OnDeathServerOriginal);
+        // SwapVTable(AthenaSupplyDropDefault, FindObject<UFunction>(L"/Game/Athena/SupplyDrops/AthenaSupplyDrop.AthenaSupplyDrop_C.OnDeathServer"),
+           // AthenaSupplyDrop_OnDeathServerHook, (PVOID*)&AthenaSupplyDrop_OnDeathServerOriginal);
     }
 
     Hooking::MinHook::Hook(FortWeaponDefault, FindObject<UFunction>(L"/Script/FortniteGame.FortWeapon.ServerReleaseWeaponAbility"),
