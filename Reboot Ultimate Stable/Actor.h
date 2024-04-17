@@ -34,6 +34,7 @@ public:
 	void K2_DestroyActor();
 	class UActorComponent* GetComponentByClass(class UClass* ComponentClass);
 	float GetDistanceTo(AActor* OtherActor);
+	float GetDistanceTo_Manual(AActor* OtherActor);
 	struct FRotator GetActorRotation();
 	void FlushNetDormancy();
 	bool TeleportTo(const FVector& DestLocation, const FRotator& DestRotation);

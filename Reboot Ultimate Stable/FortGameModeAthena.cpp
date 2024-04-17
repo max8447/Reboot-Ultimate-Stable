@@ -292,7 +292,20 @@ void AFortGameModeAthena::OnAircraftEnteredDropZoneHook(AFortGameModeAthena* Gam
 		auto GameState = Cast<AFortGameStateAthena>(GameModeAthena->GetGameState());
 		GameState->SkipAircraft();
 	}
+
+	for (auto& PlayerBot : AllPlayerBotsToTick)
+		PlayerBot.bCanJumpFromBus = true;
 }
+
+void AFortGameModeAthena::OnAircraftExitedDropZoneHook(AFortGameModeAthena* GameModeAthena, AActor* Aircraft)
+{
+	LOG_INFO(LogDev, "OnAircraftEnteredDropZoneHook!");
+
+	OnAircraftExitedDropZoneOriginal(GameModeAthena, Aircraft);
+
+	for (auto& PlayerBot : AllPlayerBotsToTick)
+		PlayerBot.bForceJumpFromAircraft = true;
+};
 
 void SetupEverythingAI() // find better name lol
 {

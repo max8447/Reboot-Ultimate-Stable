@@ -9,6 +9,7 @@
 #include "FortWeaponRangedItemDefinition.h"
 #include "GameplayTagContainer.h"
 #include "KismetMathLibrary.h"
+#include "BuildingFoundation.h"
 
 class BotPOI
 {
@@ -38,6 +39,7 @@ class PlayerBot
 public:
 	static inline UClass* PawnClass = nullptr;
 	static inline UClass* ControllerClass = nullptr;
+	static inline std::map<AActor*, AController*> ClaimedChests;
 
 	AController* Controller = nullptr; // This can be 1. AFortAthenaAIBotController OR AFortPlayerControllerAthena
 	AFortPlayerPawnAthena* Pawn = nullptr;
@@ -47,8 +49,12 @@ public:
 	std::vector<BotPOI> POIsTraveled;
 	float NextJumpTime = 1.0f;
 	bool bIsEmoting = false; // afortpawn::isplayingemote (bitfield)
+	bool bForceJumpFromAircraft = false;
+	bool bCanJumpFromBus = false;
 	bool bHasJumpedFromBus = false;
+	bool bShouldTick = false;
 	EAIWarmupBehavior WarmupBehavior = EAIWarmupBehavior::None;
+	AActor* CurrentTargetActor = nullptr;
 
 	void OnPlayerEncountered()
 	{
@@ -353,7 +359,13 @@ public:
 		bIsEmoting = true;
 	}
 
-	void WalkInDirection(FVector Direction)
+	void LookAtLocation(FVector FocalPoint)
+	{
+		auto LookAtRotation = UKismetMathLibrary::FindLookAtRotation(Pawn->GetActorLocation(), FocalPoint);
+		Controller->SetControlRotation(LookAtRotation);
+	}
+
+	void MoveInDirection(FVector Direction)
 	{
 		static auto AddMovementInputFn = FindObject<UFunction>(L"/Script/Engine.Pawn.AddMovementInput");
 
@@ -365,6 +377,38 @@ public:
 		}Pawn_AddMovementInput_Params{ Direction , 1.f , true };
 
 		Pawn->ProcessEvent(AddMovementInputFn, &Pawn_AddMovementInput_Params);
+	}
+
+	void MoveToLocation(FVector Destination, bool bShouldLookAtDestination = true)
+	{
+		MoveInDirection(Destination - Pawn->GetActorLocation());
+
+		if (bShouldLookAtDestination)
+			LookAtLocation(Destination);
+	}
+
+	AActor* FindNearestAvailableChest()
+	{
+		static auto TieredChestClass = FindObject<UClass>(L"/Game/Building/ActorBlueprints/Containers/Tiered_Chest_Athena.Tiered_Chest_Athena_C");
+		TArray<AActor*> AllTieredChests = UGameplayStatics::GetAllActorsOfClass(GetWorld(), TieredChestClass);
+
+		AActor* NearestChest = nullptr;
+
+		for (int i = 0; i < AllTieredChests.Num(); i++)
+		{
+			AActor* CurrentChest = AllTieredChests.at(i);
+
+			if (ClaimedChests.contains(CurrentChest) && ClaimedChests[CurrentChest] != Controller)
+				continue;
+
+			if (!NearestChest || CurrentChest->GetDistanceTo_Manual(Pawn) < NearestChest->GetDistanceTo_Manual(Pawn))
+				NearestChest = CurrentChest;
+		}
+
+		AllTieredChests.Free();
+		ClaimedChests[NearestChest] = Controller;
+
+		return NearestChest;
 	}
 
 	void Initialize(const FTransform& SpawnTransform, AActor* InSpawnLocator)
@@ -453,12 +497,16 @@ public:
 				AIBotController->AddDigestedSkillSets();
 		}
 
-		LOG_INFO(LogDev, "Finished spawning bot!")
+		bShouldTick = true;
+
+		LOG_INFO(LogDev, "Finished spawning bot!");
 	}
 
 	void OnDied(AFortPlayerStateAthena* KillerPlayerState, AActor* DamageCauser)
 	{
 		LOG_INFO(LogBots, "Bot Died!");
+
+		bShouldTick = false;
 
 		AFortPawn* KillerPawn = nullptr;
 
@@ -542,6 +590,9 @@ namespace Bots
 
 		for (auto& PlayerBot : AllPlayerBotsToTick)
 		{
+			if (!PlayerBot.bShouldTick)
+				continue;
+
 			auto CurrentPlayer = PlayerBot.Controller;
 
 			if (CurrentPlayer->IsActorBeingDestroyed())
@@ -570,7 +621,7 @@ namespace Bots
 					PlayerBot.StartEmoting();
 					break;
 				case EAIWarmupBehavior::LootAndShoot:
-					PlayerBot.WalkInDirection(CurrentPawn->GetActorForwardVector());
+					PlayerBot.MoveInDirection(CurrentPawn->GetActorForwardVector());
 					break;
 				case EAIWarmupBehavior::Idle:
 					break;
@@ -587,7 +638,7 @@ namespace Bots
 				CurrentPlayerState->SetIsInAircraft(true);
 			}
 
-			if (PlayerBot::ShouldUseAIBotController() && CurrentPlayerState->IsInAircraft() && !CurrentPlayerState->HasThankedBusDriver())
+			if (PlayerBot::ShouldUseAIBotController() && CurrentPlayerState->IsInAircraft() && !CurrentPlayerState->HasThankedBusDriver() && UKismetMathLibrary::RandomBoolWithWeight(0.05f))
 			{
 				static auto ThankBusDriverFn = FindObject<UFunction>(L"/Script/FortniteGame.FortAthenaAIBotController.ThankBusDriver");
 				CurrentPlayer->ProcessEvent(ThankBusDriverFn);
@@ -605,7 +656,7 @@ namespace Bots
 				}
 			}
 
-			bool bShouldJumpFromBus = CurrentPlayerState->IsInAircraft() && CurrentPlayerState->HasThankedBusDriver() && UKismetMathLibrary::RandomBoolWithWeight(0.03f) && !PlayerBot.bHasJumpedFromBus;
+			bool bShouldJumpFromBus = (CurrentPlayerState->IsInAircraft() && CurrentPlayerState->HasThankedBusDriver() && UKismetMathLibrary::RandomBoolWithWeight(0.07f) && PlayerBot.bCanJumpFromBus && !PlayerBot.bHasJumpedFromBus) || PlayerBot.bForceJumpFromAircraft;
 
 			if (bShouldJumpFromBus)
 			{
@@ -614,12 +665,19 @@ namespace Bots
 
 				CurrentPawn->TeleportTo(Aircraft->GetActorLocation(), FRotator());
 				CurrentPawn->BeginSkydiving(true);
-				PlayerBot.bHasJumpedFromBus = true;
 				CurrentPlayerState->SetIsInAircraft(false);
+				PlayerBot.bHasJumpedFromBus = true;
+				PlayerBot.bForceJumpFromAircraft = false;
+			}
+
+			if (!CurrentPlayerState->IsInAircraft() && GameState->GetGamePhase() > EAthenaGamePhase::Warmup)
+			{
+				if (!PlayerBot.CurrentTargetActor)
+					PlayerBot.CurrentTargetActor = PlayerBot.FindNearestAvailableChest();
+
+				PlayerBot.MoveToLocation(PlayerBot.CurrentTargetActor->GetActorLocation());
 			}
 		}
-
-		// AllBuildingContainers.Free();
 	}
 }
 

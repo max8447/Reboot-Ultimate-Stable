@@ -244,6 +244,7 @@ public:
 	static inline void (*Athena_HandleStartingNewPlayerOriginal)(AFortGameModeAthena* GameMode, AActor* NewPlayer);
 	static inline void (*SetZoneToIndexOriginal)(AFortGameModeAthena* GameModeAthena, int OverridePhaseMaybeIDFK);
 	static inline void (*OnAircraftEnteredDropZoneOriginal)(AFortGameModeAthena* GameModeAthena, AActor* Aircraft);
+	static inline void (*OnAircraftExitedDropZoneOriginal)(AFortGameModeAthena* GameModeAthena, AActor* Aircraft);
 
 	AFortSafeZoneIndicator*& GetSafeZoneIndicator()
 	{
@@ -291,6 +292,7 @@ public:
 	static void HandleSpawnRateForActorClass(UClass* ActorClass, float SpawnPercentage); // idk where to put
 
 	static void OnAircraftEnteredDropZoneHook(AFortGameModeAthena* GameModeAthena, AActor* Aircraft);
+	static void OnAircraftExitedDropZoneHook(AFortGameModeAthena* GameModeAthena, AActor* Aircraft);
 	static bool Athena_ReadyToStartMatchHook(AFortGameModeAthena* GameMode);
 	static int Athena_PickTeamHook(AFortGameModeAthena* GameMode, uint8 preferredTeam, AActor* Controller);
 	static void Athena_HandleStartingNewPlayerHook(AFortGameModeAthena* GameMode, AActor* NewPlayerActor);

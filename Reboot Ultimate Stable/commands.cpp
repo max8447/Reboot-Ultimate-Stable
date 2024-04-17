@@ -1078,11 +1078,30 @@ void ServerCheatHook(AFortPlayerControllerAthena* PlayerController, FString Msg)
 		}
 		else if (Command == "slurpthing")
 		{
-			static auto Class = FindObject<UClass>(L"/Game/Athena/Items/Gameplay/SilkyBingo/Athena_Prop_SilkyBingo.Athena_Prop_SilkyBingo_C");
-			FVector Loc = ReceivingController->GetPawn()->GetActorLocation();
-			Loc.Z += 100;
-			auto NewActor = GetWorld()->SpawnActor<AActor>(Class, Loc);
-			NewActor->K2_DestroyActor();
+			if (auto Pawn = Cast<AFortPlayerPawn>(ReceivingController->GetMyFortPawn()))
+				Pawn->ApplySiphonEffect();
+		}
+		else if (Command == "tptorandombot")
+		{
+			AFortPawn* RandomBotPawn = AllPlayerBotsToTick[UKismetMathLibrary::RandomIntegerInRange(0, AllPlayerBotsToTick.size() - 1)].Pawn;
+
+			if (RandomBotPawn)
+			{
+				if (ReceivingController->GetMyFortPawn())
+				{
+					ReceivingController->GetMyFortPawn()->TeleportTo(RandomBotPawn->GetActorLocation(), FRotator());
+				}
+				else
+				{
+					SendMessageToConsole(PlayerController, L"No pawn!");
+					return;
+				}
+			}
+			else
+			{
+				SendMessageToConsole(PlayerController, L"Invalid Bot Pawn!");
+				return;
+			}
 		}
 		else if (Command == "setpickaxe" || Command == "pickaxe")
 		{

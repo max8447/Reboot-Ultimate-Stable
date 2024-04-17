@@ -21,3 +21,9 @@ void AController::UnPossess()
 	auto UnPossessFn = FindFunction("UnPossess");
 	this->ProcessEvent(UnPossessFn);
 }
+
+void AController::SetControlRotation(FRotator NewRotation)
+{
+	static auto SetControlRotationFn = FindObject<UFunction>("/Script/Engine.Controller.SetControlRotation");
+	this->ProcessEvent(SetControlRotationFn, &NewRotation);
+}

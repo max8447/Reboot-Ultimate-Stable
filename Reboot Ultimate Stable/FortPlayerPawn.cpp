@@ -214,17 +214,20 @@ void AFortPlayerPawn::BeginSkydiving(bool bFromBus)
 	this->ProcessEvent(BeginSkydivingFn, &bFromBus);
 }
 
-void AFortPlayerPawn::ApplySiphonEffect()
+void AFortPlayerPawn::ApplySiphonEffect() // this BARELY works bro
 {
 	static auto SlurpBarrelClass = FindObject<UClass>(L"/Game/Athena/Items/Gameplay/SilkyBingo/Athena_Prop_SilkyBingo.Athena_Prop_SilkyBingo_C");
+
+	if (!SlurpBarrelClass)
+		return;
 
 	FVector Loc = GetActorLocation();
 	Loc.Z += 100;
 
 	auto NewActor = GetWorld()->SpawnActor<AActor>(SlurpBarrelClass, Loc);
 
-	if (NewActor)
-		NewActor->K2_DestroyActor();
+	NewActor->SetCanBeDamaged(true);
+	NewActor->K2_DestroyActor();
 }
 
 AFortAthenaVehicle* AFortPlayerPawn::GetVehicle() // hm should we call the reflecterd function?

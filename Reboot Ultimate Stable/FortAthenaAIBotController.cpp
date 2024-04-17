@@ -37,11 +37,17 @@ void AFortAthenaAIBotController::OnPossesedPawnDiedHook(AFortAthenaAIBotControll
 {
 	LOG_INFO(LogDev, "OnPossesedPawnDiedHook!");
 
-	for (int i = 0; i < AllPlayerBotsToTick.size(); i++)
+	for (auto& PlayerBot : AllPlayerBotsToTick)
 	{
-		auto PlayerBot = AllPlayerBotsToTick[i];
+		if (!PlayerBot.bShouldTick)
+			continue;
 
-		if (PlayerBot.Controller == PlayerController)
+		auto CurrentController = PlayerBot.Controller;
+
+		if (!CurrentController)
+			continue;
+
+		if (CurrentController == PlayerController)
 		{
 			AFortPlayerStateAthena* KillerPlayerState = nullptr;
 
@@ -49,7 +55,6 @@ void AFortAthenaAIBotController::OnPossesedPawnDiedHook(AFortAthenaAIBotControll
 				KillerPlayerState = Cast<AFortPlayerStateAthena>(InstigatedBy->GetPlayerState());
 
 			PlayerBot.OnDied(KillerPlayerState, DamageCauser);
-			AllPlayerBotsToTick.erase(AllPlayerBotsToTick.begin() + i);
 			return;
 		}
 	}

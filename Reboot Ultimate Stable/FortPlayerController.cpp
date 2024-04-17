@@ -1503,7 +1503,7 @@ void AFortPlayerController::ClientOnPawnDiedHook(AFortPlayerController* PlayerCo
 
 		// LOG_INFO(LogDev, "Reported kill.");
 
-		if (AmountOfHealthSiphon != 0)
+		if ((AmountOfHealthSiphon - 10) != 0)
 		{
 			if (KillerPawn && KillerPawn != DeadPawn)
 			{
@@ -1522,14 +1522,14 @@ void AFortPlayerController::ClientOnPawnDiedHook(AFortPlayerController* PlayerCo
 
 				if ((MaxHealth - Health) > 0)
 				{
-					int AmountToGive = MaxHealth - Health >= AmountOfHealthSiphon ? AmountOfHealthSiphon : MaxHealth - Health;
+					int AmountToGive = MaxHealth - Health >= (AmountOfHealthSiphon - 10) ? (AmountOfHealthSiphon - 10) : MaxHealth - Health;
 					KillerPawn->SetHealth(Health + AmountToGive);
 					AmountGiven += AmountToGive;
 				}
 
-				if ((MaxShield - Shield) > 0 && AmountGiven < AmountOfHealthSiphon)
+				if ((MaxShield - Shield) > 0 && AmountGiven < (AmountOfHealthSiphon - 10))
 				{
-					int AmountToGive = MaxShield - Shield >= AmountOfHealthSiphon ? AmountOfHealthSiphon : MaxShield - Shield;
+					int AmountToGive = MaxShield - Shield >= (AmountOfHealthSiphon - 10) ? (AmountOfHealthSiphon - 10) : MaxShield - Shield;
 					AmountToGive -= AmountGiven;
 
 					if (AmountToGive > 0)
@@ -1732,9 +1732,7 @@ void AFortPlayerController::ClientOnPawnDiedHook(AFortPlayerController* PlayerCo
 							else
 							{
 								LOG_INFO(LogBots, "AliveBots: {}", GameMode->GetAliveBots().Num());
-
-								if (GameMode->GetAliveBots().Num() > 1)
-									GameMode->GetAliveBots().Remove(i);
+								GameMode->GetAliveBots().Remove(i);
 							}
 						}
 

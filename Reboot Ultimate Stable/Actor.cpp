@@ -95,6 +95,11 @@ float AActor::GetDistanceTo(AActor* OtherActor)
 	return AActor_GetDistanceTo_Params.ReturnValue;
 }
 
+float AActor::GetDistanceTo_Manual(AActor* OtherActor)
+{
+	return OtherActor ? (this->GetActorLocation() - OtherActor->GetActorLocation()).Size() : 0.f;
+}
+
 FVector AActor::GetActorScale3D()
 {
 	static auto GetActorScale3DFn = FindObject<UFunction>(L"/Script/Engine.Actor.GetActorScale3D");

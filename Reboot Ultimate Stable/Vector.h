@@ -59,6 +59,16 @@ public:
 		return X * X + Y * Y + Z * Z;
 	}
 
+	FORCEINLINE VectorDataType Size() const
+	{
+		return sqrt(SizeSquared());
+	}
+
+	FORCEINLINE VectorDataType DistanceTo(const FVector& Other) const
+	{
+		return (FVector(*this) - Other).Size();
+	}
+
 	FORCEINLINE VectorDataType operator|(const FVector& V) const
 	{
 		return X * V.X + Y * V.Y + Z * V.Z;

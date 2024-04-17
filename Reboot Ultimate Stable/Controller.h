@@ -8,6 +8,7 @@ public:
 	AActor* GetViewTarget();
 	void Possess(class APawn* Pawn);
 	void UnPossess();
+	void SetControlRotation(FRotator NewRotation);
 
 	FName& GetStateName()
 	{
