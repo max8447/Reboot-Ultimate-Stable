@@ -210,8 +210,21 @@ AActor* AFortPlayerPawn::ServerOnExitVehicle(ETryExitVehicleBehavior ExitForceBe
 
 void AFortPlayerPawn::BeginSkydiving(bool bFromBus)
 {
-	static auto BeginSkydivingFn = FindObject<UFunction>("/Script/FortniteGame.FortPlayerPawn.BeginSkydiving");
+	static auto BeginSkydivingFn = FindObject<UFunction>(L"/Script/FortniteGame.FortPlayerPawn.BeginSkydiving");
 	this->ProcessEvent(BeginSkydivingFn, &bFromBus);
+}
+
+void AFortPlayerPawn::ApplySiphonEffect()
+{
+	static auto SlurpBarrelClass = FindObject<UClass>(L"/Game/Athena/Items/Gameplay/SilkyBingo/Athena_Prop_SilkyBingo.Athena_Prop_SilkyBingo_C");
+
+	FVector Loc = GetActorLocation();
+	Loc.Z += 100;
+
+	auto NewActor = GetWorld()->SpawnActor<AActor>(SlurpBarrelClass, Loc);
+
+	if (NewActor)
+		NewActor->K2_DestroyActor();
 }
 
 AFortAthenaVehicle* AFortPlayerPawn::GetVehicle() // hm should we call the reflecterd function?

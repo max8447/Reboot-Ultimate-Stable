@@ -8,13 +8,13 @@ void AFortAthenaAIBotController::AddDigestedSkillSets()
 	{
 		auto CurrentDigestedBotSkillSet = GetDigestedBotSkillSets().at(i);
 
-		UClass* AimingDigestedSkillSetClass = FindObject<UClass>("/Script/FortniteGame.FortAthenaAIBotAimingDigestedSkillSet");
-		UClass* HarvestDigestedSkillSetClass = FindObject<UClass>("/Script/FortniteGame.FortAthenaAIBotHarvestDigestedSkillSet");
-		UClass* InventoryDigestedSkillSetClass = FindObject<UClass>("/Script/FortniteGame.FortAthenaAIBotInventoryDigestedSkillSet");
-		UClass* LootingDigestedSkillSetClass = FindObject<UClass>("/Script/FortniteGame.FortAthenaAIBotLootingDigestedSkillSet");
-		UClass* MovementDigestedSkillSetClass = FindObject<UClass>("/Script/FortniteGame.FortAthenaAIBotMovementDigestedSkillSet");
-		UClass* PerceptionDigestedSkillSetClass = FindObject<UClass>("/Script/FortniteGame.FortAthenaAIBotPerceptionDigestedSkillSet");
-		UClass* PlayStyleDigestedSkillSetClass = FindObject<UClass>("/Script/FortniteGame.FortAthenaAIBotPlayStyleDigestedSkillSet");
+		UClass* AimingDigestedSkillSetClass = FindObject<UClass>(L"/Script/FortniteGame.FortAthenaAIBotAimingDigestedSkillSet");
+		UClass* HarvestDigestedSkillSetClass = FindObject<UClass>(L"/Script/FortniteGame.FortAthenaAIBotHarvestDigestedSkillSet");
+		UClass* InventoryDigestedSkillSetClass = FindObject<UClass>(L"/Script/FortniteGame.FortAthenaAIBotInventoryDigestedSkillSet");
+		UClass* LootingDigestedSkillSetClass = FindObject<UClass>(L"/Script/FortniteGame.FortAthenaAIBotLootingDigestedSkillSet");
+		UClass* MovementDigestedSkillSetClass = FindObject<UClass>(L"/Script/FortniteGame.FortAthenaAIBotMovementDigestedSkillSet");
+		UClass* PerceptionDigestedSkillSetClass = FindObject<UClass>(L"/Script/FortniteGame.FortAthenaAIBotPerceptionDigestedSkillSet");
+		UClass* PlayStyleDigestedSkillSetClass = FindObject<UClass>(L"/Script/FortniteGame.FortAthenaAIBotPlayStyleDigestedSkillSet");
 
 		if (CurrentDigestedBotSkillSet->IsA(AimingDigestedSkillSetClass))
 			Get("CacheAimingDigestedSkillSet") = CurrentDigestedBotSkillSet;

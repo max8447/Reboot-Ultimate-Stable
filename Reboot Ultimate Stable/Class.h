@@ -6,6 +6,19 @@
 #include "UnrealString.h"
 #include "Map.h"
 
+struct FPrimaryAssetType
+{
+public:
+	FName Name;
+};
+
+struct FPrimaryAssetId
+{
+public:
+	FPrimaryAssetType PrimaryAssetType;
+	FName PrimaryAssetName;
+};
+
 struct UField : UObject
 {
 	UField* Next;

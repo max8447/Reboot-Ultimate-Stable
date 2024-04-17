@@ -1302,8 +1302,6 @@ void AFortPlayerController::ClientOnPawnDiedHook(AFortPlayerController* PlayerCo
 	if (!DeadPawn || !GameState || !DeadPlayerState)
 		return ClientOnPawnDiedOriginal(PlayerController, DeathReport);
 
-	auto KillerController = Cast<AFortPlayerController>(KillerPawn->GetController());
-
 	AActor* DamageCauser = *(AActor**)(__int64(DeathReport) + MemberOffsets::DeathReport::DamageCauser);
 	UFortWeaponItemDefinition* KillerWeaponDef = nullptr;
 
@@ -1452,7 +1450,7 @@ void AFortPlayerController::ClientOnPawnDiedHook(AFortPlayerController* PlayerCo
 					}
 					else if (auto GG_Mutator = Cast<AFortAthenaMutator_GG>(Mutator))
 					{
-						if (KillerController)
+						if (auto KillerController = Cast<AFortPlayerController>(KillerPawn->GetController()))
 							GG_Mutator->SwapOutWeapons(KillerController, KillerPlayerState->Get<int>(MemberOffsets::FortPlayerStateAthena::KillScore));
 					}
 				});
@@ -1509,6 +1507,8 @@ void AFortPlayerController::ClientOnPawnDiedHook(AFortPlayerController* PlayerCo
 		{
 			if (KillerPawn && KillerPawn != DeadPawn)
 			{
+				KillerPawn->ApplySiphonEffect();
+
 				float Health = KillerPawn->GetHealth();
 				float Shield = KillerPawn->GetShield();
 

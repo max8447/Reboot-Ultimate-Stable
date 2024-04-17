@@ -294,6 +294,18 @@ public:
 		return ReadBitfieldValue(bMarkedAliveOffset, bMarkedAliveFieldMask);
 	}
 
+	class UFortPlayerControllerAthenaXPComponent* GetXPComponent()
+	{
+		static auto XPComponentOffset = GetOffset("XPComponent", false);
+
+		if (XPComponentOffset == -1)
+			return nullptr;
+
+		return Get<class UFortPlayerControllerAthenaXPComponent*>(XPComponentOffset);
+	}
+
+	void GiveAccolade(class UFortAccoladeItemDefinition* AccoladeDefinition);
+
 	static void StartGhostModeHook(UObject* Context, FFrame* Stack, void* Ret); // we could native hook this but eh
 	static void EndGhostModeHook(AFortPlayerControllerAthena* PlayerController);
 	static void ServerCreativeSetFlightSpeedIndexHook(UObject* Context, FFrame* Stack);

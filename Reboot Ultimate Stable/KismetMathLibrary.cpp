@@ -16,7 +16,7 @@ float UKismetMathLibrary::RandomFloatInRange(float min, float max)
 
 int UKismetMathLibrary::RandomIntegerInRange(int min, int max)
 {
-	static auto fn = FindObject<UFunction>("/Script/Engine.KismetMathLibrary.RandomIntegerInRange");
+	static auto fn = FindObject<UFunction>(L"/Script/Engine.KismetMathLibrary.RandomIntegerInRange");
 
 	struct { int min; int max; int ret; } params{ min, max };
 
@@ -40,7 +40,7 @@ bool UKismetMathLibrary::RandomBoolWithWeight(float weight)
 
 FRotator UKismetMathLibrary::FindLookAtRotation(FVector Start, FVector Target)
 {
-	static auto fn = FindObject<UFunction>("/Script/Engine.KismetMathLibrary.FindLookAtRotation");
+	static auto fn = FindObject<UFunction>(L"/Script/Engine.KismetMathLibrary.FindLookAtRotation");
 
 	struct { FVector Start; FVector Target; FRotator ret; } params{ Start , Target };
 

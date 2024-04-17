@@ -12,6 +12,47 @@
 #include "FortAthenaMutator_InventoryOverride.h"
 #include "FortGadgetItemDefinition.h"
 #include "gui.h"
+#include "FortAccoladeItemDefinition.h"
+#include "FortPlayerControllerAthenaXPComponent.h"
+
+void AFortPlayerControllerAthena::GiveAccolade(UFortAccoladeItemDefinition* AccoladeDefinition)
+{
+	if (!AccoladeDefinition)
+		return;
+
+	auto XPComponent = GetXPComponent();
+
+	if (!XPComponent)
+		return;
+
+	LOG_INFO(LogGame, "Accolade: {}", AccoladeDefinition->GetName());
+
+	FAthenaAccolades NewAccolade;
+	NewAccolade.AccoladeDef = AccoladeDefinition;
+	NewAccolade.Count = 1;
+	NewAccolade.TemplateId = std::wstring(AccoladeDefinition->GetName().begin(), AccoladeDefinition->GetName().end()).c_str();
+
+	FXPEventInfo NewEventInfo;
+	NewEventInfo.Accolade = UKismetSystemLibrary::GetPrimaryAssetIdFromObject(AccoladeDefinition);
+	NewEventInfo.EventName = AccoladeDefinition->GetFName();
+	NewEventInfo.EventXpValue = AccoladeDefinition->GetAccoladeXpValue();
+	NewEventInfo.Priority = AccoladeDefinition->GetPriority();
+	NewEventInfo.SimulatedText = AccoladeDefinition->GetShortDescription();
+	NewEventInfo.RestedValuePortion = NewEventInfo.EventXpValue;
+	NewEventInfo.RestedXPRemaining = NewEventInfo.EventXpValue;
+	NewEventInfo.SeasonBoostValuePortion = 20;
+	NewEventInfo.TotalXpEarnedInMatch = NewEventInfo.EventXpValue + XPComponent->GetTotalXpEarned();
+
+	XPComponent->GetMedalBonusXP() += 1250;
+	XPComponent->GetMatchXp() += NewEventInfo.EventXpValue;
+	XPComponent->GetTotalXpEarned() += NewEventInfo.EventXpValue + 1250;
+
+	XPComponent->GetPlayerAccolades().Add(NewAccolade);
+	XPComponent->GetMedalsEarned().Add(AccoladeDefinition);
+
+	XPComponent->ClientMedalsRecived(XPComponent->GetPlayerAccolades());
+	XPComponent->OnXPEvent(NewEventInfo);
+}
 
 void AFortPlayerControllerAthena::StartGhostModeHook(UObject* Context, FFrame* Stack, void* Ret)
 {

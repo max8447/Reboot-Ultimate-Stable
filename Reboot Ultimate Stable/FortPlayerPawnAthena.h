@@ -15,7 +15,7 @@ public:
 
 	void TeleportToSkyDive(float HeightAboveGround)
 	{
-		static auto fn = FindObject<UFunction>("/Script/FortniteGame.FortPlayerPawnAthena.TeleportToSkyDive");
+		static auto fn = FindObject<UFunction>(L"/Script/FortniteGame.FortPlayerPawnAthena.TeleportToSkyDive");
 		this->ProcessEvent(fn, &HeightAboveGround);
 	}
 

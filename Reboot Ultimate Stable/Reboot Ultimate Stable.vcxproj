@@ -335,6 +335,7 @@
     <ClInclude Include="events.h" />
     <ClInclude Include="finder.h" />
     <ClInclude Include="FortAbilitySet.h" />
+    <ClInclude Include="FortAccoladeItemDefinition.h" />
     <ClInclude Include="FortAIEncounterInfo.h" />
     <ClInclude Include="FortAthenaAIBotCharacterCustomization.h" />
     <ClInclude Include="FortAthenaAIBotController.h" />
@@ -393,6 +394,7 @@
     <ClInclude Include="FortPickup.h" />
     <ClInclude Include="FortPlayerController.h" />
     <ClInclude Include="FortPlayerControllerAthena.h" />
+    <ClInclude Include="FortPlayerControllerAthenaXPComponent.h" />
     <ClInclude Include="FortPlayerPawn.h" />
     <ClInclude Include="FortPlayerPawnAthena.h" />
     <ClInclude Include="FortPlayerState.h" />

@@ -151,7 +151,7 @@ public:
 
 	AActor* GetAircraft(int AircraftIndex)
 	{
-		static auto GetAircraftFn = FindObject<UFunction>("/Script/FortniteGame.FortGameStateAthena.GetAircraft");
+		static auto GetAircraftFn = FindObject<UFunction>(L"/Script/FortniteGame.FortGameStateAthena.GetAircraft");
 
 		struct
 		{

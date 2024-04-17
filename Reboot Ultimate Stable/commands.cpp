@@ -9,6 +9,7 @@
 #include "FortAthenaAIBotSpawnerData.h"
 #include "Texture.h"
 #include "FortWeaponRangedItemDefinition.h"
+#include "FortAccoladeItemDefinition.h"
 
 enum class EMovementMode : uint8_t
 {
@@ -1062,6 +1063,26 @@ void ServerCheatHook(AFortPlayerControllerAthena* PlayerController, FString Msg)
 			std::wstring Msg = MsgStream.str();
 
 			SendMessageToConsole(PlayerController, Msg.c_str());
+		}
+		else if (Command == "accoladetest")
+		{
+			auto Accolade = FindObject<UFortAccoladeItemDefinition>(L"/Game/Athena/Items/Accolades/AccoladeID_SurviveStormCircle.AccoladeID_SurviveStormCircle");
+
+			if (!Accolade)
+			{
+				SendMessageToConsole(ReceivingController, L"Failed to find accolade.");
+				return;
+			}
+
+			ReceivingController->GiveAccolade(Accolade);
+		}
+		else if (Command == "slurpthing")
+		{
+			static auto Class = FindObject<UClass>(L"/Game/Athena/Items/Gameplay/SilkyBingo/Athena_Prop_SilkyBingo.Athena_Prop_SilkyBingo_C");
+			FVector Loc = ReceivingController->GetPawn()->GetActorLocation();
+			Loc.Z += 100;
+			auto NewActor = GetWorld()->SpawnActor<AActor>(Class, Loc);
+			NewActor->K2_DestroyActor();
 		}
 		else if (Command == "setpickaxe" || Command == "pickaxe")
 		{

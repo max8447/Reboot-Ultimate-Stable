@@ -231,5 +231,20 @@ public:
 		return *(bool*)(__int64(Params) + ReturnValueOffset);
 	}
 
+	static FPrimaryAssetId GetPrimaryAssetIdFromObject(UObject* Object)
+	{
+		struct {
+			UObject* Object;
+			FPrimaryAssetId ret;
+		} GetPrimaryAssetIdFromObject_Params{ Object };
+
+		static auto KismetSystemLibrary = FindObject("/Script/Engine.Default__KismetSystemLibrary");
+		static auto GetPrimaryAssetIdFromObjectFn = FindObject<UFunction>(L"/Script/Engine.KismetSystemLibrary.GetPrimaryAssetIdFromObject");
+
+		KismetSystemLibrary->ProcessEvent(GetPrimaryAssetIdFromObjectFn, &GetPrimaryAssetIdFromObject_Params);
+
+		return GetPrimaryAssetIdFromObject_Params.ret;
+	}
+
 	static void PrintStringHook(UObject* Context, FFrame* Stack, void* Ret);
 };

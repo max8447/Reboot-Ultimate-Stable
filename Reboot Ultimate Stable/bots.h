@@ -24,6 +24,15 @@ public:
 	int NumPlayersEncountered;
 };
 
+enum class EAIWarmupBehavior : uint8_t
+{
+	None = 0,
+	PlayEmote = 1,
+	LootAndShoot = 2,
+	Idle = 3,
+	EAIWarmupBehavior_MAX = 4
+};
+
 class PlayerBot
 {
 public:
@@ -31,15 +40,15 @@ public:
 	static inline UClass* ControllerClass = nullptr;
 
 	AController* Controller = nullptr; // This can be 1. AFortAthenaAIBotController OR AFortPlayerControllerAthena
-	bool bIsAthenaController = false;
 	AFortPlayerPawnAthena* Pawn = nullptr;
 	AFortPlayerStateAthena* PlayerState = nullptr;
 	BotPOIEncounter currentBotEncounter;
 	int TotalPlayersEncountered;
 	std::vector<BotPOI> POIsTraveled;
 	float NextJumpTime = 1.0f;
-	bool bIsEmoting = false;
+	bool bIsEmoting = false; // afortpawn::isplayingemote (bitfield)
 	bool bHasJumpedFromBus = false;
+	EAIWarmupBehavior WarmupBehavior = EAIWarmupBehavior::None;
 
 	void OnPlayerEncountered()
 	{
@@ -253,12 +262,59 @@ public:
 		LOG_INFO(LogBots, "NewName: {}", NewName.ToString());
 	}
 
+	void ChooseWarmupBehavior()
+	{
+		if (!ShouldUseAIBotController())
+			return;
+
+		static auto FortAthenaAIBotWarmupDigestedSkillSetClass = FindObject<UClass>(L"/Script/FortniteGame.FortAthenaAIBotWarmupDigestedSkillSet"); // changes on like ch5 (very bad)
+		auto DigestedSkillSets = Cast<AFortAthenaAIBotController>(Controller)->GetDigestedBotSkillSets();
+
+		for (int i = 0; i < DigestedSkillSets.Num(); i++)
+		{
+			auto CurrentDigestedSkillSet = DigestedSkillSets.at(i);
+
+			if (CurrentDigestedSkillSet->IsA(FortAthenaAIBotWarmupDigestedSkillSetClass))
+			{
+				static UCurveTable* CurveTable = FindObject<UCurveTable>(L"/Game/Athena/AI/Phoebe/PhoebeSkillSets/Phoebe_SkillSets.Phoebe_SkillSets");
+
+				auto WarmupPlayEmoteBehaviorWeightRowName = UKismetStringLibrary::Conv_StringToName(L"Phoebe.Skill.warmup.PlayEmoteBehaviorWeight");
+				auto WarmupLootAndShootBehaviorWeightRowName = UKismetStringLibrary::Conv_StringToName(L"Phoebe.Skill.warmup.LootAndShootBehaviorWeight");
+				auto WarmupIdleBehaviorWeightRowName = UKismetStringLibrary::Conv_StringToName(L"Phoebe.Skill.warmup.IdleBehaviorWeight");
+
+				float WarmupPlayEmoteBehaviorWeight = UDataTableFunctionLibrary::EvaluateCurveTableRow(CurveTable, WarmupPlayEmoteBehaviorWeightRowName, 0.f);
+				float WarmupLootAndShootBehaviorWeight = UDataTableFunctionLibrary::EvaluateCurveTableRow(CurveTable, WarmupLootAndShootBehaviorWeightRowName, 0.f);
+				float WarmupIdleBehaviorWeight = UDataTableFunctionLibrary::EvaluateCurveTableRow(CurveTable, WarmupIdleBehaviorWeightRowName, 0.f);
+
+				while (WarmupBehavior == EAIWarmupBehavior::None || WarmupBehavior == EAIWarmupBehavior::EAIWarmupBehavior_MAX)
+				{
+					float RandomFloat = UKismetMathLibrary::RandomFloatInRange(0.f, 100.f);
+
+					LOG_INFO(LogDev, "RandomFloat: {}", RandomFloat);
+
+					if (RandomFloat <= WarmupPlayEmoteBehaviorWeight)
+						WarmupBehavior = EAIWarmupBehavior::PlayEmote;
+					else if (RandomFloat <= WarmupPlayEmoteBehaviorWeight + WarmupLootAndShootBehaviorWeight)
+						WarmupBehavior = EAIWarmupBehavior::LootAndShoot;
+					else if (RandomFloat <= WarmupPlayEmoteBehaviorWeight + WarmupLootAndShootBehaviorWeight + WarmupIdleBehaviorWeight)
+						WarmupBehavior = EAIWarmupBehavior::Idle;
+
+					Sleep(1);
+				}
+
+				LOG_INFO(LogBots, "WarmupBehavior: {}", (int)WarmupBehavior);
+
+				break;
+			}
+		}
+	}
+
 	void StartEmoting()
 	{
 		if (!Controller || !Pawn || bIsEmoting)
 			return;
 
-		static auto AthenaDanceItemDefinitionClass = FindObject<UClass>("/Script/FortniteGame.AthenaDanceItemDefinition");
+		static auto AthenaDanceItemDefinitionClass = FindObject<UClass>(L"/Script/FortniteGame.AthenaDanceItemDefinition");
 		auto RandomDanceID = GetRandomObjectOfClass(AthenaDanceItemDefinitionClass);
 
 		if (!RandomDanceID)
@@ -295,6 +351,20 @@ public:
 		}
 
 		bIsEmoting = true;
+	}
+
+	void WalkInDirection(FVector Direction)
+	{
+		static auto AddMovementInputFn = FindObject<UFunction>(L"/Script/Engine.Pawn.AddMovementInput");
+
+		struct
+		{
+			FVector WorldDirection;
+			float ScaleValue;
+			bool bForce;
+		}Pawn_AddMovementInput_Params{ Direction , 1.f , true };
+
+		Pawn->ProcessEvent(AddMovementInputFn, &Pawn_AddMovementInput_Params);
 	}
 
 	void Initialize(const FTransform& SpawnTransform, AActor* InSpawnLocator)
@@ -491,12 +561,35 @@ namespace Bots
 
 			if (GameState->GetGamePhase() == EAthenaGamePhase::Warmup)
 			{
-				PlayerBot.StartEmoting();
+				switch (PlayerBot.WarmupBehavior)
+				{
+				case EAIWarmupBehavior::None:
+					PlayerBot.ChooseWarmupBehavior();
+					break;
+				case EAIWarmupBehavior::PlayEmote:
+					PlayerBot.StartEmoting();
+					break;
+				case EAIWarmupBehavior::LootAndShoot:
+					PlayerBot.WalkInDirection(CurrentPawn->GetActorForwardVector());
+					break;
+				case EAIWarmupBehavior::Idle:
+					break;
+				case EAIWarmupBehavior::EAIWarmupBehavior_MAX:
+					PlayerBot.ChooseWarmupBehavior();
+					break;
+				default:
+					PlayerBot.ChooseWarmupBehavior();
+					break;
+				}
+			}
+			else if (GameState->GetGamePhase() == EAthenaGamePhase::Aircraft)
+			{
+				CurrentPlayerState->SetIsInAircraft(true);
 			}
 
-			if (PlayerBot.bIsAthenaController && CurrentPlayerState->IsInAircraft() && !CurrentPlayerState->HasThankedBusDriver())
+			if (PlayerBot::ShouldUseAIBotController() && CurrentPlayerState->IsInAircraft() && !CurrentPlayerState->HasThankedBusDriver())
 			{
-				static auto ThankBusDriverFn = FindObject<UFunction>("/Script/FortniteGame.FortAthenaAIBotController.ThankBusDriver");
+				static auto ThankBusDriverFn = FindObject<UFunction>(L"/Script/FortniteGame.FortAthenaAIBotController.ThankBusDriver");
 				CurrentPlayer->ProcessEvent(ThankBusDriverFn);
 				CurrentPlayerState->SetHasThankedBusDriver(true);
 			}
@@ -522,6 +615,7 @@ namespace Bots
 				CurrentPawn->TeleportTo(Aircraft->GetActorLocation(), FRotator());
 				CurrentPawn->BeginSkydiving(true);
 				PlayerBot.bHasJumpedFromBus = true;
+				CurrentPlayerState->SetIsInAircraft(false);
 			}
 		}
 
