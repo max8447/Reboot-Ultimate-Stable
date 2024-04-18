@@ -1085,6 +1085,9 @@ void ServerCheatHook(AFortPlayerControllerAthena* PlayerController, FString Msg)
 		{
 			auto& RandomBot = AllPlayerBotsToTick[UKismetMathLibrary::RandomIntegerInRange(0, AllPlayerBotsToTick.size() - 1)];
 
+			while (!RandomBot.bShouldTick)
+				RandomBot = AllPlayerBotsToTick[UKismetMathLibrary::RandomIntegerInRange(0, AllPlayerBotsToTick.size() - 1)];
+
 			if (RandomBot.Pawn && RandomBot.bShouldTick)
 			{
 				if (ReceivingController->GetMyFortPawn())
