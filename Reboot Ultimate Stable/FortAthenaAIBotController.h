@@ -31,8 +31,14 @@ public:
 
 	TArray<UObject*> GetDigestedBotSkillSets()
 	{
-		static auto DigestedBotSkillSetsOffset = GetOffset("DigestedBotSkillSets");
-		return Get<TArray<UObject*>>(DigestedBotSkillSetsOffset);
+		TArray<UObject*> Ret;
+
+		static auto DigestedBotSkillSetsOffset = GetOffset("DigestedBotSkillSets", false);
+
+		if (DigestedBotSkillSetsOffset != -1)
+			Ret = Get<TArray<UObject*>>(DigestedBotSkillSetsOffset);
+
+		return Ret;
 	}
 
 	void AddDigestedSkillSets();

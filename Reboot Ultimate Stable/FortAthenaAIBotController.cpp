@@ -4,6 +4,9 @@
 
 void AFortAthenaAIBotController::AddDigestedSkillSets()
 {
+	if (GetDigestedBotSkillSets().Num() == 0)
+		return;
+
 	for (int i = 0; i < GetDigestedBotSkillSets().Num(); i++)
 	{
 		auto CurrentDigestedBotSkillSet = GetDigestedBotSkillSets().at(i);
