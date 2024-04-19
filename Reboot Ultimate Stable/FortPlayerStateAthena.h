@@ -142,6 +142,8 @@ public:
 		RtlSecureZeroMemory(GetDeathInfo(), FDeathInfo::GetStructSize()); // TODO FREE THE DEATHTAGS
 	}
 
+	static uint8 ToDeathCause(const FGameplayTagContainer& TagContainer, bool bWasDBNO = false, class AFortPawn* Pawn = nullptr);
+
 	static void ServerSetInAircraftHook(UObject* Context, FFrame& Stack, void* Ret);
 
 	static UClass* StaticClass()

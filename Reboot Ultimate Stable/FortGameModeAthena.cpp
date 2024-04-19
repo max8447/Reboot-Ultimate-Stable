@@ -1291,6 +1291,9 @@ void AFortGameModeAthena::Athena_HandleStartingNewPlayerHook(AFortGameModeAthena
 
 	LOG_INFO(LogPlayer, "HandleStartingNewPlayer!");
 
+	if (!bFirstPlayerHasJoined)
+		bFirstPlayerHasJoined = true;
+
 	if (Globals::bAutoRestart)
 	{
 		static int LastNum123 = 15;

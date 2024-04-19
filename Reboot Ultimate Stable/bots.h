@@ -10,6 +10,8 @@
 #include "GameplayTagContainer.h"
 #include "KismetMathLibrary.h"
 #include "BuildingFoundation.h"
+#include "unordered_set"
+#include "gui.h"
 
 class BotPOI
 {
@@ -502,30 +504,222 @@ public:
 		LOG_INFO(LogDev, "Finished spawning bot!");
 	}
 
-	void OnDied(AFortPlayerStateAthena* KillerPlayerState, AActor* DamageCauser)
+	void OnDied(AFortPlayerStateAthena* KillerPlayerState, AActor* DamageCauser, FVector HitLocation = FVector())
 	{
 		LOG_INFO(LogBots, "Bot Died!");
 
 		bShouldTick = false;
 
-		AFortPawn* KillerPawn = nullptr;
+		auto GameMode = Cast<AFortGameModeAthena>(GetWorld()->GetGameMode());
+		auto GameState = Cast<AFortGameStateAthena>(GetWorld()->GetGameState());
+
+		if (!GameState->IsRespawningAllowed(PlayerState))
+		{
+			GameState->GetPlayerBotsLeft()--;
+			GameState->OnRep_PlayerBotsLeft();
+		}
+
+		AFortPlayerPawn* KillerPawn = nullptr;
+		AFortPlayerControllerAthena* KillerPlayerController = nullptr;
 
 		if (KillerPlayerState)
 		{
-			AFortPlayerControllerAthena* KillerPlayerController = Cast<AFortPlayerControllerAthena>(KillerPlayerState->GetOwner());
+			KillerPlayerController = Cast<AFortPlayerControllerAthena>(KillerPlayerState->GetOwner());
 
 			if (KillerPlayerController)
 			{
-				KillerPawn = KillerPlayerController->GetMyFortPawn();
+				KillerPawn = Cast<AFortPlayerPawn>(KillerPlayerController->GetPawn());
 			}
 		}
 
-		FFortPlayerDeathReport DeathReport{};
-		DeathReport.GetKillerPlayerState() = KillerPlayerState;
-		DeathReport.GetKillerPawn() = KillerPawn;
-		DeathReport.GetDamageCauser() = DamageCauser;
+		UFortWeaponItemDefinition* KillerWeaponDef = nullptr;
 
-		AFortPlayerController::ClientOnPawnDiedHook((AFortPlayerController*)Controller, &DeathReport);
+		static auto FortProjectileBaseClass = FindObject<UClass>(L"/Script/FortniteGame.FortProjectileBase");
+
+		if (DamageCauser)
+		{
+			if (DamageCauser->IsA(FortProjectileBaseClass))
+			{
+				auto Owner = Cast<AFortWeapon>(DamageCauser->GetOwner());
+				KillerWeaponDef = Owner->IsValidLowLevel() ? Owner->GetWeaponData() : nullptr; // I just added the IsValidLowLevel check because what if the weapon destroys (idk)?
+			}
+			if (auto Weapon = Cast<AFortWeapon>(DamageCauser))
+			{
+				KillerWeaponDef = Weapon->GetWeaponData();
+			}
+		}
+
+		uint8_t DeathCause = 0;
+
+		static auto FallDamageEnumValue = 1;
+
+		auto DeathInfo = PlayerState->GetDeathInfo(); // Alloc<void>(DeathInfoStructSize);
+		PlayerState->ClearDeathInfo();
+
+		auto Tags = MemberOffsets::FortPlayerPawn::CorrectTags == 0 ? FGameplayTagContainer()
+			: Pawn->Get<FGameplayTagContainer>(MemberOffsets::FortPlayerPawn::CorrectTags);
+
+		DeathCause = AFortPlayerStateAthena::ToDeathCause(Tags, false, Pawn); // DeadPawn->IsDBNO() ??
+
+		FGameplayTagContainer CopyTags;
+
+		for (int i = 0; i < Tags.GameplayTags.Num(); ++i)
+		{
+			CopyTags.GameplayTags.Add(Tags.GameplayTags.at(i));
+		}
+
+		for (int i = 0; i < Tags.ParentTags.Num(); ++i)
+		{
+			CopyTags.ParentTags.Add(Tags.ParentTags.at(i));
+		}
+
+		*(bool*)(__int64(DeathInfo) + MemberOffsets::DeathInfo::bDBNO) = Pawn->IsDBNO();
+		*(uint8*)(__int64(DeathInfo) + MemberOffsets::DeathInfo::DeathCause) = DeathCause;
+		*(AActor**)(__int64(DeathInfo) + MemberOffsets::DeathInfo::FinisherOrDowner) = KillerPlayerState ? KillerPlayerState : PlayerState;
+
+		if (MemberOffsets::DeathInfo::DeathLocation != -1)
+			*(FVector*)(__int64(DeathInfo) + MemberOffsets::DeathInfo::DeathLocation) = HitLocation;
+
+		if (MemberOffsets::DeathInfo::DeathTags != -1)
+			*(FGameplayTagContainer*)(__int64(DeathInfo) + MemberOffsets::DeathInfo::DeathTags) = CopyTags;
+
+		if (MemberOffsets::DeathInfo::bInitialized != -1)
+			*(bool*)(__int64(DeathInfo) + MemberOffsets::DeathInfo::bInitialized) = true;
+
+		if (DeathCause == FallDamageEnumValue)
+		{
+			if (MemberOffsets::FortPlayerPawnAthena::LastFallDistance != -1)
+				*(float*)(__int64(DeathInfo) + MemberOffsets::DeathInfo::Distance) = Pawn->Get<float>(MemberOffsets::FortPlayerPawnAthena::LastFallDistance);
+		}
+		else
+		{
+			if (MemberOffsets::DeathInfo::Distance != -1)
+				*(float*)(__int64(DeathInfo) + MemberOffsets::DeathInfo::Distance) = KillerPawn ? KillerPawn->GetDistanceTo_Manual(Pawn) : 0;
+		}
+
+		if (MemberOffsets::FortPlayerState::PawnDeathLocation != -1)
+			PlayerState->Get<FVector>(MemberOffsets::FortPlayerState::PawnDeathLocation) = HitLocation;
+
+		static auto OnRep_DeathInfoFn = FindObject<UFunction>(L"/Script/FortniteGame.FortPlayerStateAthena.OnRep_DeathInfo");
+
+		if (OnRep_DeathInfoFn)
+		{
+			PlayerState->ProcessEvent(OnRep_DeathInfoFn);
+		}
+
+		if (KillerPlayerState && KillerPlayerState != PlayerState)
+		{
+			if (MemberOffsets::FortPlayerStateAthena::KillScore != -1)
+				KillerPlayerState->Get<int>(MemberOffsets::FortPlayerStateAthena::KillScore)++;
+
+			if (MemberOffsets::FortPlayerStateAthena::TeamKillScore != -1)
+				KillerPlayerState->Get<int>(MemberOffsets::FortPlayerStateAthena::TeamKillScore)++;
+
+			KillerPlayerState->ClientReportKill(PlayerState);
+		}
+
+		if (KillerPawn && KillerPawn != Pawn)
+		{
+			KillerPawn->AttemptSiphonHealAndMats();
+			KillerPawn->ApplySiphonEffect();
+		}
+
+		for (int i = 0; i < GameMode->GetAliveBots().Num(); i++)
+		{
+			if (GameMode->GetAliveBots().at(i) == Controller)
+				GameMode->GetAliveBots().Remove(i);
+		}
+
+		LOG_INFO(LogDev, "Removed!");
+
+		std::unordered_set<int> AliveTeamIndexes;
+
+		for (int i = 0; i < GameMode->GetAlivePlayers().Num(); i++)
+		{
+			auto AlivePlayer = GameMode->GetAlivePlayers().at(i);
+
+			if (!AlivePlayer)
+				continue;
+
+			if (AlivePlayer != Controller)
+			{
+				auto TeamIndex = AlivePlayer->GetPlayerStateAthena()->GetTeamIndex();
+
+				AliveTeamIndexes.emplace(TeamIndex);
+			}
+		}
+
+		for (int i = 0; i < GameMode->GetAliveBots().Num(); i++)
+		{
+			auto AliveBot = GameMode->GetAliveBots().at(i);
+
+			if (!AliveBot)
+				continue;
+
+			if (AliveBot != Controller)
+			{
+				auto TeamIndex = Cast<AFortPlayerStateAthena>(AliveBot->GetPlayerState())->GetTeamIndex();
+				AliveTeamIndexes.emplace(TeamIndex);
+			}
+			else
+			{
+				LOG_INFO(LogBots, "AliveBots: {}", GameMode->GetAliveBots().Num());
+				GameMode->GetAliveBots().Remove(i);
+			}
+		}
+
+		if (GameMode->GetAliveBots().Num() > 0 && false) // dk what i was cooking here tbh
+		{
+			if (!AliveTeamIndexes.empty())
+			{
+				auto Last = AliveTeamIndexes.begin();
+				std::advance(Last, std::distance(AliveTeamIndexes.begin(), AliveTeamIndexes.end()) - 1);
+				AliveTeamIndexes.erase(Last);
+			}
+		}
+
+		if (AliveTeamIndexes.size() <= 1 && bStartedBus /* && GameMode->IsMatchInProgress() // will readd later */)
+		{
+			auto ClientConnections = GetWorld()->GetNetDriver()->GetClientConnections();
+
+			for (int i = 0; i < ClientConnections.Num(); i++)
+			{
+				auto CurrentPlayerController = Cast<AFortPlayerControllerAthena>(ClientConnections.at(i)->GetPlayerController());
+
+				if (!CurrentPlayerController || CurrentPlayerController == KillerPlayerController)
+					continue;
+
+				auto CurrentPawn = CurrentPlayerController->GetMyFortPawn();
+
+				if (!CurrentPawn || CurrentPawn == KillerPawn)
+					continue;
+
+				CurrentPlayerController->PlayWinEffects(CurrentPawn, CurrentPawn->GetCurrentWeapon()->GetWeaponData(), DeathCause, false);
+				CurrentPlayerController->ClientNotifyWon(CurrentPawn, CurrentPawn->GetCurrentWeapon()->GetWeaponData(), DeathCause);
+				CurrentPlayerController->ClientNotifyTeamWon(CurrentPawn, CurrentPawn->GetCurrentWeapon()->GetWeaponData(), DeathCause);
+			}
+
+			if (KillerPlayerController)
+			{
+				KillerPlayerController->PlayWinEffects(KillerPawn, KillerWeaponDef, DeathCause, false);
+				KillerPlayerController->ClientNotifyWon(KillerPawn, KillerWeaponDef, DeathCause);
+				KillerPlayerController->ClientNotifyTeamWon(KillerPawn, KillerWeaponDef, DeathCause);
+			}
+
+			if (GameState->GetOffset("WinningPlayerState") != -1)
+				GameState->Get<APlayerState*>("WinningPlayerState") = KillerPlayerState;
+
+			if (GameState->GetOffset("WinningTeam") != -1)
+				GameState->Get<uint8>("WinningTeam") = KillerPlayerState ? KillerPlayerState->GetTeamIndex() : 0;
+
+			if (GameState->FindFunction("OnRep_WinningPlayerState"))
+				GameState->ProcessEvent(GameState->FindFunction("OnRep_WinningPlayerState"));
+
+			if (GameState->FindFunction("OnRep_WinningTeam"))
+				GameState->ProcessEvent(GameState->FindFunction("OnRep_WinningTeam"));
+
+			GameMode->EndMatch();
+		}
 	}
 };
 

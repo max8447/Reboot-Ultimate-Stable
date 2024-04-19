@@ -57,7 +57,7 @@ void AFortAthenaAIBotController::OnPossesedPawnDiedHook(AFortAthenaAIBotControll
 			if (InstigatedBy)
 				KillerPlayerState = Cast<AFortPlayerStateAthena>(InstigatedBy->GetPlayerState());
 
-			PlayerBot.OnDied(KillerPlayerState, DamageCauser);
+			PlayerBot.OnDied(KillerPlayerState, DamageCauser, HitLocation);
 			return;
 		}
 	}

@@ -399,8 +399,8 @@ void ActivatePhaseAtIndexHook(UObject* SpecialEventScript, int Index)
             }
             if (Index == 8) // Bubbles
             {
-                //auto BubbleScript = FindObject("/Buffet/Levels/Buffet_Bubbles.Buffet_Bubbles:PersistentLevel.BP_Buffet_PhaseScripting_Bubble_4");
-                //auto BubbleSpline = FindObject("/Buffet/Levels/Buffet_Bubbles.Buffet_Bubbles:PersistentLevel.BP_Buffet_SmallBubblePath_2.Spline");
+                //auto BubbleScript = FindObject(L"/Buffet/Levels/Buffet_Bubbles.Buffet_Bubbles:PersistentLevel.BP_Buffet_PhaseScripting_Bubble_4");
+                //auto BubbleSpline = FindObject(L"/Buffet/Levels/Buffet_Bubbles.Buffet_Bubbles:PersistentLevel.BP_Buffet_SmallBubblePath_2.Spline");
 
                 for (int i = 0; i < ClientConnections.Num(); i++)
                 {
@@ -1241,7 +1241,7 @@ DWORD WINAPI Main(LPVOID)
     {
         HookInstruction(__int64(GetModuleHandleW(0)) + 0x1FC835D, (PVOID)UFortAthenaAIBotCustomizationData::ApplyOverrideCharacterCustomizationHook, "/Script/Engine.PlayerController.SetVirtualJoystickVisibility", ERelativeOffsets::CALL, nullptr);
     
-        // static auto AthenaSupplyDropDefault = FindObject("/Game/Athena/SupplyDrops/AthenaSupplyDrop.Default__AthenaSupplyDrop_C");
+        // static auto AthenaSupplyDropDefault = FindObject(L"/Game/Athena/SupplyDrops/AthenaSupplyDrop.Default__AthenaSupplyDrop_C");
 
         // SwapVTable(AthenaSupplyDropDefault, FindObject<UFunction>(L"/Game/Athena/SupplyDrops/AthenaSupplyDrop.AthenaSupplyDrop_C.OnDeathServer"),
            // AthenaSupplyDrop_OnDeathServerHook, (PVOID*)&AthenaSupplyDrop_OnDeathServerOriginal);

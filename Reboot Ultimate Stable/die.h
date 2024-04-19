@@ -3,6 +3,7 @@
 #include "reboot.h"
 #include "FortGameModeAthena.h"
 #include "ai.h"
+#include "AbilitySystemComponent.h"
 
 extern inline void (*SetZoneToIndexOriginal)(AFortGameModeAthena* GameModeAthena, int OverridePhaseMaybeIDFK) = nullptr;
 
@@ -236,6 +237,11 @@ static inline void ProcessEventHook(UObject* Object, UFunction* Function, void* 
 
 			auto NewParams = *(AbilitySystemComponent_ServerTryActivateAbility*)Parameters;
 
+			auto AbilitySystemComponent = (UAbilitySystemComponent*)Object;
+
+			FGameplayAbilitySpec* AbilititySpec = AbilitySystemComponent->FindAbilitySpecFromHandle(NewParams.AbilityToActivate);
+
+			LOG_ERROR(LogDev, "Ability to activate: {}", AbilititySpec->GetAbility()->GetFullName());
 			LOG_ERROR(LogDev, "AbilityToActivate: {}", NewParams.AbilityToActivate.Handle);
 			LOG_ERROR(LogDev, "InputPressed: {}", (bool)NewParams.InputPressed);
 			for (int i = 0; i < sizeof(NewParams.Pad_3CA3); i++)

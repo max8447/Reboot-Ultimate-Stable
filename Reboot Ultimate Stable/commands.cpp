@@ -1081,12 +1081,20 @@ void ServerCheatHook(AFortPlayerControllerAthena* PlayerController, FString Msg)
 			if (auto Pawn = Cast<AFortPlayerPawn>(ReceivingController->GetMyFortPawn()))
 				Pawn->ApplySiphonEffect();
 		}
-		else if (Command == "tptorandombot")
+		else if (Command == "tptorandombot") // freezes if theres 0 bots left alive
 		{
 			auto& RandomBot = AllPlayerBotsToTick[UKismetMathLibrary::RandomIntegerInRange(0, AllPlayerBotsToTick.size() - 1)];
 
+			int InvalidBotsFound = 0;
+
 			while (!RandomBot.bShouldTick)
+			{
 				RandomBot = AllPlayerBotsToTick[UKismetMathLibrary::RandomIntegerInRange(0, AllPlayerBotsToTick.size() - 1)];
+				InvalidBotsFound++;
+
+				if (InvalidBotsFound >= AllPlayerBotsToTick.size())
+					break;
+			}
 
 			if (RandomBot.Pawn && RandomBot.bShouldTick)
 			{
@@ -1105,6 +1113,37 @@ void ServerCheatHook(AFortPlayerControllerAthena* PlayerController, FString Msg)
 				SendMessageToConsole(PlayerController, L"Invalid Bot Pawn!");
 				return;
 			}
+		}
+		else if (Command == "shieldtest")
+		{
+			auto Pawn = ReceivingController->GetMyFortPawn();
+
+			if (!Pawn)
+			{
+				SendMessageToConsole(PlayerController, L"No pawn!");
+				return;
+			}
+
+			auto HealthSet = Pawn->GetHealthSet();
+
+			if (!HealthSet)
+			{
+				SendMessageToConsole(PlayerController, L"No HealthSet!");
+				return;
+			}
+
+			float Shield = 0.f;
+
+			if (NumArgs >= 1)
+			{
+				try { Shield = std::stof(Arguments[1]); }
+				catch (...) {}
+			}
+
+			static auto CurrentShieldOffset = HealthSet->GetOffset("CurrentShield");
+			FFortGameplayAttributeData& CurrentShield = HealthSet->Get<FFortGameplayAttributeData>(CurrentShieldOffset);
+
+			CurrentShield.GetCurrentValue() = Shield;
 		}
 		else if (Command == "setpickaxe" || Command == "pickaxe")
 		{
@@ -1474,8 +1513,29 @@ void ServerCheatHook(AFortPlayerControllerAthena* PlayerController, FString Msg)
 				return;
 			}
 
-			Pawn->SetCanBeDamaged(!Pawn->CanBeDamaged());
-			SendMessageToConsole(PlayerController, std::wstring(L"God set to " + std::to_wstring(!(bool)Pawn->CanBeDamaged())).c_str());
+			float MaxHealth = Pawn->GetMaxHealth();
+
+			auto HealthSet = Pawn->GetHealthSet();
+
+			if (!HealthSet)
+			{
+				SendMessageToConsole(PlayerController, L"No HealthSet!");
+				return;
+			}
+
+			static auto HealthOffset = HealthSet->GetOffset("Health");
+			auto& Health = HealthSet->Get<FFortGameplayAttributeData>(HealthOffset);
+
+			if (Health.GetMinimum() != MaxHealth)
+			{
+				Health.GetMinimum() = MaxHealth;
+				SendMessageToConsole(PlayerController, L"God on.");
+			}
+			else
+			{
+				Health.GetMinimum() = 0;
+				SendMessageToConsole(PlayerController, L"God off.");
+			}
 		}
 		else if (Command == "destroyall")
 		{
@@ -2258,7 +2318,7 @@ void ServerCheatHook(AFortPlayerControllerAthena* PlayerController, FString Msg)
 				{
 					auto CurrentHandle = Spec->GetHandle();
 
-					if (Spec->GetAbility()->GetFullName().contains("OnKillSiphon"))
+					if (Spec->GetAbility()->GetFullName().contains("OnKillSiphon") || Spec->GetAbility()->GetFullName().contains("Surface"))
 					{
 						LOG_INFO(LogDev, "Ability: {}", Spec->GetAbility()->GetFullName());
 
@@ -2267,6 +2327,29 @@ void ServerCheatHook(AFortPlayerControllerAthena* PlayerController, FString Msg)
 				};
 
 			LoopSpecs(ReceivingPlayerState->GetAbilitySystemComponent(), CompareAbilities);
+		}
+		else if (Command == "siphontest3")
+		{
+			static auto AbilityToUse = FindObject(L"");
+			auto Default = FindObject(L"/Game/Creative/Abilities/Siphon/GA_Creative_OnKillSiphon.Default__GA_Creative_OnKillSiphon_C");
+
+			int outHandle = 0;
+
+			FGameplayAbilitySpec* Spec = MakeNewSpec((UClass*)AbilityToUse, Default, true);
+
+			if (!Spec)
+				return;
+
+			static unsigned int* (*GiveAbilityAndActivateOnce)(UAbilitySystemComponent * ASC, int* outHandle, __int64 Spec, FGameplayEventData * TriggerEventData) = decltype(GiveAbilityAndActivateOnce)(Addresses::GiveAbilityAndActivateOnce); // EventData is only on ue500?
+
+			if (GiveAbilityAndActivateOnce)
+			{
+				GiveAbilityAndActivateOnce(ReceivingPlayerState->GetAbilitySystemComponent(), &outHandle, __int64(Spec), nullptr);
+			}
+		}
+		else if (Command == "siphontest4")
+		{
+
 		}
 		/*
 		else if (Command == "testballermove")

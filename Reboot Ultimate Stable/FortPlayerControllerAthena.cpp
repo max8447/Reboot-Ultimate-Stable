@@ -524,6 +524,9 @@ void AFortPlayerControllerAthena::GetPlayerViewPointHook(AFortPlayerControllerAt
 	void (*GetActorEyesViewPointOriginal)(AActor* Actor, FVector* OutLocation, FRotator* OutRotation) = decltype(GetActorEyesViewPointOriginal)(PlayerController->VFTable[GetActorEyesViewPointIndex]);
 	return GetActorEyesViewPointOriginal(PlayerController, &Location, &Rotation); */
 
+	if (!bFirstPlayerHasJoined)
+		return;
+
 	if (auto MyFortPawn = PlayerController->GetMyFortPawn())
 	{
 		Location = MyFortPawn->GetActorLocation();

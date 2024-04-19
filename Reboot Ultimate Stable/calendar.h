@@ -121,7 +121,7 @@ namespace Calendar
 
 	static inline void SetWaterLevel(int WaterLevel)
 	{
-		UObject* WL = FindObject("/Game/Athena/Apollo/Maps/Apollo_POI_Foundations.Apollo_POI_Foundations.PersistentLevel.Apollo_WaterSetup_2");
+		UObject* WL = FindObject(L"/Game/Athena/Apollo/Maps/Apollo_POI_Foundations.Apollo_POI_Foundations.PersistentLevel.Apollo_WaterSetup_2");
 
 		if (WL && WaterLevel != -1)
 		{

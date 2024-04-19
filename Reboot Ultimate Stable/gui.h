@@ -94,6 +94,7 @@ extern inline bool bEngineDebugLogs = false;
 extern inline bool bStartedBus = false;
 extern inline bool bShouldDestroyAllPlayerBuilds = false;
 extern inline int AmountOfHealthSiphon = 50;
+extern inline bool bFirstPlayerHasJoined = false;
 
 // THE BASE CODE IS FROM IMGUI GITHUB
 

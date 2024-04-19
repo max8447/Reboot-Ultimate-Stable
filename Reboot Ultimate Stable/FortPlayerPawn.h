@@ -40,6 +40,7 @@ public:
 	void ForceLaunchPlayerZipline(); // Thanks android
 	AActor* ServerOnExitVehicle(ETryExitVehicleBehavior ExitForceBehavior); // actually returns AFortAthenaVehicle
 	void BeginSkydiving(bool bFromBus);
+	void AttemptSiphonHealAndMats();
 	void ApplySiphonEffect();
 
 	AFortAthenaVehicle* GetVehicle();
